@@ -1,22 +1,24 @@
 import java.util.Arrays;
 
 public class AssignCookies {
-    
 
     public int findContentChildren(int[] g, int[] s) {
-        Arrays.sort(g);
-        Arrays.sort(s);
+   Arrays.sort(g);
+    Arrays.sort(s);
+    int nchil = g.length;
+    int ncookies = s.length;
+    int res = 0;
+    int l = 0;
+    int r = 0;
 
-        int child = 0;
-        int cookie = 0;
-
-        while (child < g.length && cookie < s.length) {
-            if (s[cookie] >= g[child]) {
-                child++;   // child is satisfied
-            }
-            cookie++;       // move to next cookie
+    while(l < nchil && r < ncookies) {
+        if(g[l] <= s[r]) {
+            res++;
+            l++;
         }
+        r++;
+    }
 
-        return child; // number of satisfied children
+    return res;
     }
 }
