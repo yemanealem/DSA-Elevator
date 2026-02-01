@@ -1,35 +1,36 @@
 class Solution {
-    List<String> result = new ArrayList<>();
+    List<String> res = new ArrayList<>();
 
-    int[] hours = {8, 4, 2, 1};
-    int[] minutes = {32, 16, 8, 4, 2, 1};
+    int[] hourLED = {8, 4, 2, 1};
+    int[] minLED  = {32, 16, 8, 4, 2, 1};
 
     public List<String> readBinaryWatch(int turnedOn) {
-        backtrack(0, 0, 0, 0, turnedOn);
-        return result;
+        dfs(0, 0, 0, turnedOn);
+        return res;
     }
 
-    private void backtrack(int index, int hour, int minute, int count, int target) {
-        // Stop if invalid
-        if (hour > 11 || minute > 59) return;
+    private void dfs(int idx, int hour, int min, int left) {
+        // prune invalid time
+        if (hour > 11 || min > 59) return;
 
-        // Found valid time
-        if (count == target) {
-            result.add(hour + ":" + (minute < 10 ? "0" : "") + minute);
+        // prune impossible selections
+        if (10 - idx < left) return;
+
+        // success
+        if (left == 0) {
+            res.add(hour + ":" + (min < 10 ? "0" : "") + min);
             return;
         }
 
-        // Stop if all LEDs checked
-        if (index == 10) return;
+        if (idx == 10) return;
 
-        // Choose current LED
-        if (index < 4) {
-            backtrack(index + 1, hour + hours[index], minute, count + 1, target);
-        } else {
-            backtrack(index + 1, hour, minute + minutes[index - 4], count + 1, target);
-        }
+        // choose current LED
+        if (idx < 4)
+            dfs(idx + 1, hour + hourLED[idx], min, left - 1);
+        else
+            dfs(idx + 1, hour, min + minLED[idx - 4], left - 1);
 
-        // Skip current LED
-        backtrack(index + 1, hour, minute, count, target);
+        // skip current LED
+        dfs(idx + 1, hour, min, left);
     }
 }
