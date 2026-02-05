@@ -1,50 +1,53 @@
-class Solution {
-    public List<List<Integer>> threeSum(int[] nums) {
-   List<List<Integer>> result = new ArrayList<>();
+import java.util.*;
 
-        // Step 1: Sort the array
+public class ThreeSum {
+
+    public static List<List<Integer>> threeSum(int[] nums) {
+
+        List<List<Integer>> result = new ArrayList<>();
+        int n = nums.length;
+
+        if (n < 3) return result;
+
         Arrays.sort(nums);
 
-        // Step 2: Fix one number
-        for (int i = 0; i < nums.length - 2; i++) {
+        for (int i = 0; i < n - 2; i++) {
 
-            // Skip duplicate values for i
-            if (i > 0 && nums[i] == nums[i - 1]) {
-                continue;
-            }
+            // 🔥 Early termination: if the smallest number is > 0
+            if (nums[i] > 0) break;
+
+            // Skip duplicate i
+            if (i > 0 && nums[i] == nums[i - 1]) continue;
 
             int left = i + 1;
-            int right = nums.length - 1;
+            int right = n - 1;
+            int target = -nums[i]; // Avoid repeated addition
 
-            // Step 3: Two pointer search
             while (left < right) {
+                int sum = nums[left] + nums[right];
 
-                int sum = nums[i] + nums[left] + nums[right];
-
-                if (sum == 0) {
-                    // Found a valid triplet
+                if (sum == target) {
                     result.add(Arrays.asList(nums[i], nums[left], nums[right]));
 
-                    // Skip duplicates for left and right
-                    while (left < right && nums[left] == nums[left + 1]) {
-                        left++;
-                    }
-                    while (left < right && nums[right] == nums[right - 1]) {
-                        right--;
-                    }
+                    int leftVal = nums[left];
+                    int rightVal = nums[right];
 
+                    // Skip duplicates faster
+                    while (left < right && nums[left] == leftVal) left++;
+                    while (left < right && nums[right] == rightVal) right--;
+
+                } else if (sum < target) {
                     left++;
-                    right--;
-
-                } else if (sum < 0) {
-                    left++;    
                 } else {
-                    right--;   
+                    right--;
                 }
             }
         }
+        return result;
+    }
 
-        return result;     
-   
+    public static void main(String[] args) {
+        int[] nums = {-1, 0, 1, 2, -1, -4};
+        System.out.println(threeSum(nums));
     }
 }
