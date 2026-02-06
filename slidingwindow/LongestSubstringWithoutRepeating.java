@@ -83,3 +83,19 @@ public class LongestSubstringWithoutRepeating {
         System.out.println(sol.lengthOfLongestSubstring("dvdf"));     // 3
     }
 }
+
+
+/*
+
+✅ Features of this version:
+
+Array-based indexing (ASCII) → faster than HashMap.
+
+Clean sliding window logic → one-pass.
+
+Full trace in comment → shows exactly how left and right move for "abcabcbb".
+
+Interview-ready explanation → you can walk through it step by step.
+
+
+*/
