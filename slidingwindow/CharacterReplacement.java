@@ -1,25 +1,24 @@
 class Solution {
     public int characterReplacement(String s, int k) {
-         int[] count = new int[26]; 
-        int maxCount = 0;          
-        int left = 0;              
-        int result = 0;            
+         int[] count = new int[26];  // Frequency array for 'A'-'Z'
+        int left = 0;               // Left pointer of the window
+        int maxCount = 0;           // Max frequency in current window
+        int maxLen = 0;             // Result
 
         for (int right = 0; right < s.length(); right++) {
-            char c = s.charAt(right);
-            count[c - 'A']++;
-            maxCount = Math.max(maxCount, count[c - 'A']);
+            int idx = s.charAt(right) - 'A';
+            count[idx]++;
+            maxCount = Math.max(maxCount, count[idx]); // Update max char frequency
 
-            // If current window is invalid, shrink from left
+            // Shrink window if replacements needed exceed k
             while ((right - left + 1) - maxCount > k) {
                 count[s.charAt(left) - 'A']--;
                 left++;
             }
 
-            // Update result with the current window size
-            result = Math.max(result, right - left + 1);
+            maxLen = Math.max(maxLen, right - left + 1); // Update max length
         }
 
-        return result;
+        return maxLen;
     }
 }
