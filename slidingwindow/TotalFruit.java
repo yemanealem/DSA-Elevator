@@ -1,24 +1,30 @@
-import java.util.HashMap;
-
-public class TotalFruit {
+class Solution {
     public int totalFruit(int[] fruits) {
-       int l = 0;
-        int n = fruits.length;
-        int ans = 0;
-        HashMap<Integer,Integer> map = new HashMap<>();
-        for(int r=0;r<n;r++){
-            int val = fruits[r];
-            map.put(val,map.getOrDefault(val,0)+1);
+        if (fruits.length == 0) return 0;
 
-            while(map.size() > 2){
-                int lval = fruits[l];
-                map.put(lval,map.get(lval)-1);
-                if(map.get(lval) == 0){
-                    map.remove(lval);
-                }
-                l++;
+        int maxFruits = 0;
+        int lastFruit = -1, secondLastFruit = -1;
+        int lastFruitCount = 0;
+        int currentMax = 0;
+
+        for (int fruit : fruits) {
+            if (fruit == lastFruit || fruit == secondLastFruit) {
+                currentMax += 1; 
+            } else {
+                currentMax = lastFruitCount + 1; 
             }
-            ans = Math.max(ans,r-l+1);
+
+            if (fruit == lastFruit) {
+                lastFruitCount += 1;
+            } else {
+                lastFruitCount = 1; 
+                secondLastFruit = lastFruit;
+                lastFruit = fruit;
+            }
+
+            maxFruits = Math.max(maxFruits, currentMax);
         }
-        return ans; 
+
+        return maxFruits; 
+    }
 }
