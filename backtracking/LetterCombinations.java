@@ -11,6 +11,12 @@ Example:
 Input: "23"
 Output:
 [ad, ae, af, bd, be, bf, cd, ce, cf]
+
+APPROACH:
+- Backtracking
+- At each digit, try all possible letters
+- Build the combination step by step
+- When length == digits.length → save result
 */
 
 public class LetterCombinations {
@@ -19,24 +25,18 @@ public class LetterCombinations {
 
         String digits = "23";
 
-        Solution solution = new Solution();
-        List<String> result = solution.letterCombinations(digits);
+        List<String> result = letterCombinations(digits);
 
-        // Print results
+        System.out.println("Letter combinations for digits \"" + digits + "\":");
         for (String s : result) {
             System.out.println(s);
         }
     }
-}
 
-// LeetCode-style Solution class
-class Solution {
-
-    public List<String> letterCombinations(String digits) {
+    public static List<String> letterCombinations(String digits) {
 
         List<String> result = new ArrayList<>();
 
-        // Edge case
         if (digits == null || digits.length() == 0) {
             return result;
         }
@@ -60,22 +60,51 @@ class Solution {
     }
 
     /*
-    TRACE for digits = "23"
+    STEP-BY-STEP TRACE for digits = "23"
 
-    index=0 → digit '2' → "abc"
-      choose 'a'
-        index=1 → digit '3' → "def"
-          ad ✔ ae ✔ af ✔
-      choose 'b'
-          bd ✔ be ✔ bf ✔
-      choose 'c'
-          cd ✔ ce ✔ cf ✔
+    Initial call: index=0, path=""
+
+    Level 0 (index=0, digit='2', letters="abc")
+    -------------------------------------------
+    Choose 'a' → path="a"
+      Level 1 (index=1, digit='3', letters="def")
+        Choose 'd' → path="ad" → index=2 → SAVE "ad"
+        Backtrack → path="a"
+        Choose 'e' → path="ae" → SAVE "ae"
+        Backtrack → path="a"
+        Choose 'f' → path="af" → SAVE "af"
+        Backtrack → path="a"
+    Backtrack → path=""
+
+    Choose 'b' → path="b"
+      Level 1 (index=1, letters="def")
+        "bd" → SAVE
+        "be" → SAVE
+        "bf" → SAVE
+    Backtrack → path=""
+
+    Choose 'c' → path="c"
+      Level 1 (index=1, letters="def")
+        "cd" → SAVE
+        "ce" → SAVE
+        "cf" → SAVE
+    Backtrack → path=""
+
+    END
+    Final result: [ad, ae, af, bd, be, bf, cd, ce, cf]
+
+    RECURSION TREE VISUAL:
+          ""
+       /    |    \
+      a     b     c
+    / | \  / | \  / | \
+   ad ae af bd be bf cd ce cf
     */
 
-    private void backtrack(String digits, int index,
-                           StringBuilder path,
-                           List<String> result,
-                           String[] map) {
+    private static void backtrack(String digits, int index,
+                                  StringBuilder path,
+                                  List<String> result,
+                                  String[] map) {
 
         // Base case: full combination formed
         if (index == digits.length()) {
