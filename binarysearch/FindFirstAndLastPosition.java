@@ -2,6 +2,31 @@ import java.util.Arrays;
 
 public class FindFirstAndLastPosition {
 
+    /*
+    LeetCode Problem 34: Find First and Last Position of Element in Sorted Array
+
+    Description:
+    Given an integer array nums sorted in ascending order, 
+    find the starting and ending position of a given target value.
+
+    If target is not found in the array, return [-1, -1].
+
+    You must write an algorithm with O(log n) runtime complexity.
+
+    Example 1:
+    Input: nums = [5,7,7,8,8,10], target = 8
+    Output: [3,4]
+
+    Example 2:
+    Input: nums = [5,7,7,8,8,10], target = 6
+    Output: [-1,-1]
+
+    Constraints:
+    0 <= nums.length <= 10^5
+    -10^9 <= nums[i] <= 10^9
+    nums is a non-decreasing array.
+    */
+
     /**
      * Function to find the first and last position of a target element in a sorted array.
      * @param nums: the sorted integer array
@@ -70,6 +95,12 @@ public class FindFirstAndLastPosition {
         // Print result
         System.out.println("First and Last Position of " + target + ": " + Arrays.toString(result));
         // Expected Output: [3, 4]
+
+        // Test a case where target is not found
+        target = 6;
+        result = searchRange(nums, target);
+        System.out.println("First and Last Position of " + target + ": " + Arrays.toString(result));
+        // Expected Output: [-1, -1]
     }
 }
 
@@ -85,7 +116,7 @@ Explanation:
    - Binary search takes O(log n)
    - Two searches → still O(log n)
 5. Space Complexity: O(1) → no extra space used.
-6. Example:
+6. Example Trace:
    nums = [5, 7, 7, 8, 8, 10], target = 8
    - First occurrence → index 3
    - Last occurrence  → index 4
