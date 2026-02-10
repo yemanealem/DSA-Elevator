@@ -68,15 +68,42 @@ public class FindPeakElement {
 }
 
 /*
-Explanation:
+Explanation & Trace Example:
 
-1. Use binary search to find a peak element:
-   - Compare nums[mid] with nums[mid+1]
-   - If nums[mid] < nums[mid+1], move to the right half → peak is there
-   - Else, move to the left half → peak is at mid or left
-2. Repeat until left == right → this is the peak index
-3. Time Complexity: O(log n) → binary search
-4. Space Complexity: O(1) → no extra space used
-5. Works because nums[-1] and nums[n] are treated as -∞
-6. Returns any peak (multiple peaks are allowed)
+nums = [1, 2, 1, 3, 5, 6, 4]
+Goal: Find any peak element.
+
+Step 1:
+left = 0, right = 6
+mid = 0 + (6-0)/2 = 3
+nums[mid] = 3, nums[mid+1] = 5
+3 < 5 → move left = mid + 1 = 4
+
+Step 2:
+left = 4, right = 6
+mid = 4 + (6-4)/2 = 5
+nums[mid] = 6, nums[mid+1] = 4
+6 > 4 → move right = mid = 5
+
+Step 3:
+left = 4, right = 5
+mid = 4 + (5-4)/2 = 4
+nums[mid] = 5, nums[mid+1] = 6
+5 < 6 → move left = mid + 1 = 5
+
+End:
+left = 5, right = 5 → peak found at index 5
+nums[5] = 6 is a peak because nums[5] > nums[4] and nums[5] > nums[6]
+
+Summary Table:
+
+| Iteration | left | right | mid | nums[mid] | nums[mid+1] | Action        |
+|-----------|------|-------|-----|-----------|-------------|---------------|
+| 1         | 0    | 6     | 3   | 3         | 5           | left = mid+1  |
+| 2         | 4    | 6     | 5   | 6         | 4           | right = mid   |
+| 3         | 4    | 5     | 4   | 5         | 6           | left = mid+1  |
+| End       | 5    | 5     | -   | 6         | -           | Peak found    |
+
+Time Complexity: O(log n)
+Space Complexity: O(1)
 */
