@@ -7,16 +7,12 @@ public class MinimumWindowSubstring {
      * Find the smallest substring in s that contains all characters of t.
      * 
      * Optimized using sliding window with fixed-size arrays (ASCII 128 chars)
-     * 
-     * Example:
-     * s = "ADOBECODEBANC", t = "ABC"
-     * Output: "BANC"
      */
 
     public String minWindow(String s, String t) {
         if (s.length() < t.length()) return "";
 
-        int[] tCount = new int[128];      // counts for t
+        int[] tCount = new int[128];      // counts for characters in t
         int[] windowCount = new int[128]; // counts for current window
 
         // Fill t counts
@@ -24,17 +20,19 @@ public class MinimumWindowSubstring {
             tCount[c]++;
         }
 
+        // Number of unique characters to match
         int required = 0;
         for (int count : tCount) {
             if (count > 0) required++;
         }
 
         int left = 0, right = 0;
-        int formed = 0; // number of chars in window that meet tCount requirement
+        int formed = 0; // unique chars in window that meet required count
         int minLen = Integer.MAX_VALUE;
         int start = 0;
 
-        System.out.println("Sliding Window Trace:");
+        System.out.println("Step-by-step sliding window trace:\n");
+
         while (right < s.length()) {
             char c = s.charAt(right);
             windowCount[c]++;
@@ -44,7 +42,7 @@ public class MinimumWindowSubstring {
                 formed++;
             }
 
-            // Try to shrink the window from the left
+            // Shrink window from left if valid
             while (left <= right && formed == required) {
                 char ch = s.charAt(left);
 
@@ -54,6 +52,7 @@ public class MinimumWindowSubstring {
                     start = left;
                 }
 
+                // Remove left char from window
                 windowCount[ch]--;
                 if (tCount[ch] > 0 && windowCount[ch] < tCount[ch]) {
                     formed--;
@@ -61,6 +60,10 @@ public class MinimumWindowSubstring {
 
                 left++;
             }
+
+            // Trace info for current step
+            System.out.println("Right: " + right + " (char '" + c + "'), Left: " + left
+                    + ", Formed: " + formed + ", Current window: '" + s.substring(left-1, right+1) + "'");
 
             right++;
         }
@@ -74,21 +77,23 @@ public class MinimumWindowSubstring {
         String s = "ADOBECODEBANC";
         String t = "ABC";
 
+        System.out.println("Input string: " + s);
+        System.out.println("Characters to include: " + t + "\n");
+
         String result = solution.minWindow(s, t);
 
-        System.out.println("\nInput string: " + s);
-        System.out.println("Characters to include: " + t);
-        System.out.println("Minimum window substring containing all characters: " + result);
+        System.out.println("\nMinimum window substring containing all characters: " + result);
 
         /*
-         * Step-by-step (high-level) sliding window trace:
-         * - Expand right pointer until all characters in t are included in the window.
-         * - Shrink left pointer as much as possible while window remains valid.
-         * - Update minimum length whenever window is valid.
-         * Example for this input:
-         * Right moves: A D O B E C O D E B A N C
-         * Left shrinks to remove unnecessary chars
-         * Minimum valid window found: B A N C
+         * How it works (high-level trace):
+         * 1. Expand right pointer until window contains all chars of t.
+         * 2. Shrink left pointer to remove unnecessary chars while keeping window valid.
+         * 3. Keep updating minimum window length whenever a valid window is found.
+         * 
+         * Example trace for s = "ADOBECODEBANC", t = "ABC":
+         * Step 1: window "ADOBEC" → valid, shrink left → "DOBEC"
+         * Step 2: window "BECODEBA" → valid, shrink left → "BANC"
+         * Final minimum window → "BANC"
          */
     }
 }
