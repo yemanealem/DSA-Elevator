@@ -1,58 +1,46 @@
-
 class Solution {
-
     public List<String> removeInvalidParentheses(String s) {
-        List<String> result = new ArrayList<>();
-        Set<String> visited = new HashSet<>();
-        Queue<String> queue = new LinkedList<>();
-
-        queue.offer(s);
-        visited.add(s);
-
-        boolean found = false;
-
-        while (!queue.isEmpty()) {
-            String curr = queue.poll();
-
-            if (isValid(curr)) {
-                result.add(curr);
-                found = true;
-            }
-
-            if (found) continue;
-
-            for (int i = 0; i < curr.length(); i++) {
-
-                // Only remove parentheses
-                if (curr.charAt(i) != '(' && curr.charAt(i) != ')')
-                    continue;
-
-                // 🔥 KEY OPTIMIZATION:
-                // Skip duplicate removals
-                if (i > 0 && curr.charAt(i) == curr.charAt(i - 1))
-                    continue;
-
-                String next = curr.substring(0, i) + curr.substring(i + 1);
-
-                if (!visited.contains(next)) {
-                    visited.add(next);
-                    queue.offer(next);
-                }
-            }
-        }
-
+         List<String> result = new ArrayList<>();
+        remove(s, result, 0, 0, new char[]{'(', ')'});
         return result;
     }
 
-    private boolean isValid(String s) {
-        int count = 0;
-        for (char c : s.toCharArray()) {
-            if (c == '(') count++;
-            else if (c == ')') {
-                if (count == 0) return false;
-                count--;
+    private void remove(String s, List<String> result,
+                        int last_i, int last_j, char[] par) {
+
+        int stack = 0;
+
+        for (int i = last_i; i < s.length(); i++) {
+            if (s.charAt(i) == par[0]) stack++;
+            if (s.charAt(i) == par[1]) stack--;
+
+            if (stack >= 0) continue;
+
+            // We found extra closing parenthesis
+            for (int j = last_j; j <= i; j++) {
+
+                // Remove only the first parenthesis in consecutive duplicates
+                if (s.charAt(j) == par[1] &&
+                   (j == last_j || s.charAt(j - 1) != par[1])) {
+
+                    remove(
+                        s.substring(0, j) + s.substring(j + 1),
+                        result,
+                        i,
+                        j,
+                        par
+                    );
+                }
             }
+            return;
         }
-        return count == 0; 
+
+        String reversed = new StringBuilder(s).reverse().toString();
+
+        if (par[0] == '(') {
+            remove(reversed, result, 0, 0, new char[]{')', '('});
+        } else {
+            result.add(reversed);
+        } 
     }
 }
