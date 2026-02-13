@@ -1,8 +1,8 @@
+
 class Solution {
+
     public List<String> removeInvalidParentheses(String s) {
         List<String> result = new ArrayList<>();
-        if (s == null) return result;
-
         Set<String> visited = new HashSet<>();
         Queue<String> queue = new LinkedList<>();
 
@@ -19,12 +19,18 @@ class Solution {
                 found = true;
             }
 
-            if (found) continue; // stop generating next level
+            if (found) continue;
 
             for (int i = 0; i < curr.length(); i++) {
-                char c = curr.charAt(i);
 
-                if (c != '(' && c != ')') continue;
+                // Only remove parentheses
+                if (curr.charAt(i) != '(' && curr.charAt(i) != ')')
+                    continue;
+
+                // 🔥 KEY OPTIMIZATION:
+                // Skip duplicate removals
+                if (i > 0 && curr.charAt(i) == curr.charAt(i - 1))
+                    continue;
 
                 String next = curr.substring(0, i) + curr.substring(i + 1);
 
