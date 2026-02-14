@@ -11,39 +11,54 @@ You must:
 - Do it in-place
 - Use O(1) extra space
 
-Example:
-Input: nums = [1,2,3,4,5,6,7], k = 3
-Output: [5,6,7,1,2,3,4]
-
 -----------------------------------------------------------
-HOW IT WORKS (Reverse Trick)
+DETAILED TRACE EXAMPLE
 -----------------------------------------------------------
 
-If we rotate right by k:
-
-1) Reverse whole array
-2) Reverse first k elements
-3) Reverse remaining elements
-
-Example Trace:
-
-Original:
-[1,2,3,4,5,6,7]
+Input:
+nums = [1,2,3,4,5,6,7]
 k = 3
 
-Step 1:
-Reverse whole array:
+n = 7
+
+Step 0:
+k = k % n
+k = 3 % 7 = 3
+
+-----------------------------------------------------------
+STEP 1: Reverse entire array
+-----------------------------------------------------------
+
+Before:
+[1,2,3,4,5,6,7]
+
+After reversing whole array:
 [7,6,5,4,3,2,1]
 
-Step 2:
-Reverse first 3:
+-----------------------------------------------------------
+STEP 2: Reverse first k elements (0 to k-1)
+-----------------------------------------------------------
+
+Reverse first 3 elements:
+[7,6,5]
+
+After reversing:
 [5,6,7,4,3,2,1]
 
-Step 3:
-Reverse rest:
+-----------------------------------------------------------
+STEP 3: Reverse remaining elements (k to n-1)
+-----------------------------------------------------------
+
+Reverse from index 3 to 6:
+[4,3,2,1]
+
+After reversing:
 [5,6,7,1,2,3,4]
 
 -----------------------------------------------------------
+FINAL RESULT:
+[5,6,7,1,2,3,4]
+
 Time Complexity: O(n)
 Space Complexity: O(1)
 -----------------------------------------------------------
@@ -57,20 +72,19 @@ class RotateArray {
 
         int n = nums.length;
 
-        // Important: handle k > n
+        // handle k greater than array length
         k = k % n;
 
-        // Step 1: Reverse entire array
+        // Step 1
         reverse(nums, 0, n - 1);
 
-        // Step 2: Reverse first k elements
+        // Step 2
         reverse(nums, 0, k - 1);
 
-        // Step 3: Reverse remaining elements
+        // Step 3
         reverse(nums, k, n - 1);
     }
 
-    // Helper method to reverse part of array
     private void reverse(int[] nums, int start, int end) {
         while (start < end) {
             int temp = nums[start];
