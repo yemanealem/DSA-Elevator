@@ -2,31 +2,17 @@ import java.util.*;
 
 /*
 ===========================================================
-Class: FourSum
+Optimized 4Sum with Pruning
 
-Problem:
-Given an integer array nums and an integer target,
-return all unique quadruplets [a,b,c,d] such that:
-a + b + c + d == target.
-
-Example:
-Input: nums = [1,0,-1,0,-2,2], target = 0
-Output:
-[
- [-2,-1,1,2],
- [-2,0,0,2],
- [-1,0,0,1]
-]
-
-Approach:
-1. Sort array
-2. Fix first index (i)
-3. Fix second index (j)
-4. Use two pointers (left, right)
-5. Skip duplicates
+Key Optimizations:
+1. Early break if minimum possible sum > target
+2. Early continue if maximum possible sum < target
+3. Same pruning inside second loop
+4. Skip duplicates properly
+5. Use long to prevent overflow
 
 Time Complexity: O(n^3)
-Space Complexity: O(1) (excluding output)
+But MUCH faster in practice due to pruning.
 ===========================================================
 */
 
@@ -35,24 +21,34 @@ public class FourSum {
     public static List<List<Integer>> fourSum(int[] nums, int target) {
 
         List<List<Integer>> result = new ArrayList<>();
+        int n = nums.length;
 
-        if (nums == null || nums.length < 4) {
-            return result;
-        }
+        if (n < 4) return result;
 
         Arrays.sort(nums);
 
-        int n = nums.length;
-
         for (int i = 0; i < n - 3; i++) {
 
-            // Skip duplicate i
             if (i > 0 && nums[i] == nums[i - 1]) continue;
+
+            // 🔥 Early break (smallest possible sum too big)
+            long min1 = (long) nums[i] + nums[i+1] + nums[i+2] + nums[i+3];
+            if (min1 > target) break;
+
+            // 🔥 Early continue (largest possible sum too small)
+            long max1 = (long) nums[i] + nums[n-1] + nums[n-2] + nums[n-3];
+            if (max1 < target) continue;
 
             for (int j = i + 1; j < n - 2; j++) {
 
-                // Skip duplicate j
                 if (j > i + 1 && nums[j] == nums[j - 1]) continue;
+
+                // 🔥 Inner pruning
+                long min2 = (long) nums[i] + nums[j] + nums[j+1] + nums[j+2];
+                if (min2 > target) break;
+
+                long max2 = (long) nums[i] + nums[j] + nums[n-1] + nums[n-2];
+                if (max2 < target) continue;
 
                 int left = j + 1;
                 int right = n - 1;
@@ -69,7 +65,6 @@ public class FourSum {
                                 nums[left], nums[right]
                         ));
 
-                        // Skip duplicates
                         while (left < right && nums[left] == nums[left + 1]) left++;
                         while (left < right && nums[right] == nums[right - 1]) right--;
 
@@ -95,7 +90,6 @@ public class FourSum {
 
         List<List<Integer>> result = fourSum(nums, target);
 
-        System.out.println("Quadruplets:");
         for (List<Integer> quad : result) {
             System.out.println(quad);
         }
