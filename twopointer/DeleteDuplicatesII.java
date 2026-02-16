@@ -26,17 +26,14 @@ Space Complexity: O(1)
 
 public class DeleteDuplicatesII {
 
-    // Definition for singly-linked list
     static class ListNode {
         int val;
         ListNode next;
-
         ListNode() {}
         ListNode(int val) { this.val = val; }
         ListNode(int val, ListNode next) { this.val = val; this.next = next; }
     }
 
-    // Method to remove duplicates
     public static ListNode deleteDuplicates(ListNode head) {
 
         if (head == null) return null;
@@ -44,25 +41,60 @@ public class DeleteDuplicatesII {
         ListNode dummy = new ListNode(0);
         dummy.next = head;
 
-        ListNode prev = dummy; // last unique node
-        ListNode curr = head;  // pointer to traverse
+        ListNode prev = dummy;
+        ListNode curr = head;
+
+        /*
+        Trace for Example: 1 -> 2 -> 3 -> 3 -> 4 -> 4 -> 5
+
+        Initial:
+        dummy -> 0 -> 1 -> 2 -> 3 -> 3 -> 4 -> 4 -> 5
+        prev = dummy, curr = 1
+
+        Step 1:
+        curr = 1
+        curr.next.val = 2 (not equal)
+        -> move prev = 1, curr = 2
+
+        Step 2:
+        curr = 2
+        curr.next.val = 3 (not equal)
+        -> move prev = 2, curr = 3
+
+        Step 3:
+        curr = 3
+        curr.next.val = 3 (duplicate detected)
+        -> skip all 3s: curr = 3 (second 3)
+        -> prev.next = curr.next = 4
+        List now: 0 -> 1 -> 2 -> 4 -> 4 -> 5
+        curr = 4
+
+        Step 4:
+        curr = 4
+        curr.next.val = 4 (duplicate detected)
+        -> skip all 4s: curr = 4 (second 4)
+        -> prev.next = curr.next = 5
+        List now: 0 -> 1 -> 2 -> 5
+        curr = 5
+
+        Step 5:
+        curr = 5
+        curr.next = null (no duplicate)
+        -> move prev = 5, curr = null
+
+        Done.
+        Final List: 1 -> 2 -> 5
+        */
 
         while (curr != null) {
 
-            // If duplicates detected
             if (curr.next != null && curr.val == curr.next.val) {
-
-                // Skip all nodes with same value
                 while (curr.next != null && curr.val == curr.next.val) {
-                    curr = curr.next;
+                    curr = curr.next; // skip duplicates
                 }
-
-                // Remove duplicates
-                prev.next = curr.next;
-
+                prev.next = curr.next; // remove duplicates
             } else {
-                // Move prev only if current is unique
-                prev = prev.next;
+                prev = prev.next; // move prev if unique
             }
 
             curr = curr.next;
@@ -71,7 +103,6 @@ public class DeleteDuplicatesII {
         return dummy.next;
     }
 
-    // Helper method to print the linked list
     public static void printList(ListNode head) {
         while (head != null) {
             System.out.print(head.val);
@@ -81,10 +112,8 @@ public class DeleteDuplicatesII {
         System.out.println();
     }
 
-    // Main method to test the solution
     public static void main(String[] args) {
 
-        // Example 1: 1 -> 2 -> 3 -> 3 -> 4 -> 4 -> 5
         ListNode head = new ListNode(1,
                         new ListNode(2,
                         new ListNode(3,
@@ -100,20 +129,5 @@ public class DeleteDuplicatesII {
 
         System.out.println("After Removing Duplicates:");
         printList(result);
-
-        // Example 2: 1 -> 1 -> 1 -> 2 -> 3
-        ListNode head2 = new ListNode(1,
-                        new ListNode(1,
-                        new ListNode(1,
-                        new ListNode(2,
-                        new ListNode(3)))));
-
-        System.out.println("\nOriginal List:");
-        printList(head2);
-
-        ListNode result2 = deleteDuplicates(head2);
-
-        System.out.println("After Removing Duplicates:");
-        printList(result2);
     }
 }
