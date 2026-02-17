@@ -12,6 +12,44 @@ Spiral order means:
 3. Right → Left
 4. Bottom → Top
 Repeat while shrinking boundaries.
+
+Example Trace:
+
+Input matrix:
+[
+ [1, 2, 3],
+ [4, 5, 6],
+ [7, 8, 9]
+]
+
+Step-by-step spiral traversal:
+
+Initial boundaries:
+top = 0, bottom = 2, left = 0, right = 2
+
+1️⃣ Traverse Left → Right (top row)
+Add: 1 2 3
+top = 1
+
+2️⃣ Traverse Top → Bottom (right column)
+Add: 6 9
+right = 1
+
+3️⃣ Traverse Right → Left (bottom row)
+Add: 8 7
+bottom = 1
+
+4️⃣ Traverse Bottom → Top (left column)
+Add: 4
+left = 1
+
+5️⃣ Remaining layer:
+Left → Right (only element left)
+Add: 5
+Boundaries crossed → stop
+
+Final Spiral Order:
+[1, 2, 3, 6, 9, 8, 7, 4, 5]
 */
 
 public class SpiralMatrix {
@@ -30,19 +68,19 @@ public class SpiralMatrix {
 
         while (top <= bottom && left <= right) {
 
-            // 1️⃣ Left → Right
+            // 1️⃣ Left → Right (top row)
             for (int i = left; i <= right; i++) {
                 result.add(matrix[top][i]);
             }
             top++;
 
-            // 2️⃣ Top → Bottom
+            // 2️⃣ Top → Bottom (right column)
             for (int i = top; i <= bottom; i++) {
                 result.add(matrix[i][right]);
             }
             right--;
 
-            // 3️⃣ Right → Left
+            // 3️⃣ Right → Left (bottom row)
             if (top <= bottom) {
                 for (int i = right; i >= left; i--) {
                     result.add(matrix[bottom][i]);
@@ -50,7 +88,7 @@ public class SpiralMatrix {
                 bottom--;
             }
 
-            // 4️⃣ Bottom → Top
+            // 4️⃣ Bottom → Top (left column)
             if (left <= right) {
                 for (int i = bottom; i >= top; i--) {
                     result.add(matrix[i][left]);
@@ -61,7 +99,6 @@ public class SpiralMatrix {
 
         return result;
     }
-
 
     // Default main method
     public static void main(String[] args) {
