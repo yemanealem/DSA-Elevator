@@ -60,7 +60,7 @@ class IsValidSudoku {
 }
 
 
-public class Main {
+public class IsValidSudoku {
     public static void main(String[] args) {
         
         char[][] board = {
