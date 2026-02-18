@@ -100,6 +100,7 @@ public class SpiralMatrix {
         return result;
     }
 
+
     public static void main(String[] args) {
 
         int[][] matrix = {
