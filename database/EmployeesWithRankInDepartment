@@ -1,3 +1,75 @@
+/*
+LeetCode — Top 3 Salaries per Department
+
+Question:
+The Employee table holds all employees. 
+Every employee has an Id, Name, Salary, and DepartmentId.
+The Department table holds all departments of the company.
+
+Write a SQL query to find employees who earn the top three salaries in each department.
+If there are less than three salaries in a department, return all of them.
+
+Tables:
+
+Employee
++----+-------+--------+-------------+
+| Id | Name  | Salary | DepartmentId|
++----+-------+--------+-------------+
+
+Department
++----+-------+
+| Id | Name  |
++----+-------+
+
+Output: Department name, Employee name, Salary
+Order by Department name and Salary descending.
+
+---
+
+Solution Explanation:
+1. Use DENSE_RANK() to rank salaries within each department.
+2. PARTITION BY DepartmentId ensures ranking is per department.
+3. ORDER BY Salary DESC ensures highest salaries get rank 1.
+4. Filter with rnk <= 3 to get only top 3 salaries.
+5. Join Employee with Department to get department names.
+6. Order final result by Department and Salary descending.
+
+---
+
+Example Input:
+
+Employee
++----+-------+--------+-------------+
+| Id | Name  | Salary | DepartmentId|
++----+-------+--------+-------------+
+| 1  | Alice | 3000   | 1           |
+| 2  | Bob   | 2000   | 1           |
+| 3  | Carol | 1000   | 1           |
+| 4  | Dave  | 5000   | 2           |
+| 5  | Eve   | 4000   | 2           |
+| 6  | Frank | 3000   | 2           |
+| 7  | Grace | 2000   | 2           |
+
+Department
++----+-------+
+| Id | Name  |
++----+-------+
+| 1  | HR    |
+| 2  | IT    |
+
+Expected Output:
++------------+---------+--------+
+| Department | Employee| Salary |
++------------+---------+--------+
+| HR         | Alice   | 3000   |
+| HR         | Bob     | 2000   |
+| HR         | Carol   | 1000   |
+| IT         | Dave    | 5000   |
+| IT         | Eve     | 4000   |
+| IT         | Frank   | 3000   |
+*/
+
+-- Solution Query
 SELECT 
     d.Name AS Department,
     e.Name AS Employee,
