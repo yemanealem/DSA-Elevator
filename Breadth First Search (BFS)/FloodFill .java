@@ -35,6 +35,12 @@ How it works (trace):
    - Right: (1,2) color 0 → skip
 4. Continue recursively for all connected 1's.
 5. Stop when all connected pixels with original color are replaced.
+
+Time Complexity: O(m * n)
+- Each pixel is visited at most once.
+
+Space Complexity: O(m * n)
+- Recursion stack in the worst case where all pixels have the original color.
 */
 
 public class FloodFill {
