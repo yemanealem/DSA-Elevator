@@ -1,38 +1,32 @@
-public class CandyProblem {
-    public static int candy(int[] ratings) {
-        int n = ratings.length;
-        int[] candies = new int[n];
-        
-        // Step 1: each child gets at least 1 candy
-        for (int i = 0; i < n; i++) {
-            candies[i] = 1;
-        }
+class Solution {
+    public int candy(int[] ratings) {
+         int n = ratings.length;
+        if (n == 0) return 0;
 
-        // Step 2: left to right
+        int total = 1;    
+        int up = 0;      
+        int down = 0;     
+        int peak = 1;     
+
         for (int i = 1; i < n; i++) {
-            if (ratings[i] > ratings[i - 1]) {
-                candies[i] = candies[i - 1] + 1;
+            if (ratings[i] > ratings[i - 1]) {         
+                up++;
+                peak = up + 1;
+                total += peak;
+                down = 0;                              
+            } else if (ratings[i] < ratings[i - 1]) {  
+                down++;
+                total += down;
+                if (down >= peak) total++;              
+                up = 0;                                
+            } else {                                    
+                up = 0;
+                down = 0;
+                peak = 1;
+                total += 1;
             }
-        }
-
-        // Step 3: right to left
-        for (int i = n - 2; i >= 0; i--) {
-            if (ratings[i] > ratings[i + 1]) {
-                candies[i] = Math.max(candies[i], candies[i + 1] + 1);
-            }
-        }
-
-        // Step 4: sum up all candies
-        int total = 0;
-        for (int c : candies) {
-            total += c;
         }
 
         return total;
-    }
-
-    public static void main(String[] args) {
-        int[] ratings = {1, 0, 2};
-        System.out.println("Minimum candies needed: " + candy(ratings)); // Output: 5
     }
 }
