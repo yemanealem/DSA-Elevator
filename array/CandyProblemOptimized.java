@@ -1,12 +1,9 @@
-public class CandyProblemOptimized {
-    public static int candy(int[] ratings) {
-        int n = ratings.length;
+ int n = ratings.length;
         if (n == 0) return 0;
 
+        // Left-to-right array to track increasing sequence
         int[] left = new int[n];
-        for (int i = 0; i < n; i++) {
-            left[i] = 1;
-        }
+        for (int i = 0; i < n; i++) left[i] = 1;
 
         // Left to right
         for (int i = 1; i < n; i++) {
@@ -15,26 +12,17 @@ public class CandyProblemOptimized {
             }
         }
 
-        int total = left[n - 1];
+        int total = 0;
         int right = 1;
 
         // Right to left
-        for (int i = n - 2; i >= 0; i--) {
-            if (ratings[i] > ratings[i + 1]) {
+        for (int i = n - 1; i >= 0; i--) {
+            if (i < n - 1 && ratings[i] > ratings[i + 1]) {
                 right++;
-            } else {
+            } else if (i < n - 1 && ratings[i] <= ratings[i + 1]) {
                 right = 1;
             }
-            total += Math.max(left[i], right) - left[i];
+            total += Math.max(left[i], right);
         }
 
         return total;
-    }
-
-    public static void main(String[] args) {
-        int[] ratings1 = {1, 0, 2};
-        int[] ratings2 = {1, 2, 3, 2, 1};
-        System.out.println(candy(ratings1)); // 5
-        System.out.println(candy(ratings2)); // 9
-    }
-}
