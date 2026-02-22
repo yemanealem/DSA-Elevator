@@ -1,3 +1,8 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class SubstringWithConcatenationOfAllWords {
 
     /*
@@ -7,18 +12,15 @@ public class SubstringWithConcatenationOfAllWords {
 
     Problem:
     --------
-    You are given a string s and an array of strings words.
-    All words are of the same length.
-
-    A concatenated substring is formed by concatenating each word
-    exactly once in any order, without any extra characters.
+    Given a string s and an array of strings words.
+    All words have the same length.
 
     Return all starting indices of substring(s) in s that is a
-    concatenation of each word exactly once.
+    concatenation of each word exactly once and without
+    any intervening characters.
 
-    ------------------------------------------------------------
     Example:
-    ------------------------------------------------------------
+    --------
     Input:
         s = "barfoothefoobarman"
         words = ["foo","bar"]
@@ -26,80 +28,48 @@ public class SubstringWithConcatenationOfAllWords {
     Output:
         [0, 9]
 
-    Explanation:
-        "barfoo" starts at index 0
-        "foobar" starts at index 9
-
     ============================================================
     SLIDING WINDOW APPROACH
     ============================================================
 
-    Key Observations:
-    -----------------
-    1. All words have same length → wordLen
-    2. Total window size = wordLen * numberOfWords
-    3. We move window in steps of wordLen
-    4. Use frequency map to track required words
-
-    Algorithm:
+    Key Idea:
     ----------
-    1. Build a frequency map of words.
-    2. Loop from i = 0 to wordLen - 1
-       (to handle different alignments)
-    3. Use sliding window:
-        - right pointer moves in steps of wordLen
-        - track current word count
-        - if word exceeds frequency → shrink from left
-        - if count matches → record starting index
+    1. Each word has equal length → wordLen
+    2. Total window size = wordLen * words.length
+    3. Move window in steps of wordLen
+    4. Use two HashMaps:
+         - wordCount (required frequency)
+         - currentMap (current window frequency)
+
+    We iterate starting from 0 to wordLen - 1
+    to handle different alignments.
 
     ============================================================
-    TRACE EXAMPLE
+    RUNNING TIME
     ============================================================
 
-    s = "barfoothefoobarman"
-    words = ["foo","bar"]
+    Let:
+        n = s.length()
+        m = number of words
+        k = word length
 
-    wordLen = 3
-    totalWords = 2
-    windowSize = 6
+    Each character is processed at most twice.
+    Time Complexity: O(n)
+    (More precisely O(n * k) due to substring creation)
 
-    Start i = 0
+    Space Complexity: O(m)
+    For storing word frequencies.
 
-    right=0 → "bar" ✓
-    right=3 → "foo" ✓
-    count=2 → add index 0
-
-    right=9 → "foo"
-    right=12 → "bar"
-    count=2 → add index 9
-
-    Result = [0,9]
-
-    ============================================================
-    Time Complexity:
-    ------------------------------------------------------------
-    n = length of string
-    m = number of words
-    k = word length
-
-    Each character is visited at most twice.
-    Time Complexity = O(n)
-    (more precisely O(n * k))
-
-    ============================================================
-    Space Complexity:
-    ------------------------------------------------------------
-    O(m) for storing word frequencies
     ============================================================
     */
 
-    public static java.util.List<Integer> findSubstring(String s, String[] words) {
+    public static List<Integer> findSubstring(String s, String[] words) {
 
-        java.util.List<Integer> result = new java.util.ArrayList<>();
+        List<Integer> result = new ArrayList<>();
         if (s == null || s.length() == 0 || words.length == 0)
             return result;
 
-        java.util.Map<String, Integer> wordCount = new java.util.HashMap<>();
+        Map<String, Integer> wordCount = new HashMap<>();
 
         for (String word : words) {
             wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
@@ -107,13 +77,12 @@ public class SubstringWithConcatenationOfAllWords {
 
         int wordLen = words[0].length();
         int totalWords = words.length;
-        int windowSize = wordLen * totalWords;
 
         for (int i = 0; i < wordLen; i++) {
 
             int left = i;
             int count = 0;
-            java.util.Map<String, Integer> currentMap = new java.util.HashMap<>();
+            Map<String, Integer> currentMap = new HashMap<>();
 
             for (int right = i; right + wordLen <= s.length(); right += wordLen) {
 
