@@ -1,24 +1,9 @@
-// Find Center of Star Graph - LeetCode
-// Question:
-// In a star graph, there is one center node connected to all other nodes.
-// Given edges of the star graph, return the center node.
-//
-// How it works (Graph Theory):
-// - The center node appears in every edge.
-// - So the center must be either edges[0][0] or edges[0][1].
-// - Check which one appears in the next edge.
-//
-// Running Time:
-// - O(1) (constant time)
-// - Space: O(1)
-
 public class FindCenterOfStarGraph {
 
     public int findCenter(int[][] edges) {
         int a = edges[0][0];
         int b = edges[0][1];
 
-        // The center must appear in the second edge
         if (edges[1][0] == a || edges[1][1] == a) {
             return a;
         } else {
@@ -39,4 +24,26 @@ public class FindCenterOfStarGraph {
 
         System.out.println("Center of Star Graph: " + center);
     }
+
+    /*
+     * Question:
+     * Find the center of a star graph. A star graph has one center node connected
+     * to all other nodes. Given the edges of the graph, return the center node.
+     *
+     * How it works (Graph Theory):
+     * In a star graph, the center node appears in every edge.
+     * So the center must be either edges[0][0] or edges[0][1].
+     * To determine which one, we check the second edge:
+     * - If edges[1] contains edges[0][0], that is the center.
+     * - Otherwise, edges[0][1] is the center.
+     *
+     * Trace:
+     * edges[0] = {1,2} -> candidates: 1 or 2
+     * edges[1] = {2,3} -> contains 2, so center = 2
+     * edges[2] = {2,4} -> also contains 2 (valid star)
+     *
+     * Running Time:
+     * O(1) because we check only two edges.
+     * Space Complexity: O(1)
+     */
 }
