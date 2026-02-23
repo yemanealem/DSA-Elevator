@@ -1,27 +1,30 @@
 public class FindTheTownJudge {
 
     public int findJudge(int n, int[][] trust) {
-        int[] trustCount = new int[n + 1];
-        int[] trustedBy = new int[n + 1];
 
-        // How it works:
-        // trust[i] = {a, b} means person a trusts person b.
+        // Graph Theory Approach (Optimized):
         // The judge:
-        // - trusts nobody (trustCount[judge] == 0)
-        // - is trusted by everyone else (trustedBy[judge] == n - 1)
+        // - Has indegree = n - 1 (everyone trusts the judge)
+        // - Has outdegree = 0 (judge trusts no one)
 
-        for (int[] t : trust) {
-            trustCount[t[0]]++;
-            trustedBy[t[1]]++;
+        int[] indegree = new int[n + 1];
+        int[] outdegree = new int[n + 1];
+
+        for (int[] edge : trust) {
+            int a = edge[0];
+            int b = edge[1];
+
+            outdegree[a]++;  // a trusts someone (so not judge)
+            indegree[b]++;    // b is trusted
         }
 
         for (int i = 1; i <= n; i++) {
-            if (trustCount[i] == 0 && trustedBy[i] == n - 1) {
+            if (indegree[i] == n - 1 && outdegree[i] == 0) {
                 return i; // This is the town judge
             }
         }
 
-        return -1; // No judge found
+        return -1;
     }
 
     public static void main(String[] args) {
@@ -39,31 +42,26 @@ public class FindTheTownJudge {
     }
 
     /*
-     * Question:
-     * Find the town judge. In the town, if there is a judge:
-     * - The judge trusts nobody.
-     * - Everyone else trusts the judge.
+     * Question (Graph Theory):
+     * In a directed graph:
+     * - Each trust relationship is an edge: a -> b (a trusts b).
+     * - The judge has:
+     *   indegree = n - 1 (everyone points to judge)
+     *   outdegree = 0 (judge points to no one)
      *
-     * How it works (Graph Theory):
-     * We use two arrays:
-     * - trustCount[i]: how many people i trusts.
-     * - trustedBy[i]: how many people trust i.
+     * Why?
+     * - If someone trusts the judge → incoming edge (indegree++)
+     * - Judge trusts no one → no outgoing edges (outdegree = 0)
      *
-     * The judge condition:
-     * - trustCount[judge] == 0 (does not trust anyone)
-     * - trustedBy[judge] == n - 1 (everyone else trusts judge)
-     *
-     * Trace Example:
-     * n = 3
+     * Trace:
      * trust = { {1,3}, {2,3} }
-     * trustCount[1] = 1, trustedBy[3] = 2
-     * trustCount[2] = 1, trustedBy[3] = 2
-     * trustCount[3] = 0
-     * -> 3 is the judge
+     * indegree[3] = 2 (from 1 and 2)
+     * outdegree[3] = 0
+     * => 3 is the judge
      *
      * Running Time:
-     * O(n) because we iterate through trust array and check once.
+     * O(n)
      * Space Complexity:
-     * O(n) for arrays.
+     * O(n)
      */
 }
