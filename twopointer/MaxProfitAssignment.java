@@ -1,27 +1,23 @@
 public class MaxProfitAssignment {
-     int n = difficulty.length;
-        int[][] jobs = new int[n][2];
+    int n = difficulty.length;
 
-        for (int i = 0; i < n; i++) {
-            jobs[i][0] = difficulty[i];
-            jobs[i][1] = profit[i];
-        }
+        Integer[] idx = new Integer[n];
+        for (int i = 0; i < n; i++) idx[i] = i;
 
-        Arrays.sort(jobs, (a, b) -> Integer.compare(a[0], b[0]));
+        // Sort indices by difficulty (avoids building 2D array)
+        Arrays.sort(idx, (a, b) -> Integer.compare(difficulty[a], difficulty[b]));
 
         Arrays.sort(worker);
 
-        int i = 0; 
+        int i = 0;
         int best = 0;
         int total = 0;
 
         for (int w : worker) {
-
-            while (i < n && jobs[i][0] <= w) {
-                best = Math.max(best, jobs[i][1]);
+            while (i < n && difficulty[idx[i]] <= w) {
+                best = Math.max(best, profit[idx[i]]);
                 i++;
             }
-
             total += best;
         }
 
