@@ -1,6 +1,14 @@
-public class RotateRigh {
+public class RotateRight {
 
-    // Definition for singly-linked list
+    // ----------------------------------------------------------------------
+    // Question:
+    // Given the head of a singly linked list, rotate the list to the right by k places.
+    //
+    // Example:
+    // Input:  1 -> 2 -> 3 -> 4 -> 5, k = 2
+    // Output: 4 -> 5 -> 1 -> 2 -> 3
+    // ----------------------------------------------------------------------
+
     static class ListNode {
         int val;
         ListNode next;
@@ -24,7 +32,16 @@ public class RotateRigh {
             return head;
         }
 
-        // 1️⃣ Find length and tail
+        // ------------------------------------------------------------------
+        // How it works:
+        // 1. Find the length of the list and the last node (tail).
+        // 2. Connect tail -> head to form a circular list.
+        // 3. Reduce k using (k % length) because rotating full cycles has no effect.
+        // 4. Find the new tail at position (length - k).
+        // 5. Break the circular link and return the new head.
+        // ------------------------------------------------------------------
+
+        // Step 1: Find length and tail
         ListNode tail = head;
         int length = 1;
 
@@ -33,16 +50,16 @@ public class RotateRigh {
             length++;
         }
 
-        // 2️⃣ Reduce k
+        // Step 2: Reduce k
         k = k % length;
         if (k == 0) {
             return head;
         }
 
-        // 3️⃣ Make circular
+        // Step 3: Make circular
         tail.next = head;
 
-        // 4️⃣ Find new tail
+        // Step 4: Find new tail
         int stepsToNewTail = length - k;
         ListNode newTail = head;
 
@@ -50,7 +67,7 @@ public class RotateRigh {
             newTail = newTail.next;
         }
 
-        // 5️⃣ Break circle
+        // Step 5: Set new head and break circle
         ListNode newHead = newTail.next;
         newTail.next = null;
 
