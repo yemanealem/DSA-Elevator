@@ -1,74 +1,42 @@
-import java.util.Stack;
-
 public class RemoveKDigits {
-
-    /*
-     * LeetCode Problem: Remove K Digits
-     *
-     * Question:
-     * Given a string num representing a non-negative integer and an integer k,
-     * remove k digits from the number so that the new number is the smallest possible.
-     *
-     * Example:
-     * Input: num = "1432219", k = 3
-     * Output: "1219"
-     *
-     * How It Works (Greedy + Monotonic Stack):
-     * 1. Use a stack to maintain digits in increasing order.
-     * 2. While:
-     *      - k > 0
-     *      - stack not empty
-     *      - top of stack > current digit
-     *    → pop the stack (remove larger digit).
-     *
-     * 3. Push current digit into stack.
-     * 4. If k still > 0 after traversal, remove remaining digits from the end.
-     * 5. Build result and remove leading zeros.
-     *
-     * Running Time:
-     * Time Complexity: O(n)
-     *   - Each digit pushed and popped at most once.
-     * Space Complexity: O(n)
-     *   - Stack stores digits.
-     */
 
     public static String removeKdigits(String num, int k) {
 
-        Stack<Character> stack = new Stack<>();
+        // Edge case
+        if (k == num.length()) return "0";
+
+        StringBuilder stack = new StringBuilder();
 
         for (char digit : num.toCharArray()) {
 
-            while (k > 0 && !stack.isEmpty() && stack.peek() > digit) {
-                stack.pop();
+            // Remove larger digits from the end
+            while (k > 0 && stack.length() > 0 
+                    && stack.charAt(stack.length() - 1) > digit) {
+
+                stack.deleteCharAt(stack.length() - 1);
                 k--;
             }
 
-            stack.push(digit);
+            stack.append(digit);
         }
 
         // If k still remains, remove from end
-        while (k > 0) {
-            stack.pop();
-            k--;
+        stack.setLength(stack.length() - k);
+
+        // Remove leading zeros efficiently
+        int start = 0;
+        while (start < stack.length() && stack.charAt(start) == '0') {
+            start++;
         }
 
-        // Build result
-        StringBuilder result = new StringBuilder();
-        for (char digit : stack) {
-            result.append(digit);
-        }
+        String result = stack.substring(start);
 
-        // Remove leading zeros
-        while (result.length() > 0 && result.charAt(0) == '0') {
-            result.deleteCharAt(0);
-        }
-
-        return result.length() == 0 ? "0" : result.toString();
+        return result.isEmpty() ? "0" : result;
     }
 
     public static void main(String[] args) {
-        System.out.println(removeKdigits("1432219", 3)); // Output: 1219
-        System.out.println(removeKdigits("10200", 1));   // Output: 200
-        System.out.println(removeKdigits("10", 2));      // Output: 0
+        System.out.println(removeKdigits("1432219", 3)); // 1219
+        System.out.println(removeKdigits("10200", 1));   // 200
+        System.out.println(removeKdigits("10", 2));      // 0
     }
 }
