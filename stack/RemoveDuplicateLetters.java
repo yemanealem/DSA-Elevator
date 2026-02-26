@@ -1,71 +1,45 @@
-import java.util.*;
-
-/**
- * LeetCode 316 - Remove Duplicate Letters
- *
- * Problem:
- * Remove duplicate letters so that every letter appears once
- * and result is the smallest lexicographical order.
- *
- * Approach:
- * 1. Track last occurrence of each character.
- * 2. Use stack (Deque) to build result.
- * 3. If current char is smaller than stack top
- *    AND stack top appears later, pop it.
- * 4. Use visited[] to avoid duplicates.
- *
- * Time Complexity: O(n)
- * Space Complexity: O(1) (only 26 lowercase letters)
- */
-
 public class RemoveDuplicateLetters {
 
     public static String removeDuplicateLetters(String s) {
 
-        int[] lastIndex = new int[26];
+        int n = s.length();
+        int[] last = new int[26];
         boolean[] visited = new boolean[26];
 
-        // Record last index of each character
-        for (int i = 0; i < s.length(); i++) {
-            lastIndex[s.charAt(i) - 'a'] = i;
+        // Last occurrence of each character
+        for (int i = 0; i < n; i++) {
+            last[s.charAt(i) - 'a'] = i;
         }
 
-        Deque<Character> stack = new ArrayDeque<>();
+        StringBuilder stack = new StringBuilder();
 
-        for (int i = 0; i < s.length(); i++) {
+        for (int i = 0; i < n; i++) {
 
-            char current = s.charAt(i);
+            char c = s.charAt(i);
 
-            // If already used, skip
-            if (visited[current - 'a']) {
+            if (visited[c - 'a']) {
                 continue;
             }
 
-            // Maintain lexicographical order
-            while (!stack.isEmpty() &&
-                    current < stack.peekLast() &&
-                    lastIndex[stack.peekLast() - 'a'] > i) {
+            // Remove larger characters that appear later
+            while (stack.length() > 0 &&
+                   c < stack.charAt(stack.length() - 1) &&
+                   last[stack.charAt(stack.length() - 1) - 'a'] > i) {
 
-                visited[stack.pollLast() - 'a'] = false;
+                visited[stack.charAt(stack.length() - 1) - 'a'] = false;
+                stack.deleteCharAt(stack.length() - 1);
             }
 
-            stack.offerLast(current);
-            visited[current - 'a'] = true;
+            stack.append(c);
+            visited[c - 'a'] = true;
         }
 
-        StringBuilder result = new StringBuilder();
-        for (char c : stack) {
-            result.append(c);
-        }
-
-        return result.toString();
+        return stack.toString();
     }
 
     public static void main(String[] args) {
-
-        System.out.println(removeDuplicateLetters("bcabc"));    // abc
-        System.out.println(removeDuplicateLetters("cbacdcbc")); // acdb
-        System.out.println(removeDuplicateLetters("abacb"));     // abc
-        System.out.println(removeDuplicateLetters("bbcaac"));    // bac
+        System.out.println(removeDuplicateLetters("bcabc"));     // abc
+        System.out.println(removeDuplicateLetters("cbacdcbc"));  // acdb
+        System.out.println(removeDuplicateLetters("abacb"));      // abc
     }
 }
