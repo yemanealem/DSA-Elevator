@@ -1,23 +1,22 @@
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /*
  * LeetCode 394 - Decode String
  *
  * Question:
- * Given an encoded string, return its decoded string.
- *
- * Encoding rule:
- * k[encoded_string] means repeat encoded_string k times.
+ * Decode an encoded string where:
+ * k[encoded] -> repeat encoded k times.
  *
  * Example:
- * Input: "3[a2[c]]"
- * Output: "accaccacc"
+ * "3[a2[c]]" -> "accaccacc"
  *
- * How It Works (Stack Approach):
- * - Use stack to process characters.
- * - When ']' is found, pop until '[' to get substring.
- * - Also pop digits to get repeat count.
- * - Build repeated string and push back to stack.
+ * How It Works:
+ * - Use two stacks: one for strings, one for numbers.
+ * - When ']' is found:
+ *     - Pop string stack (inner content)
+ *     - Pop number stack (repeat count)
+ *     - Build result and push back to string stack
  *
  * Runtime:
  * Time Complexity: O(n)
@@ -28,54 +27,46 @@ public class DecodeString {
 
     public static String decodeString(String s) {
 
-        Deque<String> stack = new ArrayDeque<>();
+        Deque<String> stringStack = new ArrayDeque<>();
+        Deque<Integer> countStack = new ArrayDeque<>();
 
-        for (int i = 0; i < s.length(); i++) {
+        StringBuilder current = new StringBuilder();
+        int number = 0;
 
-            char c = s.charAt(i);
+        for (char c : s.toCharArray()) {
 
-            if (c != ']') {
-                stack.offerLast(String.valueOf(c));
+            if (Character.isDigit(c)) {
+                number = number * 10 + (c - '0');
+            } else if (c == '[') {
+                countStack.offerLast(number);
+                stringStack.offerLast(current.toString());
+                current.setLength(0);
+                number = 0;
+            } else if (c == ']') {
+
+                int repeat = countStack.pollLast();
+                StringBuilder temp = new StringBuilder(stringStack.pollLast());
+
+                String str = current.toString();
+                for (int i = 0; i < repeat; i++) {
+                    temp.append(str);
+                }
+
+                current = temp;
+
             } else {
-
-                // Build encoded string inside []
-                StringBuilder sb = new StringBuilder();
-
-                while (!stack.isEmpty() && !stack.peekLast().equals("[")) {
-                    sb.insert(0, stack.pollLast());
-                }
-
-                // Remove '['
-                stack.pollLast();
-
-                // Get number (repeat count)
-                StringBuilder num = new StringBuilder();
-                while (!stack.isEmpty() && Character.isDigit(stack.peekLast().charAt(0))) {
-                    num.insert(0, stack.pollLast());
-                }
-
-                int repeat = Integer.parseInt(num.toString());
-
-                // Repeat decoded string
-                String decoded = sb.toString().repeat(repeat);
-
-                stack.offerLast(decoded);
+                current.append(c);
             }
         }
 
-        // Build final result
-        StringBuilder result = new StringBuilder();
-        while (!stack.isEmpty()) {
-            result.insert(0, stack.pollLast());
-        }
-
-        return result.toString();
+        return current.toString();
     }
 
     public static void main(String[] args) {
 
-        System.out.println(decodeString("3[a2[c]]"));  // accaccacc
-        System.out.println(decodeString("2[abc]3[cd]ef")); // abcabccdcdcdef
-        System.out.println(decodeString("3[a]2[bc]")); // aaabcbc
+        System.out.println(decodeString("3[a2[c]]"));       // accaccacc
+        System.out.println(decodeString("2[abc]3[cd]ef"));   // abcabccdcdcdef
+        System.out.println(decodeString("3[a]2[bc]"));       // aaabcbc
+        System.out.println(decodeString("10[a]"));           // aaaaaaaaaa
     }
 }
