@@ -1,3 +1,23 @@
+
+/*
+ * LeetCode 316 - Remove Duplicate Letters
+ *
+ * Question:
+ * Given a string, remove duplicate letters so that every letter appears
+ * once and the result is the smallest lexicographical order.
+ *
+ * How it Works:
+ * - Track last occurrence of each character.
+ * - Use StringBuilder as a stack (faster than Deque<Character>).
+ * - If current character is smaller than stack top
+ *   AND the top appears later, pop it.
+ * - Use visited[] to avoid duplicates.
+ *
+ * Runtime:
+ * Time Complexity: O(n)
+ * Space Complexity: O(1) (only 26 lowercase letters)
+ */
+
 public class RemoveDuplicateLetters {
 
     public static String removeDuplicateLetters(String s) {
@@ -6,7 +26,7 @@ public class RemoveDuplicateLetters {
         int[] last = new int[26];
         boolean[] visited = new boolean[26];
 
-        // Last occurrence of each character
+        // Record last occurrence of each character
         for (int i = 0; i < n; i++) {
             last[s.charAt(i) - 'a'] = i;
         }
@@ -21,7 +41,7 @@ public class RemoveDuplicateLetters {
                 continue;
             }
 
-            // Remove larger characters that appear later
+            // Maintain lexicographically smallest order
             while (stack.length() > 0 &&
                    c < stack.charAt(stack.length() - 1) &&
                    last[stack.charAt(stack.length() - 1) - 'a'] > i) {
@@ -38,8 +58,10 @@ public class RemoveDuplicateLetters {
     }
 
     public static void main(String[] args) {
+
         System.out.println(removeDuplicateLetters("bcabc"));     // abc
         System.out.println(removeDuplicateLetters("cbacdcbc"));  // acdb
         System.out.println(removeDuplicateLetters("abacb"));      // abc
+        System.out.println(removeDuplicateLetters("bbcaac"));     // bac
     }
 }
