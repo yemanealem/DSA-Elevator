@@ -1,29 +1,72 @@
 import java.util.*;
 
-public class Subset{
+public class Subset {
 
     /*
      * LeetCode 78 - Subsets
      *
+     * Problem:
      * Given an integer array nums of unique elements,
      * return all possible subsets (the power set).
      *
-     * Approach (Iterative Doubling):
-     * 1. Start with an empty subset [[]]
-     * 2. For each number:
+     * --------------------------------------------------------
+     * Approach: Iterative Doubling
+     * --------------------------------------------------------
+     * 1. Start with an empty subset: [[]]
+     * 2. For each number in nums:
      *      - Duplicate all existing subsets
      *      - Add the current number to each duplicated subset
      *
-     * Example:
-     * nums = [1,2,3]
+     * --------------------------------------------------------
+     * Trace Example: nums = [1, 2, 3]
+     * --------------------------------------------------------
      *
-     * Start: [[]]
-     * Add 1 → [[], [1]]
-     * Add 2 → [[], [1], [2], [1,2]]
-     * Add 3 → [[], [1], [2], [1,2], [3], [1,3], [2,3], [1,2,3]]
+     * Step 0:
+     * result = [[]]
      *
-     * Time Complexity: O(n * 2^n)
+     * Step 1 (add 1):
+     * Existing subsets: [[]]
+     * Duplicate and add 1:
+     * → [1]
+     * result = [[], [1]]
+     *
+     * Step 2 (add 2):
+     * Existing subsets: [[], [1]]
+     * Duplicate and add 2:
+     * → [2]
+     * → [1,2]
+     * result = [[], [1], [2], [1,2]]
+     *
+     * Step 3 (add 3):
+     * Existing subsets: [[], [1], [2], [1,2]]
+     * Duplicate and add 3:
+     * → [3]
+     * → [1,3]
+     * → [2,3]
+     * → [1,2,3]
+     *
+     * Final result:
+     * [[],
+     *  [1],
+     *  [2],
+     *  [1,2],
+     *  [3],
+     *  [1,3],
+     *  [2,3],
+     *  [1,2,3]]
+     *
+     * --------------------------------------------------------
+     * Why This Works:
+     * Each element has 2 choices:
+     *   - Not included (existing subsets)
+     *   - Included (new duplicated subsets)
+     *
+     * So total subsets = 2^n
+     *
+     * --------------------------------------------------------
+     * Time Complexity:  O(n * 2^n)
      * Space Complexity: O(n * 2^n)
+     * --------------------------------------------------------
      */
 
     public static List<List<Integer>> subsets(int[] nums) {
