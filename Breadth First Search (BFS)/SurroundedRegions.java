@@ -1,4 +1,6 @@
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Queue;
 
 public class SurroundedRegions {
 
@@ -8,51 +10,63 @@ public class SurroundedRegions {
         int m = board.length;
         int n = board[0].length;
 
-        // Step 1: Run BFS for all border 'O'
+        // Run BFS on border cells
         for (int i = 0; i < m; i++) {
-            if (board[i][0] == 'O') bfs(board, i, 0);
-            if (board[i][n - 1] == 'O') bfs(board, i, n - 1);
+            if (board[i][0] == 'O') bfs(board, i, 0, m, n);
+            if (board[i][n - 1] == 'O') bfs(board, i, n - 1, m, n);
         }
 
         for (int j = 0; j < n; j++) {
-            if (board[0][j] == 'O') bfs(board, 0, j);
-            if (board[m - 1][j] == 'O') bfs(board, m - 1, j);
+            if (board[0][j] == 'O') bfs(board, 0, j, m, n);
+            if (board[m - 1][j] == 'O') bfs(board, m - 1, j, m, n);
         }
 
-        // Step 2: Flip surrounded and restore safe
+        // Flip surrounded regions
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (board[i][j] == 'O') board[i][j] = 'X';
-                if (board[i][j] == 'S') board[i][j] = 'O';
+                else if (board[i][j] == '#') board[i][j] = 'O';
             }
         }
     }
 
-    private static void bfs(char[][] board, int i, int j) {
-        int m = board.length;
-        int n = board[0].length;
-
-        Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[]{i, j});
-        board[i][j] = 'S';  // mark safe
-
-        int[][] directions = {{1,0},{-1,0},{0,1},{0,-1}};
+    private static void bfs(char[][] board, int row, int col, int m, int n) {
+        Queue<Integer> queue = new ArrayDeque<>();
+        queue.offer(row * n + col);
+        board[row][col] = '#';  // mark safe
 
         while (!queue.isEmpty()) {
-            int[] cell = queue.poll();
-            for (int[] dir : directions) {
-                int x = cell[0] + dir[0];
-                int y = cell[1] + dir[1];
+            int cell = queue.poll();
+            int r = cell / n;
+            int c = cell % n;
 
-                if (x >= 0 && x < m && y >= 0 && y < n && board[x][y] == 'O') {
-                    board[x][y] = 'S';
-                    queue.offer(new int[]{x, y});
-                }
+            // Up
+            if (r > 0 && board[r - 1][c] == 'O') {
+                board[r - 1][c] = '#';
+                queue.offer((r - 1) * n + c);
+            }
+
+            // Down
+            if (r < m - 1 && board[r + 1][c] == 'O') {
+                board[r + 1][c] = '#';
+                queue.offer((r + 1) * n + c);
+            }
+
+            // Left
+            if (c > 0 && board[r][c - 1] == 'O') {
+                board[r][c - 1] = '#';
+                queue.offer(r * n + c - 1);
+            }
+
+            // Right
+            if (c < n - 1 && board[r][c + 1] == 'O') {
+                board[r][c + 1] = '#';
+                queue.offer(r * n + c + 1);
             }
         }
     }
 
-    // Main method for testing
+    // Test
     public static void main(String[] args) {
         char[][] board = {
                 {'X','X','X','X'},
