@@ -2,27 +2,24 @@ import java.util.HashSet;
 
 public class UniqueEmailAddresses {
 
-    // Function to count unique emails
     public static int numUniqueEmails(String[] emails) {
-        HashSet<String> set = new HashSet<>();
+        HashSet<String> set = new HashSet<>(emails.length);
 
         for (String email : emails) {
-            String[] parts = email.split("@");
-            String local = parts[0];
-            String domain = parts[1];
+            int atIndex = email.indexOf('@');
+            String domain = email.substring(atIndex); // domain part
 
-            // Remove part after '+' if exists
-            int plusIndex = local.indexOf('+');
-            if (plusIndex != -1) {
-                local = local.substring(0, plusIndex);
+            String local = email.substring(0, atIndex);
+
+            // Build normalized local part (skip dots and '+' part)
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < local.length(); i++) {
+                char c = local.charAt(i);
+                if (c == '+') break;
+                if (c != '.') sb.append(c);
             }
 
-            // Remove dots from local name
-            local = local.replace(".", "");
-
-            // Rebuild normalized email
-            String normalized = local + "@" + domain;
-            set.add(normalized);
+            set.add(sb.toString() + domain);
         }
 
         return set.size();
@@ -36,7 +33,6 @@ public class UniqueEmailAddresses {
             "test.email+spam@leetcode.com"
         };
 
-        int result = numUniqueEmails(emails);
-        System.out.println("Unique Emails: " + result);
+        System.out.println("Unique Emails: " + numUniqueEmails(emails));
     }
 }
