@@ -11,15 +11,16 @@ public class UniqueEmailAddresses {
 
             String local = email.substring(0, atIndex);
 
-            // Build normalized local part (skip dots and '+' part)
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder(local.length());
+
             for (int i = 0; i < local.length(); i++) {
                 char c = local.charAt(i);
-                if (c == '+') break;
-                if (c != '.') sb.append(c);
+
+                if (c == '+') break;   // ignore after +
+                if (c != '.') sb.append(c); // ignore dots
             }
 
-            set.add(sb.toString() + domain);
+            set.add(sb.append(domain).toString());
         }
 
         return set.size();
