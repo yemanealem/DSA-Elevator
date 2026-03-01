@@ -6,18 +6,16 @@ public class UniqueEmailAddresses {
         HashSet<String> set = new HashSet<>(emails.length);
 
         for (String email : emails) {
-            int atIndex = email.indexOf('@');
-            String domain = email.substring(atIndex); // domain part
+            int at = email.indexOf('@');
+            String domain = email.substring(at); 
 
-            String local = email.substring(0, atIndex);
-
+            String local = email.substring(0, at);
             StringBuilder sb = new StringBuilder(local.length());
 
             for (int i = 0; i < local.length(); i++) {
                 char c = local.charAt(i);
-
-                if (c == '+') break;   // ignore after +
-                if (c != '.') sb.append(c); // ignore dots
+                if (c == '+') break;   
+                if (c != '.') sb.append(c);
             }
 
             set.add(sb.append(domain).toString());
