@@ -3,23 +3,19 @@ public class ZigzagConversion {
     public String convert(String s, int numRows) {
         if (numRows == 1 || s.length() <= numRows) return s;
 
-        StringBuilder[] rows = new StringBuilder[numRows];
-        for (int i = 0; i < numRows; i++) rows[i] = new StringBuilder();
-
-        int row = 0;
-        boolean down = true;
-
-        for (char c : s.toCharArray()) {
-            rows[row].append(c);
-
-            if (row == 0) down = true;
-            else if (row == numRows - 1) down = false;
-
-            row += down ? 1 : -1;
-        }
-
         StringBuilder result = new StringBuilder();
-        for (StringBuilder r : rows) result.append(r);
+        int cycle = 2 * numRows - 2;
+
+        for (int row = 0; row < numRows; row++) {
+            for (int i = row; i < s.length(); i += cycle) {
+                result.append(s.charAt(i));
+
+                int secondIndex = i + cycle - 2 * row;
+                if (row != 0 && row != numRows - 1 && secondIndex < s.length()) {
+                    result.append(s.charAt(secondIndex));
+                }
+            }
+        }
 
         return result.toString();
     }
@@ -28,7 +24,6 @@ public class ZigzagConversion {
         ZigzagConversion solution = new ZigzagConversion();
 
         System.out.println(solution.convert("PAYPALISHIRING", 3));
-
         System.out.println(solution.convert("PAYPALISHIRING", 4));
     }
 }
