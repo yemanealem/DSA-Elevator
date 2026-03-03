@@ -1,5 +1,13 @@
 public class ZigzagConversion {
 
+    // Question:
+    // Given a string and number of rows, convert it into a zigzag pattern
+    // and then read row by row to form the final string.
+
+    // How it works:
+    // Zigzag pattern repeats in cycles of length (2 * numRows - 2).
+    // For each row, characters appear at predictable positions.
+
     public String convert(String s, int numRows) {
         if (numRows == 1 || s.length() <= numRows) return s;
 
@@ -24,6 +32,9 @@ public class ZigzagConversion {
         ZigzagConversion solution = new ZigzagConversion();
 
         System.out.println(solution.convert("PAYPALISHIRING", 3));
+        // Output: PAHNAPLSIIGYIR
+
         System.out.println(solution.convert("PAYPALISHIRING", 4));
+        // Output: PINALSIGYAHRPI
     }
 }
