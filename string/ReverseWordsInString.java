@@ -1,25 +1,36 @@
 public class ReverseWordsInString {
 
     public static String reverseWords(String s) {
-        if (s == null || s.length() == 0) return "";
-
-        // Trim leading/trailing spaces and split by whitespace
-        String[] words = s.trim().split("\\s+");
-
+        int n = s.length();
         StringBuilder result = new StringBuilder();
+        int i = n - 1;
 
-        // Traverse from the end to reverse the order
-        for (int i = words.length - 1; i >= 0; i--) {
-            result.append(words[i]);
-            if (i > 0) result.append(" ");
+        while (i >= 0) {
+            // Skip trailing spaces
+            while (i >= 0 && s.charAt(i) == ' ') i--;
+
+            if (i < 0) break;
+
+            int end = i;
+
+            // Find the start of the word
+            while (i >= 0 && s.charAt(i) != ' ') i--;
+
+            int start = i + 1;
+
+            // Append the word
+            result.append(s, start, end + 1);
+
+            // Add space if more words exist
+            result.append(' ');
         }
 
-        return result.toString();
+        // Remove last space if exists
+        return result.length() > 0 ? result.substring(0, result.length() - 1) : "";
     }
 
     public static void main(String[] args) {
         String input = "  the sky   is blue ";
-        String output = reverseWords(input);
-        System.out.println(output);  // Output: "blue is sky the"
+        System.out.println(reverseWords(input)); // Output: "blue is sky the"
     }
 }
