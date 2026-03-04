@@ -6,9 +6,21 @@ public class RangeBitwiseAnd {
 
     // How it works (Bit Manipulation Trick):
     // - The common prefix of left and right remains
-    // - Bits that differ will become 0 in AND result
+    // - Bits that differ become 0 in AND result
     // - Shift both numbers right until they are equal
     // - Count shifts, then shift result back
+
+    // Example Trace:
+    // left = 5  -> 101
+    // right = 7 -> 111
+    // They differ, so shift both:
+    // 101 -> 10
+    // 111 -> 11
+    // still different, shift again:
+    // 10 -> 1
+    // 11 -> 1  (now equal)
+    // shifts = 2
+    // result = 1 << 2 = 100 (4)
 
     // Running Time:
     // - Time Complexity: O(number of bits) -> at most 32
