@@ -1,3 +1,18 @@
+// Question: Reverse Words in a String
+// Input: "  the sky   is blue "
+// Output: "blue is sky the"
+
+// How it works:
+// - Use two pointers to scan the string
+// - Skip spaces
+// - Extract each word
+// - Insert words at the front of StringBuilder to reverse order
+// - Avoid regex and extra arrays for better performance
+
+// Running Time:
+// - Time Complexity: O(n) (single scan)
+// - Space Complexity: O(n) (StringBuilder for result)
+
 public class ReverseWordsInString {
 
     public static String reverseWords(String s) {
@@ -18,7 +33,7 @@ public class ReverseWordsInString {
             // Find the end of the word
             while (right < n && s.charAt(right) != ' ') right++;
 
-            // Add word to front (to reverse order)
+            // Add word to front (reverse order)
             if (sb.length() == 0) {
                 sb.insert(0, s.substring(left, right));
             } else {
