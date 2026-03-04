@@ -1,32 +1,34 @@
 public class ReverseWordsInString {
 
     public static String reverseWords(String s) {
+        if (s == null || s.length() == 0) return "";
+
         int n = s.length();
-        StringBuilder result = new StringBuilder();
-        int i = n - 1;
+        StringBuilder sb = new StringBuilder();
 
-        while (i >= 0) {
-            // Skip trailing spaces
-            while (i >= 0 && s.charAt(i) == ' ') i--;
+        int left = 0;
 
-            if (i < 0) break;
+        while (left < n) {
+            // Skip spaces
+            while (left < n && s.charAt(left) == ' ') left++;
 
-            int end = i;
+            if (left >= n) break;
 
-            // Find the start of the word
-            while (i >= 0 && s.charAt(i) != ' ') i--;
+            int right = left;
+            // Find the end of the word
+            while (right < n && s.charAt(right) != ' ') right++;
 
-            int start = i + 1;
+            // Add word to front (to reverse order)
+            if (sb.length() == 0) {
+                sb.insert(0, s.substring(left, right));
+            } else {
+                sb.insert(0, " ").insert(0, s.substring(left, right));
+            }
 
-            // Append the word
-            result.append(s, start, end + 1);
-
-            // Add space if more words exist
-            result.append(' ');
+            left = right;
         }
 
-        // Remove last space if exists
-        return result.length() > 0 ? result.substring(0, result.length() - 1) : "";
+        return sb.toString();
     }
 
     public static void main(String[] args) {
