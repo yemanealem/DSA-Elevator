@@ -1,64 +1,59 @@
 /*
  * QUESTION:
  * Subarray Sums Divisible by K
- * ---------------------------
+ *
  * Given an integer array nums and an integer k,
  * return the number of subarrays whose sum is divisible by k.
  *
+ * APPROACH (Prefix Remainder Counting):
+ * ------------------------------------
  * A subarray sum is divisible by k if:
+ *
  * (prefixSum[i] - prefixSum[j]) % k == 0
  *
- * That means:
+ * This is equivalent to:
+ *
  * prefixSum[i] % k == prefixSum[j] % k
  *
- * So we count how many times each remainder occurs.
+ * So we count occurrences of each remainder.
  *
- * HOW IT WORKS (Prefix Mod + HashMap):
- * ---------------------------
- * 1. Compute running prefix sum.
- * 2. Take modulo k (handle negative by adding k).
- * 3. If same remainder appeared before, add its count.
- * 4. Update remainder frequency.
- *
- * RUNNING TIME:
- * ---------------------------
- * - Time Complexity: O(n)
- * - Space Complexity: O(k) (for remainder map)
- *
- * This is optimal for this problem.
+ * COMPLEXITY:
+ * - Time: O(n)
+ * - Space: O(k)
  */
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class SubarrayDivisibleByK {
 
     public int subarraysDivByK(int[] nums, int k) {
-        HashMap<Integer, Integer> map = new HashMap<>();
-        map.put(0, 1); // base case: remainder 0 appears once
+        Map<Integer, Integer> remainderCount = new HashMap<>();
+        remainderCount.put(0, 1); // base case: empty prefix
 
         int prefixSum = 0;
-        int count = 0;
+        int result = 0;
 
         for (int num : nums) {
             prefixSum += num;
 
             int remainder = prefixSum % k;
-            if (remainder < 0) remainder += k; // handle negative remainder
+            if (remainder < 0) remainder += k; // normalize negative remainder
 
-            count += map.getOrDefault(remainder, 0);
+            result += remainderCount.getOrDefault(remainder, 0);
 
-            map.put(remainder, map.getOrDefault(remainder, 0) + 1);
+            remainderCount.put(remainder, remainderCount.getOrDefault(remainder, 0) + 1);
         }
 
-        return count;
+        return result;
     }
 
     public static void main(String[] args) {
-        SubarrayDivisibleByK solution = new SubarrayDivisibleByK();
+        SubarrayDivisibleByK solver = new SubarrayDivisibleByK();
 
         int[] nums = {4, 5, 0, -2, -3, 1};
         int k = 5;
 
-        System.out.println(solution.subarraysDivByK(nums, k)); // Output: 7
+        System.out.println(solver.subarraysDivByK(nums, k)); // Output: 7
     }
 }
