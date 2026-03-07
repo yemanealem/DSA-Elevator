@@ -3,7 +3,7 @@ Question: Reorganize String
 
 How it works:
 - We need to rearrange characters so that no two adjacent characters are the same.
-- If it is impossible, return empty string.
+- If it is impossible, return empty string.ss
 - Approach:
   1. Count frequency of each character (array of size 26).
   2. Check if max frequency > (n+1)/2 → not possible.
@@ -67,7 +67,7 @@ public class Main {
     public static void main(String[] args) {
         Solution sol = new Solution();
 
-        System.out.println(sol.reorganizeString("aab"));   // Output: "aba"
-        System.out.println(sol.reorganizeString("aaab"));  // Output: ""
+        System.out.println(sol.reorganizeString("aab"));   
+        System.out.println(sol.reorganizeString("aaab"));  
     }
 }
