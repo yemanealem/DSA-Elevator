@@ -1,35 +1,30 @@
 /**
  * Maximum Average Subarray I
- * Sliding Window approach
+ * Optimized Sliding Window
  * Time Complexity: O(n)
  * Space Complexity: O(1)
  */
 class MaximumAverageSubarray {
+
     public double findMaxAverage(int[] nums, int k) {
-        int n = nums.length;
-        // Calculate sum of first window
-        int windowSum = 0;
-        for (int i = 0; i < k; i++) {
-            windowSum += nums[i];
+        int sum = 0;
+        for (int i = 0; i < k; i++) sum += nums[i];  // first window
+
+        int maxSum = sum;
+
+        // Slide window, avoid extra operations
+        for (int i = k; i < nums.length; i++) {
+            sum += nums[i] - nums[i - k];  // remove left, add right
+            if (sum > maxSum) maxSum = sum;  // avoid Math.max call overhead
         }
-        
-        int maxSum = windowSum;
-        
-        // Slide the window
-        for (int i = k; i < n; i++) {
-            windowSum = windowSum - nums[i - k] + nums[i];
-            maxSum = Math.max(maxSum, windowSum);
-        }
-        
-        return (double) maxSum / k;
+
+        return maxSum / (double) k;  // single cast at the end
     }
 
-    // Example main
     public static void main(String[] args) {
         MaximumAverageSubarray sol = new MaximumAverageSubarray();
-        int[] nums = {1,12,-5,-6,50,3};
+        int[] nums = {1, 12, -5, -6, 50, 3};
         int k = 4;
-        double result = sol.findMaxAverage(nums, k);
-        System.out.println("Maximum average subarray: " + result); // 12.75
+        System.out.println(sol.findMaxAverage(nums, k));  // 12.75
     }
 }
