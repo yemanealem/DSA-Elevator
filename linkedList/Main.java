@@ -1,4 +1,26 @@
-// Definition of a singly-linked list node
+/*
+ * LeetCode Problem: Intersection of Two Linked Lists
+ * 
+ * Question:
+ * Given the heads of two singly linked lists, return the node where the two lists intersect.
+ * If the two linked lists have no intersection at all, return null.
+ * 
+ * Notes:
+ * - Intersection is by reference, not by value.
+ * - The lists retain their original structure.
+ *
+ * How it works (Optimized Length-Align Method):
+ * 1. Compute the lengths of both lists (lenA and lenB).
+ * 2. Align the starting points by skipping the extra nodes in the longer list.
+ * 3. Traverse both lists together one node at a time.
+ * 4. If the nodes are the same by reference, return that node (intersection).
+ * 5. If both pointers reach null, there is no intersection.
+ *
+ * Time Complexity: O(m + n), where m and n are lengths of the two lists.
+ * Space Complexity: O(1), constant extra space.
+ */
+
+// Definition for singly-linked list node
 class ListNode {
     int val;
     ListNode next;
@@ -12,7 +34,6 @@ class ListNode {
 // Solution class containing the intersection logic
 class Solution {
 
-    // Function to find intersection node of two linked lists
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         if (headA == null || headB == null) return null;
 
@@ -53,7 +74,7 @@ class Solution {
 // Main class to run and test the program
 public class Main {
     public static void main(String[] args) {
-        // Create intersection part
+        // Create intersection part: 8 -> 4 -> 5
         ListNode intersect = new ListNode(8);
         intersect.next = new ListNode(4);
         intersect.next.next = new ListNode(5);
@@ -72,6 +93,7 @@ public class Main {
         Solution solution = new Solution();
         ListNode result = solution.getIntersectionNode(headA, headB);
 
+        // Output the result
         if (result != null) {
             System.out.println("Intersection at node with value: " + result.val);
         } else {
