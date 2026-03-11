@@ -31,9 +31,10 @@ class ListNode {
     }
 }
 
-// Solution class containing the intersection logic
-class Solution {
+// Intersection class containing the solution
+class Intersection {
 
+    // Function to find intersection node of two linked lists
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         if (headA == null || headB == null) return null;
 
@@ -41,15 +42,8 @@ class Solution {
         int lenA = 0, lenB = 0;
         ListNode currA = headA, currB = headB;
 
-        while (currA != null) {
-            lenA++;
-            currA = currA.next;
-        }
-
-        while (currB != null) {
-            lenB++;
-            currB = currB.next;
-        }
+        while (currA != null) { lenA++; currA = currA.next; }
+        while (currB != null) { lenB++; currB = currB.next; }
 
         // Step 2: Align the start of both lists
         currA = headA;
@@ -71,7 +65,7 @@ class Solution {
     }
 }
 
-// Main class to run and test the program
+// Main class to test Intersection
 public class Main {
     public static void main(String[] args) {
         // Create intersection part: 8 -> 4 -> 5
@@ -90,8 +84,9 @@ public class Main {
         headB.next.next = new ListNode(1);
         headB.next.next.next = intersect;
 
-        Solution solution = new Solution();
-        ListNode result = solution.getIntersectionNode(headA, headB);
+        // Use Intersection class
+        Intersection intersection = new Intersection();
+        ListNode result = intersection.getIntersectionNode(headA, headB);
 
         // Output the result
         if (result != null) {
