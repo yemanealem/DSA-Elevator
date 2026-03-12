@@ -27,8 +27,11 @@ class TreeNode {
 
 /**
  * Converts a sorted singly linked list to a height-balanced BST
+ * and contains the main method for testing
  */
-class SortedListToBSTConverter {
+public class SortedListToBSTConverter {
+
+    // Method to convert sorted linked list to BST
     public TreeNode convert(ListNode head) {
         if (head == null) return null;
         if (head.next == null) return new TreeNode(head.val);
@@ -49,16 +52,15 @@ class SortedListToBSTConverter {
         return root;
     }
     
-    // Helper to print BST inorder
+    // Helper method to print BST inorder
     public void printInorder(TreeNode root) {
         if (root == null) return;
         printInorder(root.left);
         System.out.print(root.val + " ");
         printInorder(root.right);
     }
-}
 
-public class Main {
+    // Main method for testing
     public static void main(String[] args) {
         // Create a sorted linked list: 1 -> 2 -> 3 -> 4 -> 5
         ListNode head = new ListNode(1);
@@ -67,11 +69,11 @@ public class Main {
         head.next.next.next = new ListNode(4);
         head.next.next.next.next = new ListNode(5);
         
-        // Convert the sorted list to BST
+        // Convert the list to BST
         SortedListToBSTConverter converter = new SortedListToBSTConverter();
         TreeNode bstRoot = converter.convert(head);
         
-        // Print inorder traversal to verify
+        // Print inorder traversal
         System.out.println("Inorder traversal of BST:");
         converter.printInorder(bstRoot); // Output: 1 2 3 4 5
     }
