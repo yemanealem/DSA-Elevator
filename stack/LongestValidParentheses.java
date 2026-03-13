@@ -12,12 +12,24 @@ import java.util.Deque;
  * Input:  ")()())"
  * Output: 4
  *
- * Optimized Approach:
- * - Use Deque as stack (faster than Stack class).
- * - Store indices instead of characters.
- * - Use -1 as base index for length calculation.
+ * Enhanced Stack Approach:
+ * - Use Deque instead of Stack (faster and recommended).
+ * - Store indices, not characters.
+ * - Push -1 as base index.
  *
- * Time Complexity:  O(n)
+ * Why -1?
+ * It helps calculate the length of valid substrings correctly.
+ *
+ * Algorithm:
+ * 1. Initialize stack with -1.
+ * 2. Traverse string:
+ *      - If '(' → push index.
+ *      - If ')':
+ *            pop stack.
+ *            If stack becomes empty → push current index.
+ *            Else → update max length.
+ *
+ * Time Complexity: O(n)
  * Space Complexity: O(n)
  */
 
@@ -27,7 +39,7 @@ public class LongestValidParentheses {
 
         Deque<Integer> stack = new ArrayDeque<>();
 
-        // Base index to calculate lengths
+        // Base index for correct length calculation
         stack.push(-1);
 
         int maxLength = 0;
@@ -35,19 +47,24 @@ public class LongestValidParentheses {
         for (int i = 0; i < s.length(); i++) {
 
             if (s.charAt(i) == '(') {
-                // Push index of '('
+
+                // Store index of '('
                 stack.push(i);
-            } 
-            else {
-                // Pop matching '('
+
+            } else {
+
+                // Remove matching '('
                 stack.pop();
 
                 if (stack.isEmpty()) {
-                    // Start new base
+
+                    // No base to calculate length
+                    // Start new invalid boundary
                     stack.push(i);
-                } 
-                else {
-                    // Calculate valid substring length
+
+                } else {
+
+                    // Valid substring found
                     maxLength = Math.max(maxLength, i - stack.peek());
                 }
             }
@@ -60,9 +77,7 @@ public class LongestValidParentheses {
 
         String input = ")()())";
 
-        int result = longestValidParentheses(input);
-
         System.out.println("Input: " + input);
-        System.out.println("Longest Valid Parentheses Length: " + result);
+        System.out.println("Longest Valid Length: " + longestValidParentheses(input));
     }
 }
