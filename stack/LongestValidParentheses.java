@@ -1,27 +1,23 @@
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /**
  * LeetCode 32 - Longest Valid Parentheses
  *
  * Problem:
- * Given a string containing '(' and ')',
+ * Given a string containing only '(' and ')',
  * return the length of the longest valid parentheses substring.
  *
  * Example:
  * Input:  ")()())"
  * Output: 4
  *
- * Approach (Stack of Indices):
+ * Optimized Approach:
+ * - Use Deque as stack (faster than Stack class).
+ * - Store indices instead of characters.
+ * - Use -1 as base index for length calculation.
  *
- * 1. Push -1 as base index.
- * 2. Traverse the string:
- *      - If '(', push index.
- *      - If ')':
- *            pop stack.
- *            If stack becomes empty → push current index.
- *            Else → calculate length.
- *
- * Time Complexity: O(n)
+ * Time Complexity:  O(n)
  * Space Complexity: O(n)
  */
 
@@ -29,9 +25,9 @@ public class LongestValidParentheses {
 
     public static int longestValidParentheses(String s) {
 
-        Stack<Integer> stack = new Stack<>();
+        Deque<Integer> stack = new ArrayDeque<>();
 
-        // Base for length calculation
+        // Base index to calculate lengths
         stack.push(-1);
 
         int maxLength = 0;
@@ -39,7 +35,7 @@ public class LongestValidParentheses {
         for (int i = 0; i < s.length(); i++) {
 
             if (s.charAt(i) == '(') {
-                // Store index of '('
+                // Push index of '('
                 stack.push(i);
             } 
             else {
@@ -47,11 +43,11 @@ public class LongestValidParentheses {
                 stack.pop();
 
                 if (stack.isEmpty()) {
-                    // No base to calculate length
+                    // Start new base
                     stack.push(i);
                 } 
                 else {
-                    // Valid substring found
+                    // Calculate valid substring length
                     maxLength = Math.max(maxLength, i - stack.peek());
                 }
             }
@@ -62,11 +58,11 @@ public class LongestValidParentheses {
 
     public static void main(String[] args) {
 
-        String s = ")()())";
+        String input = ")()())";
 
-        int result = longestValidParentheses(s);
+        int result = longestValidParentheses(input);
 
-        System.out.println("Input : " + s);
-        System.out.println("Longest Valid Length: " + result);
+        System.out.println("Input: " + input);
+        System.out.println("Longest Valid Parentheses Length: " + result);
     }
 }
