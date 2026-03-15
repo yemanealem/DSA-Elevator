@@ -4,14 +4,13 @@ public class PalindromePartitioning {
 
     public static void main(String[] args) {
 
-        String s = "aab";   // You can change input here
+        String s = "aab"; // Change input here
 
         Solution solution = new Solution();
         List<List<String>> result = solution.partition(s);
 
-        // Print result
-        for (List<String> partition : result) {
-            System.out.println(partition);
+        for (List<String> list : result) {
+            System.out.println(list);
         }
     }
 }
@@ -19,9 +18,9 @@ public class PalindromePartitioning {
 class Solution {
 
     public List<List<String>> partition(String s) {
+
         List<List<String>> result = new ArrayList<>();
-        List<String> current = new ArrayList<>();
-        backtrack(s, 0, current, result);
+        backtrack(s, 0, new ArrayList<>(), result);
         return result;
     }
 
@@ -29,38 +28,35 @@ class Solution {
                            List<String> current,
                            List<List<String>> result) {
 
-        // If we reached the end → save result
+        // If we processed whole string → add result
         if (start == s.length()) {
             result.add(new ArrayList<>(current));
             return;
         }
 
-        // Try every possible substring
         for (int end = start; end < s.length(); end++) {
 
-            // If palindrome → choose it
             if (isPalindrome(s, start, end)) {
 
+                // Choose
                 current.add(s.substring(start, end + 1));
 
-                // Recurse for remaining string
+                // Explore
                 backtrack(s, end + 1, current, result);
 
-                // Backtrack (remove last choice)
+                // Backtrack
                 current.remove(current.size() - 1);
             }
         }
     }
 
-    // Check if substring is palindrome
+    // Optimized palindrome check
     private boolean isPalindrome(String s, int left, int right) {
 
         while (left < right) {
-            if (s.charAt(left) != s.charAt(right)) {
+            if (s.charAt(left++) != s.charAt(right--)) {
                 return false;
             }
-            left++;
-            right--;
         }
 
         return true;
