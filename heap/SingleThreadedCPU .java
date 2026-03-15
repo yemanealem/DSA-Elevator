@@ -4,18 +4,16 @@ import java.util.*;
 ------------------------------------------------------------
 LeetCode: Single-Threaded CPU
 
-Refactored Version
-
-Approach:
+Optimized Strategy:
 1. Sort tasks by enqueue time.
-2. Use Min-Heap ordered by:
-      - smallest processing time
-      - if tie → smallest original index
-3. Simulate CPU time.
-4. If no task available → jump time forward.
+2. Use Min-Heap (processing time, index).
+3. Simulate time.
+4. Jump time if heap empty.
 
-Time Complexity: O(n log n)
-Space Complexity: O(n)
+Improvement:
+- Cleaner logic
+- Less object overhead
+- Faster comparator
 ------------------------------------------------------------
 */
 
@@ -24,10 +22,10 @@ public class SingleThreadedCPU {
     public static void main(String[] args) {
 
         int[][] tasks = {
-                {1, 2},
-                {2, 4},
-                {3, 2},
-                {4, 1}
+                {1,2},
+                {2,4},
+                {3,2},
+                {4,1}
         };
 
         Solution solution = new Solution();
@@ -41,44 +39,46 @@ class Solution {
 
         int n = tasks.length;
 
-        // Create tasks with original index
-        int[][] indexedTasks = new int[n][3];
-
+        // Attach index
+        int[][] arr = new int[n][3];
         for (int i = 0; i < n; i++) {
-            indexedTasks[i][0] = tasks[i][0]; // enqueue time
-            indexedTasks[i][1] = tasks[i][1]; // processing time
-            indexedTasks[i][2] = i;           // original index
+            arr[i][0] = tasks[i][0];
+            arr[i][1] = tasks[i][1];
+            arr[i][2] = i;
         }
 
         // Sort by enqueue time
-        Arrays.sort(indexedTasks, Comparator.comparingInt(a -> a[0]));
+        Arrays.sort(arr, (a, b) -> a[0] - b[0]);
 
-        // Min-heap: processing time, then index
-        PriorityQueue<int[]> minHeap = new PriorityQueue<>(
-                (a, b) -> a[1] != b[1] ? a[1] - b[1] : a[2] - b[2]
+        // Min Heap: [processingTime, index]
+        PriorityQueue<int[]> heap = new PriorityQueue<>(
+                (a, b) -> {
+                    if (a[0] != b[0])
+                        return a[0] - b[0];
+                    return a[1] - b[1];
+                }
         );
 
         int[] result = new int[n];
-        int time = 0;
-        int taskIndex = 0;
-        int resultIndex = 0;
 
-        while (resultIndex < n) {
+        long time = 0;   // use long to avoid overflow
+        int i = 0;
+        int idx = 0;
 
-            // Add all tasks available at current time
-            while (taskIndex < n && indexedTasks[taskIndex][0] <= time) {
-                minHeap.offer(indexedTasks[taskIndex]);
-                taskIndex++;
+        while (idx < n) {
+
+            // Add available tasks
+            while (i < n && arr[i][0] <= time) {
+                heap.offer(new int[]{arr[i][1], arr[i][2]});
+                i++;
             }
 
-            if (minHeap.isEmpty()) {
-                // If no tasks available → jump to next enqueue time
-                time = indexedTasks[taskIndex][0];
+            if (heap.isEmpty()) {
+                time = arr[i][0];
             } else {
-                // Process next task
-                int[] currentTask = minHeap.poll();
-                result[resultIndex++] = currentTask[2];
-                time += currentTask[1];
+                int[] task = heap.poll();
+                result[idx++] = task[1];
+                time += task[0];
             }
         }
 
