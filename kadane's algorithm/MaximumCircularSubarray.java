@@ -1,77 +1,73 @@
-
-/**
- * 📌 Problem: Maximum Sum Circular Subarray (LeetCode 918)
- *
- * Given a circular array nums, return the maximum possible sum
- * of a non-empty subarray.
- *
- * -------------------------------------------------------
- * 🔍 Clarification:
- * - Subarray must be contiguous
- * - Can wrap around (circular)
- * - Must pick at least one element
- *
- * Example:
- * Input: nums = [1,-2,3,-2]
- * Output: 3
- *
- * Input: nums = [5,-3,5]
- * Output: 10 → [5,5] (wrap-around)
- *
- * -------------------------------------------------------
- * 🚀 Approach: Kadane’s Algorithm (2 passes)
- *
- * Case 1:
- * - Normal max subarray using Kadane
- *
- * Case 2:
- * - Circular max = totalSum - minSubarray
- *
- * -------------------------------------------------------
- * ⏱️ Time Complexity:
- * - O(n)
- *
- * 🧠 Space Complexity:
- * - O(1)
- */
 public class MaximumCircularSubarray {
+
+    /**
+     * 📌 Problem: Maximum Sum Circular Subarray
+     *
+     * Approach:
+     * 1. Find normal max subarray using Kadane
+     * 2. If all numbers are negative → return maxKadane
+     * 3. Invert array → find min subarray using Kadane
+     * 4. maxWrap = totalSum + kadane(inverted)
+     * 5. Return max(maxKadane, maxWrap)
+     *
+     * ⏱️ Time: O(n)
+     * 🧠 Space: O(n) (because of inverted array)
+     */
 
     public int maxSubarraySumCircular(int[] nums) {
 
+        if (nums == null || nums.length == 0) return 0;
+
+        // Step 1: Normal Kadane
+        int maxKadane = kadane(nums);
+
+        // 🚨 Step 2: All negative case
+        if (maxKadane < 0) {
+            return maxKadane;
+        }
+
         int totalSum = 0;
+        int[] inverted = new int[nums.length];
 
-        int currentMax = 0;
-        int maxSum = Integer.MIN_VALUE;
-
-        int currentMin = 0;
-        int minSum = Integer.MAX_VALUE;
-
-        for (int num : nums) {
-            // Standard Kadane (max)
-            currentMax = Math.max(num, currentMax + num);
-            maxSum = Math.max(maxSum, currentMax);
-
-            // Kadane for min subarray
-            currentMin = Math.min(num, currentMin + num);
-            minSum = Math.min(minSum, currentMin);
-
-            totalSum += num;
+        // Step 3: Build inverted array + compute total sum
+        for (int i = 0; i < nums.length; i++) {
+            totalSum += nums[i];
+            inverted[i] = -nums[i];
         }
 
-        // Edge case: all numbers are negative
-        if (totalSum == minSum) {
-            return maxSum;
+        // Step 4: Kadane on inverted array
+        int maxInverted = kadane(inverted);
+
+        // maxWrap = totalSum - minSubarray
+        int maxWrap = totalSum + maxInverted;
+
+        // Step 5: Final answer
+        return Math.max(maxKadane, maxWrap);
+    }
+
+    // Standard Kadane's Algorithm
+    private int kadane(int[] arr) {
+        int currentMax = arr[0];
+        int globalMax = arr[0];
+
+        for (int i = 1; i < arr.length; i++) {
+            currentMax = Math.max(arr[i], currentMax + arr[i]);
+            globalMax = Math.max(globalMax, currentMax);
         }
 
-        // return max of normal vs circular
-        return Math.max(maxSum, totalSum - minSum);
+        return globalMax;
     }
 
     public static void main(String[] args) {
         MaximumCircularSubarray obj = new MaximumCircularSubarray();
 
-        int[] nums = {5, -3, 5};
+        int[] nums1 = {5, -3, 5};
+        System.out.println(obj.maxSubarraySumCircular(nums1)); // 10
 
-        System.out.println(obj.maxSubarraySumCircular(nums)); // Output: 10
+        int[] nums2 = {1, -2, 3, -2};
+        System.out.println(obj.maxSubarraySumCircular(nums2)); // 3
+
+        int[] nums3 = {-3, -2, -3};
+        System.out.println(obj.maxSubarraySumCircular(nums3)); // -2
     }
 }
