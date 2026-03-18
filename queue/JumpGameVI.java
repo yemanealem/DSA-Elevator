@@ -1,59 +1,61 @@
-import java.util.Deque;
-import java.util.LinkedList;
-
-/*
- * JumpGameVI
- * ----------
- * Problem:
- * Given an integer array nums and an integer k,
- * you can jump from index i to any index j where:
- *      i < j ≤ i + k
- *
- * The goal is to reach the last index while maximizing
- * the total score collected.
- *
- * Approach:
- * - Use Dynamic Programming (dp[i])
- * - Use a Monotonic Decreasing Deque to keep track of
- *   the maximum dp value in the last k indices.
- *
- * Time Complexity: O(n)
- * Space Complexity: O(n)
- */
-
 public class JumpGameVI {
+
+    /*
+     * Problem:
+     * Jump from index i to any j where:
+     *      i < j ≤ i + k
+     * Goal: Maximize score to reach last index.
+     *
+     * Optimized Approach:
+     * - Use DP stored directly in nums
+     * - Use array-based monotonic decreasing deque
+     *
+     * Time Complexity: O(n)
+     * Space Complexity: O(k)
+     */
 
     public int maxResult(int[] nums, int k) {
 
         int n = nums.length;
 
-        // dp[i] represents the maximum score to reach index i
-        int[] dp = new int[n];
+        // Array-based deque for better performance
+        int[] deque = new int[n];
+        int head = 0, tail = 0;
 
-        // Deque to store indices in decreasing order of dp values
-        Deque<Integer> deque = new LinkedList<>();
-
-        dp[0] = nums[0];
-        deque.offer(0);
+        // Start with index 0
+        deque[tail++] = 0;
 
         for (int i = 1; i < n; i++) {
 
-            // Remove indices that are out of the window (i - k)
-            while (!deque.isEmpty() && deque.peekFirst() < i - k) {
-                deque.pollFirst();
+            // Remove indices outside the window
+            while (head < tail && deque[head] < i - k) {
+                head++;
             }
 
-            // Best previous value is at the front
-            dp[i] = nums[i] + dp[deque.peekFirst()];
+            // Update current value using best previous
+            nums[i] += nums[deque[head]];
 
-            // Maintain monotonic decreasing order
-            while (!deque.isEmpty() && dp[i] >= dp[deque.peekLast()]) {
-                deque.pollLast();
+            // Maintain decreasing order
+            while (head < tail && nums[i] >= nums[deque[tail - 1]]) {
+                tail--;
             }
 
-            deque.offerLast(i);
+            deque[tail++] = i;
         }
 
-        return dp[n - 1];
+        return nums[n - 1];
+    }
+
+    // Main method for testing
+    public static void main(String[] args) {
+
+        JumpGameVI solution = new JumpGameVI();
+
+        int[] nums = {1, -1, -2, 4, -7, 3};
+        int k = 2;
+
+        int result = solution.maxResult(nums, k);
+
+        System.out.println("Maximum Score: " + result);
     }
 }
