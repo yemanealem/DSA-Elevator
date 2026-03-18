@@ -2,16 +2,30 @@ import java.util.Arrays;
 
 public class MatrixClockwiseRotator {
 
-    /**
-     * Rotates an n x n matrix 90 degrees clockwise in-place.
+    /*
+     * PROBLEM:
+     * Given an n x n 2D matrix, rotate it 90 degrees clockwise in-place.
      *
-     * @param matrix The square matrix to rotate.
+     * CLARIFICATION:
+     * - The matrix is square (n x n).
+     * - You must modify the matrix directly (no extra 2D matrix).
+     * - The rotation direction is clockwise.
+     *
+     * SOLUTION APPROACH:
+     * 1. Transpose the matrix (swap matrix[i][j] with matrix[j][i]).
+     * 2. Reverse each row.
+     *
+     * This two-step process results in a 90-degree clockwise rotation.
+     *
+     * RUNNING TIME:
+     * Time Complexity: O(n^2)
+     * Space Complexity: O(1) (in-place)
      */
-    public void rotate(int[][] matrix) {
 
+    public void rotate(int[][] matrix) {
         int n = matrix.length;
 
-        // Step 1: Transpose the matrix
+        // Transpose
         for (int i = 0; i < n; i++) {
             for (int j = i; j < n; j++) {
                 int temp = matrix[i][j];
@@ -20,7 +34,7 @@ public class MatrixClockwiseRotator {
             }
         }
 
-        // Step 2: Reverse each row
+        // Reverse each row
         for (int i = 0; i < n; i++) {
             int left = 0;
             int right = n - 1;
