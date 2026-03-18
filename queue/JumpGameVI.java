@@ -1,14 +1,34 @@
 public class JumpGameVI {
 
     /*
-     * Problem:
-     * Jump from index i to any j where:
-     *      i < j ≤ i + k
-     * Goal: Maximize score to reach last index.
+     * ================================
+     * PROBLEM:
+     * ================================
+     * Given an integer array nums and an integer k.
      *
-     * Optimized Approach:
-     * - Use DP stored directly in nums
+     * You start at index 0.
+     *
+     * From index i, you can jump to any index j such that:
+     *      i < j ≤ i + k
+     *
+     * Your goal is to reach the last index
+     * while maximizing the total score collected.
+     *
+     * ================================
+     * CLARIFICATION:
+     * ================================
+     * - You must move forward only.
+     * - You cannot jump beyond k steps.
+     * - The objective is to maximize the sum.
+     * - This is a Dynamic Programming problem.
+     * - To optimize, we use a Monotonic Deque.
+     *
+     * ================================
+     * APPROACH:
+     * ================================
+     * - Use nums array to store running dp values.
      * - Use array-based monotonic decreasing deque
+     *   to keep track of maximum values in last k window.
      *
      * Time Complexity: O(n)
      * Space Complexity: O(k)
@@ -18,21 +38,21 @@ public class JumpGameVI {
 
         int n = nums.length;
 
-        // Array-based deque for better performance
+        // Array-based deque for performance
         int[] deque = new int[n];
         int head = 0, tail = 0;
 
-        // Start with index 0
+        // Start from index 0
         deque[tail++] = 0;
 
         for (int i = 1; i < n; i++) {
 
-            // Remove indices outside the window
+            // Remove indices outside window
             while (head < tail && deque[head] < i - k) {
                 head++;
             }
 
-            // Update current value using best previous
+            // Update current score
             nums[i] += nums[deque[head]];
 
             // Maintain decreasing order
