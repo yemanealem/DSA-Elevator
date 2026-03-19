@@ -2,38 +2,40 @@
 Problem: Linked List Cycle II (LeetCode #142)
 
 Description:
-Given the head of a linked list, return the node where the cycle begins. 
+Given the head of a linked list, return the node where the cycle begins.
 If there is no cycle, return null.
 
-A cycle exists if there is a node in the list that can be reached again by continuously following the next pointer.
-Do not modify the linked list.
-
-Example 1:
-Input: head = [3,2,0,-4], pos = 1
+Example:
+Input: 3 -> 2 -> 0 -> -4, cycle at node 2
 Output: Node with value 2
-Explanation: There is a cycle in the linked list, where the tail connects to the 2nd node.
-
-Example 2:
-Input: head = [1,2], pos = 0
-Output: Node with value 1
-Explanation: The tail connects to the 1st node.
-
-Example 3:
-Input: head = [1], pos = -1
-Output: null
-Explanation: No cycle in the list.
 
 Approach: Floyd’s Tortoise and Hare (Fast & Slow Pointers)
-1. Use two pointers, slow and fast.
-2. Move slow by 1 step, fast by 2 steps.
-3. If they meet, there is a cycle.
-4. To find the entry point:
-   - Start a new pointer from head.
-   - Move both this pointer and slow one step at a time.
-   - The node where they meet is the start of the cycle.
 
-Time Complexity: O(n) -> Each pointer traverses at most n nodes
-Space Complexity: O(1) -> No extra space used
+Step-by-step Explanation:
+
+1. Initialize:
+   slow = head (3)
+   fast = head (3)
+
+2. Move slow by 1 step, fast by 2 steps until they meet:
+
+Iteration Trace (slow / fast):
+- Step 1: slow=2, fast=0
+- Step 2: slow=0, fast=2
+- Step 3: slow=-4, fast=-4  <-- They meet here, cycle detected
+
+3. Find the start of the cycle:
+   - Initialize pointer = head (3)
+   - Move pointer and slow one step at a time:
+
+Trace to cycle start:
+- Step 1: pointer=3, slow=-4
+- Step 2: pointer=2, slow=2  <-- They meet at node with value 2
+
+4. Return the node where they meet: node with value 2 (start of the cycle)
+
+Time Complexity: O(n)  -> Traverse each node at most once
+Space Complexity: O(1) -> Constant space
 */
 
 class ListNode {
@@ -52,26 +54,26 @@ class LinkedListCycleII {
         // Step 1: Detect if a cycle exists
         boolean hasCycle = false;
         while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
+            slow = slow.next;           // slow moves 1 step
+            fast = fast.next.next;      // fast moves 2 steps
 
-            if (slow == fast) {
+            if (slow == fast) {         // pointers meet → cycle detected
                 hasCycle = true;
                 break;
             }
         }
 
-        // Step 2: If there is a cycle, find the entry point
+        // Step 2: If cycle exists, find entry point
         if (hasCycle) {
-            ListNode pointer = head;
-            while (pointer != slow) {
+            ListNode pointer = head;    // start from head
+            while (pointer != slow) {   // move both 1 step at a time
                 pointer = pointer.next;
                 slow = slow.next;
             }
-            return pointer; // start of the cycle
+            return pointer;             // start of the cycle
         }
 
-        return null; // no cycle
+        return null;                    // no cycle
     }
 }
 
