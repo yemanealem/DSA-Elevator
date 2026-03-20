@@ -1,57 +1,55 @@
 import java.util.HashMap;
-import java.util.Random;
 
-// Java solution for LeetCode 535: Encode and Decode TinyURL
-// Problem: Implement encode() to shorten a URL and decode() to restore the original URL
-// Approach: Use HashMap to store mapping from a unique key to the original URL. Generate random 6-character key for each URL.
-// Complexity: O(1) average time for encode and decode, O(n) space for storing mappings.
-
+// Optimized high-performance TinyURL Codec
 public class Codec {
 
     private HashMap<String, String> map = new HashMap<>();
-    private String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    private Random random = new Random();
-    private String baseUrl = "https://tinyurl.com/";
+    private int counter = 0;
+    private final String baseUrl = "https://tinyurl.com/";
+    private final char[] chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 
     // Encodes a URL to a shortened URL.
     public String encode(String longUrl) {
-        String key = generateKey();
-        map.put(key, longUrl); // store mapping
+        counter++;
+        String key = encodeBase62(counter);
+        key = padKey(key); // make it always 6 chars
+        map.put(key, longUrl);
         return baseUrl + key;
     }
 
     // Decodes a shortened URL to its original URL.
     public String decode(String shortUrl) {
-        String key = shortUrl.replace(baseUrl, ""); // extract key
-        return map.get(key); // retrieve original URL
+        return map.get(shortUrl.substring(baseUrl.length()));
     }
 
-    // Helper method to generate a unique 6-character key
-    private String generateKey() {
+    // Convert integer to base62 string
+    private String encodeBase62(int num) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 6; i++) {
-            int index = random.nextInt(chars.length());
-            sb.append(chars.charAt(index));
+        while (num > 0) {
+            sb.append(chars[num % 62]);
+            num /= 62;
         }
-        String key = sb.toString();
-        // Ensure key is unique (rare collision handling)
-        while (map.containsKey(key)) {
-            sb.setLength(0);
-            for (int i = 0; i < 6; i++) {
-                int index = random.nextInt(chars.length());
-                sb.append(chars.charAt(index));
-            }
-            key = sb.toString();
-        }
-        return key;
+        return sb.reverse().toString();
+    }
+
+    // Pad key to always 6 characters
+    private String padKey(String key) {
+        StringBuilder sb = new StringBuilder();
+        int padLength = 6 - key.length();
+        for (int i = 0; i < padLength; i++) sb.append('0'); // pad with '0'
+        sb.append(key);
+        return sb.toString();
     }
 
     // Example usage
     public static void main(String[] args) {
         Codec codec = new Codec();
-        String url = "https://leetcode.com/problems/design-tinyurl";
-        String shortUrl = codec.encode(url);
-        System.out.println("Short URL: " + shortUrl);
-        System.out.println("Decoded URL: " + codec.decode(shortUrl));
+        String url1 = "https://leetcode.com/problems/design-tinyurl";
+        String shortUrl1 = codec.encode(url1);
+        System.out.println(shortUrl1 + " -> " + codec.decode(shortUrl1));
+
+        String url2 = "https://google.com";
+        String shortUrl2 = codec.encode(url2);
+        System.out.println(shortUrl2 + " -> " + codec.decode(shortUrl2));
     }
 }
