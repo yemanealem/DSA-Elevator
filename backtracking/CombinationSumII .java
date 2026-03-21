@@ -1,3 +1,47 @@
+/*
+LeetCode 40: Combination Sum II (Backtracking Solution)
+
+Problem:
+- Given an array of candidate numbers and a target number, find all unique combinations in candidates where the numbers sum to target.
+- Each number in candidates may only be used once.
+- The solution set must not contain duplicate combinations.
+
+Example:
+Input: candidates = [10,1,2,7,6,1,5], target = 8
+Output:
+[
+ [1,1,6],
+ [1,2,5],
+ [1,7],
+ [2,6]
+]
+
+Approach (Backtracking):
+1. Sort the candidates array to handle duplicates easily.
+2. Use a recursive backtracking function:
+   - Track current combination (path) and remaining target.
+   - Iterate through candidates starting from index 'start'.
+   - Skip duplicates: if candidates[i] == candidates[i-1], continue.
+   - If candidate > target, break (prune branch).
+   - Add candidate to path, recurse with updated target and next index (i+1).
+   - Remove last element after recursion (backtrack).
+3. Add path to result when target == 0.
+
+Time Complexity: O(2^n) in worst case (all subsets)
+Space Complexity: O(target) recursion depth + O(n) path storage
+
+Trace Example:
+- Sort candidates: [1,1,2,5,6,7,10]
+- Start with [] target=8
+- Pick 1 (index 0) → path=[1], target=7
+    - Pick 1 (index 1) → path=[1,1], target=6
+        - Pick 6 (index 4) → path=[1,1,6], target=0 → add to result
+    - Pick 2 (index 2) → path=[1,2], target=5 ...
+    - Pick 5 (index 3) → path=[1,5], target=2 ...
+    - Pick 7 (index 5) → path=[1,7], target=0 → add to result
+- Continue recursion for remaining numbers...
+*/
+
 import java.util.*;
 
 public class CombinationSumII {
@@ -39,28 +83,3 @@ public class CombinationSumII {
         }
     }
 }
-
-/*
-Explanation:
-
-1. Sort candidates: [1, 1, 2, 5, 6, 7, 10]
-2. Start backtracking from index 0 with target 8.
-3. Build combinations by adding numbers to path.
-4. Skip duplicates to avoid repeated combinations.
-5. Stop recursion when target < 0 or index out of bounds.
-
-Trace Example:
-- Start with [] target=8
-- Pick 1 (index 0) → path=[1] target=7
-  - Pick 1 (index 1) → path=[1,1] target=6
-    - Pick 2 (index 2) → path=[1,1,2] target=4 ...
-    - Pick 5 (index 3) → path=[1,1,5] target=1 ...
-    - Pick 6 (index 4) → path=[1,1,6] target=0 → add to result
-  - Pick 2 (index 2) → path=[1,2] target=5 ...
-  - Pick 5 (index 3) → path=[1,5] target=2 ...
-  - Pick 6 (index 4) → path=[1,6] target=1 ...
-  - Pick 7 (index 5) → path=[1,7] target=0 → add to result
-
-Time Complexity: O(2^n) in worst case (all subsets)
-Space Complexity: O(target) recursion + O(n) path
-*/
