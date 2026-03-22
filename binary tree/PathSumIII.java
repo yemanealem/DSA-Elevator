@@ -58,7 +58,7 @@ public class PathSumIII {
         res += dfs(node.left, currSum, target, prefix);
         res += dfs(node.right, currSum, target, prefix);
 
-        prefix.put(currSum, prefix.get(currSum) - 1); // backtrack
+        prefix.put(currSum, prefix.get(currSum) - 1); 
 
         return res;
     }
