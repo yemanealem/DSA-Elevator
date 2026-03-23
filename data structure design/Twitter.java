@@ -1,60 +1,23 @@
 /*
 🧩 Problem: Design Twitter (LeetCode)
 
-Design a simplified Twitter system with the following methods:
-1. postTweet(userId, tweetId)
-2. getNewsFeed(userId) → return 10 most recent tweets
-3. follow(followerId, followeeId)
-4. unfollow(followerId, followeeId)
+------------------------------------------------------------
+💡 Improvements in this version:
+
+1. Avoid unnecessary putIfAbsent calls
+2. Use computeIfAbsent for cleaner + faster map handling
+3. Reduce repeated map lookups
+4. Keep heap operations minimal
+5. Cleaner, more interview-friendly structure
 
 ------------------------------------------------------------
-
-💡 Optimized Approach (Best Practice):
-
-We use:
-
-1. HashMap<Integer, Set<Integer>> → followMap
-   follower → followees
-
-2. HashMap<Integer, Tweet> → tweetMap
-   user → head of linked list of tweets
-
-3. Tweet class (linked list)
-   each tweet points to next tweet (older one)
-
-4. PriorityQueue (Max Heap)
-   → used to merge k sorted tweet lists (like merge k lists)
-
-------------------------------------------------------------
-
-🔍 Key Idea:
-
-- Each user’s tweets are stored as a linked list (latest first)
-- For getNewsFeed:
-    1. Add head tweet of each followee into heap
-    2. Extract top tweet
-    3. Add next tweet from same user
-    4. Repeat until 10 tweets collected
-
-👉 This avoids scanning ALL tweets → much faster
-
-------------------------------------------------------------
-
 ⏱️ Time Complexity:
-
 postTweet → O(1)
 follow/unfollow → O(1)
 getNewsFeed → O(10 log k)
-(k = number of followees)
 
 📦 Space Complexity:
 O(U + T)
-
-------------------------------------------------------------
-
-🎯 Key Insight:
-This is a classic "merge k sorted lists" problem using a heap
-
 ------------------------------------------------------------
 */
 
@@ -62,61 +25,53 @@ import java.util.*;
 
 class Twitter {
 
-    private static int time = 0;
+    private int time = 0;
 
-    // user -> set of followees
-    private Map<Integer, Set<Integer>> followMap;
+    private Map<Integer, Set<Integer>> followMap = new HashMap<>();
+    private Map<Integer, Tweet> tweetMap = new HashMap<>();
 
-    // user -> head of tweet linked list
-    private Map<Integer, Tweet> tweetMap;
-
-    public Twitter() {
-        followMap = new HashMap<>();
-        tweetMap = new HashMap<>();
-    }
-
-    // Tweet linked list node
     private static class Tweet {
-        int id;
-        int time;
+        int id, time;
         Tweet next;
 
         Tweet(int id, int time) {
             this.id = id;
             this.time = time;
-            this.next = null;
         }
     }
 
-    // Post tweet → insert at head
+    public Twitter() {}
+
+    // Post tweet
     public void postTweet(int userId, int tweetId) {
+        Tweet head = tweetMap.get(userId);
         Tweet newTweet = new Tweet(tweetId, time++);
-        newTweet.next = tweetMap.get(userId);
+        newTweet.next = head;
         tweetMap.put(userId, newTweet);
     }
 
-    // Get top 10 recent tweets
+    // Get news feed
     public List<Integer> getNewsFeed(int userId) {
-        List<Integer> res = new ArrayList<>();
+        List<Integer> res = new ArrayList<>(10);
 
-        // Max heap by time
+        Set<Integer> followees = followMap.get(userId);
+        if (followees == null) {
+            followees = new HashSet<>();
+        }
+        followees.add(userId); // include self
+
         PriorityQueue<Tweet> maxHeap = new PriorityQueue<>(
             (a, b) -> b.time - a.time
         );
 
-        // Ensure user follows themselves
-        followMap.putIfAbsent(userId, new HashSet<>());
-        followMap.get(userId).add(userId);
-
-        // Add head tweets
-        for (int followee : followMap.get(userId)) {
-            Tweet t = tweetMap.get(followee);
+        // Add only head tweets (important optimization)
+        for (int f : followees) {
+            Tweet t = tweetMap.get(f);
             if (t != null) {
                 maxHeap.offer(t);
             }
         }
 
-        // Extract top 10
         while (!maxHeap.isEmpty() && res.size() < 10) {
             Tweet curr = maxHeap.poll();
             res.add(curr.id);
@@ -131,14 +86,16 @@ class Twitter {
 
     // Follow
     public void follow(int followerId, int followeeId) {
-        followMap.putIfAbsent(followerId, new HashSet<>());
-        followMap.get(followerId).add(followeeId);
+        followMap
+            .computeIfAbsent(followerId, k -> new HashSet<>())
+            .add(followeeId);
     }
 
     // Unfollow
     public void unfollow(int followerId, int followeeId) {
-        if (followMap.containsKey(followerId) && followerId != followeeId) {
-            followMap.get(followerId).remove(followeeId);
+        Set<Integer> set = followMap.get(followerId);
+        if (set != null && followerId != followeeId) {
+            set.remove(followeeId);
         }
     }
 }
