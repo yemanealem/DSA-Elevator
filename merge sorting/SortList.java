@@ -1,4 +1,56 @@
+/*
+🧩 Problem: Sort List (LeetCode)
 
+Given the head of a linked list, return the list after sorting it in ascending order.
+
+Example:
+Input: 4 -> 2 -> 1 -> 3
+Output: 1 -> 2 -> 3 -> 4
+
+------------------------------------------------------------
+
+💡 How It Works (Merge Sort on Linked List):
+
+We use Merge Sort because:
+- Linked lists do NOT support random access
+- Merge sort works efficiently with O(1) extra space for lists
+
+Steps:
+1. Find the middle of the list using slow & fast pointers
+2. Split the list into two halves
+3. Recursively sort both halves
+4. Merge the two sorted halves
+
+------------------------------------------------------------
+
+🔍 Key Functions:
+
+1. findMid:
+   - Use slow & fast pointer to split list into two halves
+
+2. merge:
+   - Merge two sorted linked lists into one sorted list
+
+------------------------------------------------------------
+
+⏱️ Time Complexity:
+O(n log n)
+- We split the list log n times
+- Each merge takes O(n)
+
+📦 Space Complexity:
+O(log n)
+- Due to recursive call stack
+
+------------------------------------------------------------
+
+🎯 Why Merge Sort?
+- Efficient for linked lists
+- No need for extra array
+- Stable sorting algorithm
+
+------------------------------------------------------------
+*/
 
 class ListNode {
     int val;
