@@ -12,6 +12,22 @@ public class CircularArrayLoop {
      * 
      * Circular movement:
      * next_index = (current_index + nums[current_index]) % n
+     * If the result is negative, wrap it to stay within the array bounds.
+     * 
+     * Approach (Fast & Slow Pointers / Floyd’s cycle detection):
+     * 1. Loop through each index as a starting point.
+     * 2. Skip if nums[i] == 0 (already visited or cannot form a loop).
+     * 3. Use slow and fast pointers starting at i:
+     *      - slow moves one step at a time
+     *      - fast moves two steps at a time
+     * 4. While moving pointers:
+     *      - Ensure all numbers along the path have the same direction (all positive or all negative)
+     *      - If slow meets fast, a cycle is detected. Check that cycle length > 1 to ignore self-loops.
+     * 5. If no cycle is found, mark all visited elements in this path as 0 to avoid reprocessing.
+     * 6. Continue until all indices are checked.
+     * 
+     * Time Complexity: O(n) since each element is visited at most twice.
+     * Space Complexity: O(1) in-place marking.
      * 
      * Examples:
      * Input: nums = [2, -1, 1, 2, 2]
@@ -21,31 +37,26 @@ public class CircularArrayLoop {
      * Input: nums = [-1, 2]
      * Output: false
      */
-
-    // Helper function to calculate the next index in circular manner
+    
+    // Helper function to calculate the next index in a circular array
     private static int nextIndex(int[] nums, int current) {
         int n = nums.length;
-        // Use modulo and handle negative numbers
-        return ((current + nums[current]) % n + n) % n;
+        return ((current + nums[current]) % n + n) % n; // handle negative wrap
     }
 
     public static boolean circularArrayLoop(int[] nums) {
         int n = nums.length;
 
-        // Step 1: Loop through each index as starting point
         for (int i = 0; i < n; i++) {
-            if (nums[i] == 0) continue; // Skip if already visited
+            if (nums[i] == 0) continue;
 
             int slow = i, fast = i;
-            boolean direction = nums[i] > 0; // True = positive, False = negative
+            boolean direction = nums[i] > 0;
 
-            // Step 2: Move slow and fast pointers to detect a cycle
             while (true) {
-                // Move slow pointer one step
                 int nextSlow = nextIndex(nums, slow);
                 if (nums[nextSlow] == 0 || (nums[nextSlow] > 0) != direction) break;
 
-                // Move fast pointer two steps
                 int nextFast = nextIndex(nums, fast);
                 if (nums[nextFast] == 0 || (nums[nextFast] > 0) != direction) break;
                 nextFast = nextIndex(nums, nextFast);
@@ -54,32 +65,28 @@ public class CircularArrayLoop {
                 slow = nextSlow;
                 fast = nextFast;
 
-                // Step 3: Check if slow meets fast
                 if (slow == fast) {
-                    // Check if cycle length > 1 (ignore self-loop)
-                    if (slow == nextIndex(nums, slow)) break;
-                    return true; // Cycle found
+                    if (slow == nextIndex(nums, slow)) break; // one-element loop not allowed
+                    return true;
                 }
             }
 
-            // Step 4: Mark all elements along this path as 0 to avoid revisiting
             int j = i;
             while (nums[j] != 0 && (nums[j] > 0) == direction) {
                 int temp = nextIndex(nums, j);
-                nums[j] = 0; // Mark visited
+                nums[j] = 0; // mark visited
                 j = temp;
             }
         }
 
-        // Step 5: No cycle found
         return false;
     }
 
     public static void main(String[] args) {
         int[] nums1 = {2, -1, 1, 2, 2};
-        System.out.println(circularArrayLoop(nums1)); // Output: true
+        System.out.println(circularArrayLoop(nums1)); // true
 
         int[] nums2 = {-1, 2};
-        System.out.println(circularArrayLoop(nums2)); // Output: false
+        System.out.println(circularArrayLoop(nums2)); // false
     }
 }
