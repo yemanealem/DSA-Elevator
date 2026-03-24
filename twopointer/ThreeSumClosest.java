@@ -1,37 +1,29 @@
 import java.util.Arrays;
 
 public class ThreeSumClosest {
-
     public static int threeSumClosest(int[] nums, int target) {
-        // Step 1: Sort the array
-        Arrays.sort(nums);
-        int n = nums.length;
+        Arrays.sort(nums); // Sort the array first
+        int closestSum = nums[0] + nums[1] + nums[2]; // Start with first three elements
 
-        // Step 2: Initialize closestSum with the sum of first three numbers
-        int closestSum = nums[0] + nums[1] + nums[2];
-
-        // Step 3: Loop through each number as the first element of triplet
-        for (int i = 0; i < n - 2; i++) {
-
-            int left = i + 1;      // Pointer to the next element
-            int right = n - 1;     // Pointer to the last element
+        for (int i = 0; i < nums.length - 2; i++) {
+            int left = i + 1;
+            int right = nums.length - 1;
 
             while (left < right) {
                 int currentSum = nums[i] + nums[left] + nums[right];
 
-                // Update closestSum if currentSum is closer to target
+                // Update closestSum if this sum is closer to target
                 if (Math.abs(currentSum - target) < Math.abs(closestSum - target)) {
                     closestSum = currentSum;
                 }
 
-                // Move pointers intelligently
+                // Move pointers
                 if (currentSum < target) {
-                    left++;  // Increase sum
+                    left++; // Need a bigger sum
                 } else if (currentSum > target) {
-                    right--; // Decrease sum
+                    right--; // Need a smaller sum
                 } else {
-                    // Exact match found
-                    return target;
+                    return target; // Exact match found
                 }
             }
         }
