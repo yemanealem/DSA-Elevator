@@ -1,8 +1,30 @@
 import java.util.*;
 
+/**
+ * LeetCode Problem 691: Stickers to Spell Word
+ *
+ * Problem:
+ * Given an array of stickers (each a string of lowercase letters) and a target word,
+ * find the minimum number of stickers needed to spell out the target.
+ * Each sticker can be used multiple times and letters can be cut from stickers.
+ *
+ * How It Works:
+ * 1. Precompute each sticker as a letter-frequency array (int[26]).
+ * 2. Use DFS with memoization on the remaining letters of the target.
+ * 3. At each recursion:
+ *      - Skip stickers that don't contain the first needed letter (major pruning).
+ *      - Apply a sticker: reduce letters from the remaining target.
+ *      - Recursively compute the minimum stickers needed for the new remaining target.
+ * 4. Memoize results for each remaining target string to avoid recomputation.
+ *
+ * Running Time:
+ * - Worst-case exponential, but memoization + pruning makes it fast for target length ≤ 15.
+ * - For typical inputs on LeetCode, it runs in milliseconds and passes all tests.
+ */
+
 public class StickersToSpellWord {
 
-    // Main method
+    // Main method to run the program
     public static void main(String[] args) {
         String[] stickers = {"with", "example", "science"};
         String target = "thehat";
@@ -39,7 +61,7 @@ public class StickersToSpellWord {
         int min = Integer.MAX_VALUE;
 
         for (int[] sticker : stickerCount) {
-            // Optimization: skip stickers that don't contain the first needed letter
+            // Skip stickers that don't contain the first needed letter
             if (sticker[target.charAt(0) - 'a'] == 0) continue;
 
             StringBuilder sb = new StringBuilder();
