@@ -1,13 +1,13 @@
-import java.util.*;
-
 public class Solution {
     public int balancedString(String s) {
         int n = s.length();
         int target = n / 4;
 
-        Map<Character, Integer> count = new HashMap<>();
+        int[] count = new int[128]; // ASCII
+
+        // Count all characters
         for (char c : s.toCharArray()) {
-            count.put(c, count.getOrDefault(c, 0) + 1);
+            count[c]++;
         }
 
         // If already balanced
@@ -17,14 +17,12 @@ public class Solution {
         int minLen = n;
 
         for (int right = 0; right < n; right++) {
-            char c = s.charAt(right);
-            count.put(c, count.get(c) - 1);
+            count[s.charAt(right)]--;
 
-            // Try shrinking window
+            // Shrink window while valid
             while (left <= right && isBalanced(count, target)) {
                 minLen = Math.min(minLen, right - left + 1);
-                char leftChar = s.charAt(left);
-                count.put(leftChar, count.get(leftChar) + 1);
+                count[s.charAt(left)]++;
                 left++;
             }
         }
@@ -32,10 +30,10 @@ public class Solution {
         return minLen;
     }
 
-    private boolean isBalanced(Map<Character, Integer> count, int target) {
-        return count.getOrDefault('Q', 0) <= target &&
-               count.getOrDefault('W', 0) <= target &&
-               count.getOrDefault('E', 0) <= target &&
-               count.getOrDefault('R', 0) <= target;
+    private boolean isBalanced(int[] count, int target) {
+        return count['Q'] <= target &&
+               count['W'] <= target &&
+               count['E'] <= target &&
+               count['R'] <= target;
     }
 }
