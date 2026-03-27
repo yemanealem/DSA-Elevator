@@ -13,11 +13,30 @@
  * Output: 1
  * Explanation: Replacing "Q" with "R" makes the string balanced: "RQWE"
  *
- * Approach:
- * 1. Count frequency of each character.
- * 2. Use a sliding window to find the smallest substring that contains
- *    all the excess characters.
- * 3. Shrink the window while the remaining string is still balanced.
+ * ------------------------------------------------------------
+ * How it works (Sliding Window Approach):
+ *
+ * 1. Count the frequency of each character in the string.
+ * 2. Compute the target: each character should appear n / 4 times.
+ * 3. Identify "excess" characters (those exceeding the target).
+ * 4. Use a sliding window:
+ *    - Expand the right pointer and decrease counts.
+ *    - While the outside of the window is balanced (all counts <= target),
+ *      try shrinking the window from the left.
+ * 5. Track the minimum window size that satisfies the condition.
+ *
+ * The window represents the substring we will replace.
+ * We want the smallest such window.
+ *
+ * ------------------------------------------------------------
+ * Running Time:
+ *
+ * Time Complexity: O(n)
+ * - Each character is visited at most twice (once by right pointer,
+ *   once by left pointer).
+ *
+ * Space Complexity: O(1)
+ * - We only use a fixed array of size 4 (for Q, W, E, R).
  */
 
 public class BalancedString {
@@ -28,7 +47,7 @@ public class BalancedString {
 
         int[] count = new int[4];
 
-        // Count all characters
+        // Count frequency of each character
         for (char c : s.toCharArray()) {
             count[index(c)]++;
         }
@@ -43,7 +62,7 @@ public class BalancedString {
         for (int right = 0; right < n; right++) {
             count[index(s.charAt(right))]--;
 
-            // Try to shrink the window
+            // Shrink window while valid
             while (left <= right && isBalanced(count, target)) {
                 minLen = Math.min(minLen, right - left + 1);
                 count[index(s.charAt(left))]++;
@@ -54,7 +73,7 @@ public class BalancedString {
         return minLen;
     }
 
-    // Check if the string is balanced
+    // Check if current counts are balanced
     private boolean isBalanced(int[] count, int target) {
         return count[0] <= target &&
                count[1] <= target &&
@@ -62,7 +81,7 @@ public class BalancedString {
                count[3] <= target;
     }
 
-    // Map character to index
+    // Map characters to array indices
     private int index(char c) {
         switch (c) {
             case 'Q': return 0;
