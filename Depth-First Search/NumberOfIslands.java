@@ -1,10 +1,10 @@
 /*
 LeetCode 200 - Number of Islands
 
-Approach: Depth First Search (DFS)
+Optimized DFS approach
 
 Time Complexity: O(m * n)
-Space Complexity: O(m * n) (recursion stack in worst case)
+Space Complexity: O(m * n) (worst-case recursion)
 */
 
 class NumberOfIslands {
@@ -29,32 +29,18 @@ class NumberOfIslands {
     }
 
     private void dfs(char[][] grid, int r, int c) {
-        // Boundary + base condition
-        if (r < 0 || c < 0 || r >= grid.length || c >= grid[0].length || grid[r][c] == '0') {
+        // Combine boundary + visited check in one condition
+        if (r < 0 || c < 0 || r >= grid.length || c >= grid[0].length || grid[r][c] != '1') {
             return;
         }
 
-        // Mark as visited
+        // Mark visited immediately to avoid revisiting
         grid[r][c] = '0';
 
-        // Explore all 4 directions
-        dfs(grid, r + 1, c); // down
-        dfs(grid, r - 1, c); // up
-        dfs(grid, r, c + 1); // right
-        dfs(grid, r, c - 1); // left
-    }
-
-    // Main method for testing
-    public static void main(String[] args) {
-        NumberOfIslands sol = new NumberOfIslands();
-
-        char[][] grid = {
-            {'1','1','0','0','0'},
-            {'1','1','0','0','0'},
-            {'0','0','1','0','0'},
-            {'0','0','0','1','1'}
-        };
-
-        System.out.println(sol.numIslands(grid)); // Output: 3
+        // Explore 4 directions
+        dfs(grid, r + 1, c);
+        dfs(grid, r - 1, c);
+        dfs(grid, r, c + 1);
+        dfs(grid, r, c - 1);
     }
 }
