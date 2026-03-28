@@ -3,21 +3,18 @@ LeetCode 144 - Binary Tree Preorder Traversal
 
 QUESTION:
 Given the root of a binary tree, return the preorder traversal of its nodes' values.
-Preorder traversal follows the order:
+Preorder traversal follows:
     1. Root
-    2. Left subtree
-    3. Right subtree
+    2. Left
+    3. Right
 
 HOW IT WORKS:
-- Use Depth First Search (DFS).
-- Visit the current node first (root).
-- Then recursively visit the left subtree.
-- Finally, recursively visit the right subtree.
-- Add each visited node's value to the result list in this order.
+- Use DFS (recursion).
+- Visit the root first, then traverse left, then right.
 
 RUNNING TIME:
-Time Complexity: O(n) — each node is visited exactly once.
-Space Complexity: O(h) — recursion stack, where h is the height of the tree.
+Time Complexity: O(n)
+Space Complexity: O(h) where h is the height of the tree
 */
 
 import java.util.*;
@@ -42,15 +39,38 @@ class BinaryTreePreorderTraversal {
     private void dfs(TreeNode node, List<Integer> result) {
         if (node == null) return;
 
-        // 1. Visit root
+        // Visit root
         result.add(node.val);
 
-        // 2. Traverse left
+        // Traverse left
         dfs(node.left, result);
 
-        // 3. Traverse right
+        // Traverse right
         dfs(node.right, result);
     }
+
+    // Main method for testing
+    public static void main(String[] args) {
+        /*
+            Construct the following tree:
+                  1
+                 / \
+                2   3
+               / \
+              4   5
+
+            Expected Preorder: [1, 2, 4, 5, 3]
+        */
+
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.left.left = new TreeNode(4);
+        root.left.right = new TreeNode(5);
+
+        BinaryTreePreorderTraversal sol = new BinaryTreePreorderTraversal();
+        List<Integer> result = sol.preorderTraversal(root);
+
+        System.out.println(result);
+    }
 }
-
-
