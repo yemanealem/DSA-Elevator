@@ -65,9 +65,9 @@ public class NiceSubarrays {
         NiceSubarrays sol = new NiceSubarrays();
 
         int[] nums1 = {1, 1, 2, 1, 1};
-        System.out.println(sol.numberOfSubarrays(nums1, 3)); // 2
+        System.out.println(sol.numberOfSubarrays(nums1, 3));
 
         int[] nums2 = {2, 4, 6};
-        System.out.println(sol.numberOfSubarrays(nums2, 1)); // 0
+        System.out.println(sol.numberOfSubarrays(nums2, 1)); 
     }
 }
