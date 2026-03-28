@@ -1,10 +1,22 @@
 /*
 LeetCode 111 - Minimum Depth of Binary Tree
 
-Approach: BFS (Level Order Traversal)
+QUESTION:
+Given a binary tree, find its minimum depth.
+The minimum depth is the number of nodes along the shortest path from the root
+node down to the nearest leaf node.
 
-Time Complexity: O(n)
-Space Complexity: O(n)
+HOW IT WORKS:
+- Use Breadth-First Search (BFS) level order traversal.
+- Traverse the tree level by level.
+- As soon as we encounter the first leaf node (a node with no children),
+  we return the current depth.
+- This works because BFS guarantees that we visit nodes in increasing depth order,
+  so the first leaf we find is the minimum depth.
+
+RUNNING TIME:
+Time Complexity: O(n) — we may visit each node once in the worst case.
+Space Complexity: O(n) — queue may hold up to all nodes at one level.
 */
 
 import java.util.*;
@@ -34,7 +46,7 @@ class MinimumDepthOfBinaryTree {
             for (int i = 0; i < size; i++) {
                 TreeNode node = queue.poll();
 
-                // If it's a leaf → return immediately
+                // Check if it's a leaf node
                 if (node.left == null && node.right == null) {
                     return depth;
                 }
