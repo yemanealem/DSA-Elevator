@@ -8,7 +8,6 @@ A "left leaf" is a node that:
 - AND has no children (i.e., it is a leaf node)
 
 -----------------------------------
-How It Works (Recursive Approach):
 -----------------------------------
 - We traverse the tree using recursion.
 - At each node:
