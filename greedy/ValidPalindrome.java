@@ -1,3 +1,22 @@
+/**
+ * Problem: Valid Palindrome II (LeetCode 680)
+ *
+ * Given a string s, return true if the s can be a palindrome after deleting at most one character.
+ *
+ * How it works (Greedy + Two Pointers):
+ * - Use two pointers: left (start) and right (end)
+ * - Move inward while characters match
+ * - If a mismatch is found:
+ *     → Try skipping the left character OR the right character
+ *     → Check if either resulting substring is a palindrome
+ * - If no mismatch happens → already a palindrome
+ *
+ * Running Time:
+ * - Time Complexity: O(n)
+ *   (each character is visited at most twice)
+ * - Space Complexity: O(1)
+ */
+
 public class ValidPalindrome {
 
     public static void main(String[] args) {
