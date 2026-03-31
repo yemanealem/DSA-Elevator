@@ -1,69 +1,63 @@
+/*
+QUESTION:
+Given a string s and a dictionary of strings, find the longest string in the dictionary that can be formed by deleting some characters of s (without changing the order of the remaining characters).
+If there are multiple valid answers, return the lexicographically smallest one.
+
+HOW IT WORKS:
+- For each word in the dictionary:
+  - Use two pointers to check if it is a subsequence of s.
+  - Pointer i scans s, pointer j scans the word.
+  - If characters match, move j forward.
+  - If we successfully match all characters of the word, it is a valid candidate.
+- Keep track of the best result:
+  - Prefer longer words.
+  - If lengths are equal, choose lexicographically smaller.
+
+RUNNING TIME:
+- Let n = length of s, m = number of words, k = average word length
+- For each word, subsequence check takes O(n)
+- Total time complexity: O(m × n)
+- Space complexity: O(1)
+*/
+
 import java.util.*;
 
-class Solution {
+public class LongestWordThroughDeleting {
 
-    public String findLongestWord(String s, List<String> dictionary) {
+    public static String findLongestWord(String s, List<String> dictionary) {
+        String result = "";
 
-        Map<Character, List<Integer>> map = new HashMap<>();
-
-        // Step 1: Build index map
-        for (int i = 0; i < s.length(); i++) {
-            map.computeIfAbsent(s.charAt(i), k -> new ArrayList<>()).add(i);
-        }
-
-        // Step 2: Sort dictionary
-        Collections.sort(dictionary, (a, b) -> {
-            if (a.length() != b.length()) {
-                return b.length() - a.length();
-            }
-            return a.compareTo(b);
-        });
-
-        // Step 3: Check each word
         for (String word : dictionary) {
-            if (isSubsequence(word, map)) {
-                return word;
-            }
-        }
-
-        return "";
-    }
-
-    // Check if word is subsequence using binary search
-    private boolean isSubsequence(String word, Map<Character, List<Integer>> map) {
-        int prevIndex = -1;
-
-        for (char c : word.toCharArray()) {
-            if (!map.containsKey(c)) return false;
-
-            List<Integer> indices = map.get(c);
-
-            int pos = findNextIndex(indices, prevIndex);
-
-            if (pos == -1) return false;
-
-            prevIndex = indices.get(pos);
-        }
-
-        return true;
-    }
-
-    // Binary search helper
-    private int findNextIndex(List<Integer> indices, int target) {
-        int left = 0, right = indices.size() - 1;
-        int result = -1;
-
-        while (left <= right) {
-            int mid = (left + right) / 2;
-
-            if (indices.get(mid) > target) {
-                result = mid;
-                right = mid - 1;
-            } else {
-                left = mid + 1;
+            if (isSubsequence(s, word)) {
+                // Choose better candidate
+                if (word.length() > result.length() ||
+                   (word.length() == result.length() && word.compareTo(result) < 0)) {
+                    result = word;
+                }
             }
         }
 
         return result;
+    }
+
+    // Two-pointer check for subsequence
+    private static boolean isSubsequence(String s, String word) {
+        int i = 0, j = 0;
+
+        while (i < s.length() && j < word.length()) {
+            if (s.charAt(i) == word.charAt(j)) {
+                j++;
+            }
+            i++;
+        }
+
+        return j == word.length();
+    }
+
+    public static void main(String[] args) {
+        String s = "abpcplea";
+        List<String> dictionary = Arrays.asList("ale", "apple", "monkey", "plea");
+
+        System.out.println(findLongestWord(s, dictionary)); // Output: "apple"
     }
 }
