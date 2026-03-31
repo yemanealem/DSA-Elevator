@@ -3,22 +3,24 @@ import java.util.*;
 public class LongestWordThroughDeleting {
 
     public static String findLongestWord(String s, List<String> dictionary) {
-        String result = "";
+        // Sort by length DESC, then lexicographically ASC
+        Collections.sort(dictionary, (a, b) -> {
+            if (a.length() != b.length()) {
+                return b.length() - a.length();
+            }
+            return a.compareTo(b);
+        });
 
         for (String word : dictionary) {
             if (isSubsequence(s, word)) {
-                // Choose better candidate
-                if (word.length() > result.length() ||
-                   (word.length() == result.length() && word.compareTo(result) < 0)) {
-                    result = word;
-                }
+                return word; // first valid is best due to sorting
             }
         }
 
-        return result;
+        return "";
     }
 
-    // Two-pointer check for subsequence
+    // Two-pointer subsequence check
     private static boolean isSubsequence(String s, String word) {
         int i = 0, j = 0;
 
@@ -36,6 +38,6 @@ public class LongestWordThroughDeleting {
         String s = "abpcplea";
         List<String> dictionary = Arrays.asList("ale", "apple", "monkey", "plea");
 
-        System.out.println(findLongestWord(s, dictionary)); // Output: "apple"
+        System.out.println(findLongestWord(s, dictionary)); // apple
     }
 }
