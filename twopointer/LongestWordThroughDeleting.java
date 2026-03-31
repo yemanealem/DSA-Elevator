@@ -1,9 +1,17 @@
 import java.util.*;
 
-public class LongestWordThroughDeleting {
+class Solution {
 
-    public static String findLongestWord(String s, List<String> dictionary) {
-        // Sort by length DESC, then lexicographically ASC
+    public String findLongestWord(String s, List<String> dictionary) {
+
+        Map<Character, List<Integer>> map = new HashMap<>();
+
+        // Step 1: Build index map
+        for (int i = 0; i < s.length(); i++) {
+            map.computeIfAbsent(s.charAt(i), k -> new ArrayList<>()).add(i);
+        }
+
+        // Step 2: Sort dictionary
         Collections.sort(dictionary, (a, b) -> {
             if (a.length() != b.length()) {
                 return b.length() - a.length();
@@ -11,33 +19,51 @@ public class LongestWordThroughDeleting {
             return a.compareTo(b);
         });
 
+        // Step 3: Check each word
         for (String word : dictionary) {
-            if (isSubsequence(s, word)) {
-                return word; // first valid is best due to sorting
+            if (isSubsequence(word, map)) {
+                return word;
             }
         }
 
         return "";
     }
 
-    // Two-pointer subsequence check
-    private static boolean isSubsequence(String s, String word) {
-        int i = 0, j = 0;
+    // Check if word is subsequence using binary search
+    private boolean isSubsequence(String word, Map<Character, List<Integer>> map) {
+        int prevIndex = -1;
 
-        while (i < s.length() && j < word.length()) {
-            if (s.charAt(i) == word.charAt(j)) {
-                j++;
-            }
-            i++;
+        for (char c : word.toCharArray()) {
+            if (!map.containsKey(c)) return false;
+
+            List<Integer> indices = map.get(c);
+
+            int pos = findNextIndex(indices, prevIndex);
+
+            if (pos == -1) return false;
+
+            prevIndex = indices.get(pos);
         }
 
-        return j == word.length();
+        return true;
     }
 
-    public static void main(String[] args) {
-        String s = "abpcplea";
-        List<String> dictionary = Arrays.asList("ale", "apple", "monkey", "plea");
+    // Binary search helper
+    private int findNextIndex(List<Integer> indices, int target) {
+        int left = 0, right = indices.size() - 1;
+        int result = -1;
 
-        System.out.println(findLongestWord(s, dictionary)); // apple
+        while (left <= right) {
+            int mid = (left + right) / 2;
+
+            if (indices.get(mid) > target) {
+                result = mid;
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        return result;
     }
 }
