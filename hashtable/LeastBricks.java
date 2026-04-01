@@ -3,21 +3,22 @@ import java.util.*;
 class Solution {
     public int leastBricks(List<List<Integer>> wall) {
         Map<Integer, Integer> map = new HashMap<>();
+        int maxEdges = 0;
 
         for (List<Integer> row : wall) {
             int sum = 0;
+            int size = row.size();
 
-            // Go until second last brick (avoid right edge)
-            for (int i = 0; i < row.size() - 1; i++) {
+            for (int i = 0; i < size - 1; i++) {
                 sum += row.get(i);
-                map.put(sum, map.getOrDefault(sum, 0) + 1);
+
+                int count = map.getOrDefault(sum, 0) + 1;
+                map.put(sum, count);
+
+                if (count > maxEdges) {
+                    maxEdges = count;
+                }
             }
-        }
-
-        int maxEdges = 0;
-
-        for (int count : map.values()) {
-            maxEdges = Math.max(maxEdges, count);
         }
 
         return wall.size() - maxEdges;
