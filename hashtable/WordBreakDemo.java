@@ -1,10 +1,12 @@
 import java.util.*;
 
-class Solution {
-    public boolean wordBreak(String s, List<String> wordDict) {
+public class WordBreakDemo {
+
+    // Optimized solution
+    public static boolean wordBreak(String s, List<String> wordDict) {
         Set<String> set = new HashSet<>(wordDict);
-        
-        // Find max word length to limit checks
+
+        // Find max word length
         int maxLen = 0;
         for (String word : wordDict) {
             maxLen = Math.max(maxLen, word.length());
@@ -23,5 +25,15 @@ class Solution {
         }
 
         return dp[s.length()];
+    }
+
+    // Main method to test
+    public static void main(String[] args) {
+        String s = "leetcode";
+        List<String> wordDict = Arrays.asList("leet", "code");
+
+        boolean result = wordBreak(s, wordDict);
+
+        System.out.println("Can the string be segmented? " + result);
     }
 }
