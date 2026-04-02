@@ -85,7 +85,7 @@ public class JumpGameII {
     }
 
     public static void main(String[] args) {
-        int[] nums = {2, 3, 1, 1, 4};
+        int[] nums = {2, 3, 4, 1, 5};
         System.out.println(jump(nums)); // Output: 2
     }
 }
