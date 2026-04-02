@@ -64,16 +64,15 @@ public class UniquePathsII {
 
         int[] dp = new int[n];
 
-        // Starting point
         dp[0] = (grid[0][0] == 1) ? 0 : 1;
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
 
                 if (grid[i][j] == 1) {
-                    dp[j] = 0; // obstacle blocks path
+                    dp[j] = 0; 
                 } else if (j > 0) {
-                    dp[j] += dp[j - 1]; // left + top
+                    dp[j] += dp[j - 1];
                 }
             }
         }
@@ -88,6 +87,6 @@ public class UniquePathsII {
             {0, 0, 0}
         };
 
-        System.out.println(uniquePathsWithObstacles(grid)); // Output: 2
+        System.out.println(uniquePathsWithObstacles(grid)); 
     }
 }
