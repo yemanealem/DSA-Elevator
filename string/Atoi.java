@@ -34,7 +34,7 @@ public class Atoi {
     }
 
     public static void main(String[] args) {
-        System.out.println(myAtoi("   -42")); // -42
-        System.out.println(myAtoi("4193 with words")); // 4193
+        System.out.println(myAtoi("   -42")); 
+        System.out.println(myAtoi("4193 with words")); 
     }
 }
