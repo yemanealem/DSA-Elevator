@@ -3,72 +3,49 @@ import java.util.*;
 /*
 LeetCode: Search Suggestions System
 
-QUESTION:
-Given an array of strings products and a string searchWord.
+ULTRA-OPTIMIZED APPROACH (TWO POINTERS + SORT)
 
-After each character of searchWord is typed, return at most 3 lexicographically smallest products
-that start with the current prefix.
+IDEA:
+Instead of doing binary search for every prefix:
+- Maintain a valid window [left, right]
+- Shrink it as prefix grows
 
-------------------------------------------------------
-
-OPTIMIZED APPROACH (SORT + BINARY SEARCH):
-
-WHY PREVIOUS SOLUTION WAS SLOW:
-- For every prefix → we scanned ALL products → O(n * m)
-- This is inefficient when n is large
-
-------------------------------------------------------
-
-BETTER IDEA:
-
-1. Sort the products array.
-2. Use Binary Search to find the FIRST product that matches the prefix.
-3. From that index, just check the next 3 products.
-
-This avoids scanning the whole array every time.
+WHY FASTER:
+- Each product is eliminated at most once
+- No repeated binary search
+- No full rescans
 
 ------------------------------------------------------
 
 HOW IT WORKS:
 
-For each prefix:
-- Use binary search to find the leftmost index where prefix can fit
-- Check at most 3 elements from that index
-- Only add those that start with prefix
+1. Sort products
+2. Initialize:
+   left = 0, right = n - 1
 
-------------------------------------------------------
+3. For each character index i in searchWord:
+   - Move left forward until match
+   - Move right backward until match
 
-EXAMPLE:
-
-products = ["mobile","mouse","moneypot","monitor","mousepad"]
-searchWord = "mouse"
-
-Sorted:
-["mobile","moneypot","monitor","mouse","mousepad"]
-
-Prefix = "mo"
-Binary search jumps directly near:
-["mobile","moneypot","monitor"]
-
-No full scan needed ✅
+4. Now valid range is [left, right]
+5. Take first 3 elements from that range
 
 ------------------------------------------------------
 
 TIME COMPLEXITY:
 - Sorting → O(n log n)
-- Each prefix:
-    Binary search → O(log n)
-    Checking 3 items → O(1)
-- Total → O(n log n + m log n)
+- Two pointers total movement → O(n)
+- Total → O(n log n + n)
 
-SPACE COMPLEXITY:
-- O(1) extra (excluding output)
+SPACE:
+- O(1) extra
 
 ------------------------------------------------------
 
-KEY IDEA:
-- Use binary search to jump directly to matches
-- Never scan entire list again
+WHY THIS IS FAST:
+- Each element checked at most once
+- No repeated binary search
+- No prefix string building
 */
 
 public class SearchSuggestionsSystem {
@@ -77,42 +54,34 @@ public class SearchSuggestionsSystem {
         Arrays.sort(products);
         List<List<String>> result = new ArrayList<>();
 
-        String prefix = "";
+        int left = 0;
+        int right = products.length - 1;
 
-        for (char c : searchWord.toCharArray()) {
-            prefix += c;
+        for (int i = 0; i < searchWord.length(); i++) {
+            char c = searchWord.charAt(i);
 
-            int index = lowerBound(products, prefix);
+            // shrink left boundary
+            while (left <= right &&
+                  (products[left].length() <= i || products[left].charAt(i) != c)) {
+                left++;
+            }
+
+            // shrink right boundary
+            while (left <= right &&
+                  (products[right].length() <= i || products[right].charAt(i) != c)) {
+                right--;
+            }
+
             List<String> suggestions = new ArrayList<>();
 
-            // Only check next 3 items
-            for (int i = index; i < Math.min(index + 3, products.length); i++) {
-                if (products[i].startsWith(prefix)) {
-                    suggestions.add(products[i]);
-                }
+            for (int j = left; j <= Math.min(left + 2, right); j++) {
+                suggestions.add(products[j]);
             }
 
             result.add(suggestions);
         }
 
         return result;
-    }
-
-    // Binary search to find first position >= prefix
-    private static int lowerBound(String[] products, String prefix) {
-        int left = 0, right = products.length;
-
-        while (left < right) {
-            int mid = left + (right - left) / 2;
-
-            if (products[mid].compareTo(prefix) < 0) {
-                left = mid + 1;
-            } else {
-                right = mid;
-            }
-        }
-
-        return left;
     }
 
     public static void main(String[] args) {
