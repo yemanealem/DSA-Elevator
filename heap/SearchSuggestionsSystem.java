@@ -6,67 +6,60 @@ LeetCode: Search Suggestions System
 QUESTION:
 Given an array of strings products and a string searchWord.
 
-Design a system that suggests at most 3 product names from products after each character of searchWord is typed.
-
-Rules:
-- Suggested products should have a common prefix with searchWord.
-- Return at most 3 lexicographically minimum products.
-
-Return a list of lists of the suggested products after each character of searchWord is typed.
+After each character of searchWord is typed, return at most 3 lexicographically smallest products
+that start with the current prefix.
 
 ------------------------------------------------------
 
-HOW IT WORKS (SORT + PREFIX MATCH):
+OPTIMIZED APPROACH (SORT + BINARY SEARCH):
 
-1. First, sort the products array lexicographically.
-   → This ensures suggestions are already in correct order.
+WHY PREVIOUS SOLUTION WAS SLOW:
+- For every prefix → we scanned ALL products → O(n * m)
+- This is inefficient when n is large
 
-2. For each prefix of searchWord:
-   Example: searchWord = "mouse"
-   prefixes:
-   "m", "mo", "mou", "mous", "mouse"
+------------------------------------------------------
 
-3. For each prefix:
-   - Scan through products
-   - Check if product starts with prefix
-   - Add up to 3 matches
+BETTER IDEA:
 
-4. Store results for each prefix.
+1. Sort the products array.
+2. Use Binary Search to find the FIRST product that matches the prefix.
+3. From that index, just check the next 3 products.
+
+This avoids scanning the whole array every time.
+
+------------------------------------------------------
+
+HOW IT WORKS:
+
+For each prefix:
+- Use binary search to find the leftmost index where prefix can fit
+- Check at most 3 elements from that index
+- Only add those that start with prefix
 
 ------------------------------------------------------
 
 EXAMPLE:
 
-Input:
 products = ["mobile","mouse","moneypot","monitor","mousepad"]
 searchWord = "mouse"
 
 Sorted:
 ["mobile","moneypot","monitor","mouse","mousepad"]
 
-Steps:
-"m"   → ["mobile","moneypot","monitor"]
-"mo"  → ["mobile","moneypot","monitor"]
-"mou" → ["mouse","mousepad"]
-"mous"→ ["mouse","mousepad"]
-"mouse"→ ["mouse","mousepad"]
+Prefix = "mo"
+Binary search jumps directly near:
+["mobile","moneypot","monitor"]
 
-Output:
-[
- ["mobile","moneypot","monitor"],
- ["mobile","moneypot","monitor"],
- ["mouse","mousepad"],
- ["mouse","mousepad"],
- ["mouse","mousepad"]
-]
+No full scan needed ✅
 
 ------------------------------------------------------
 
 TIME COMPLEXITY:
 - Sorting → O(n log n)
-- For each prefix → O(n)
-- Total → O(n log n + n * m)
-  (n = number of products, m = length of searchWord)
+- Each prefix:
+    Binary search → O(log n)
+    Checking 3 items → O(1)
+- Total → O(n log n + m log n)
 
 SPACE COMPLEXITY:
 - O(1) extra (excluding output)
@@ -74,11 +67,8 @@ SPACE COMPLEXITY:
 ------------------------------------------------------
 
 KEY IDEA:
-- Sort first
-- Use prefix matching
-- Stop after 3 matches
-
-(Advanced version uses Trie for better performance)
+- Use binary search to jump directly to matches
+- Never scan entire list again
 */
 
 public class SearchSuggestionsSystem {
@@ -91,19 +81,38 @@ public class SearchSuggestionsSystem {
 
         for (char c : searchWord.toCharArray()) {
             prefix += c;
+
+            int index = lowerBound(products, prefix);
             List<String> suggestions = new ArrayList<>();
 
-            for (String product : products) {
-                if (product.startsWith(prefix)) {
-                    suggestions.add(product);
+            // Only check next 3 items
+            for (int i = index; i < Math.min(index + 3, products.length); i++) {
+                if (products[i].startsWith(prefix)) {
+                    suggestions.add(products[i]);
                 }
-                if (suggestions.size() == 3) break;
             }
 
             result.add(suggestions);
         }
 
         return result;
+    }
+
+    // Binary search to find first position >= prefix
+    private static int lowerBound(String[] products, String prefix) {
+        int left = 0, right = products.length;
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            if (products[mid].compareTo(prefix) < 0) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+
+        return left;
     }
 
     public static void main(String[] args) {
