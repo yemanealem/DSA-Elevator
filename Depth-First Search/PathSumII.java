@@ -1,18 +1,37 @@
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
+import java.util.*;
+
+/*
+Problem: Path Sum II (LeetCode)
+
+Given a binary tree and a target sum, return all root-to-leaf paths
+where each path's sum equals the given target.
+
+Approach:
+- Use DFS (Depth-First Search) + Backtracking
+- Track current path and remaining sum
+- When reaching a leaf and sum == 0 → add path to result
+
+Time Complexity: O(N)
+Space Complexity: O(H) recursion stack
+*/
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode() {}
+
+    TreeNode(int val) {
+        this.val = val;
+    }
+
+    TreeNode(int val, TreeNode left, TreeNode right) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+}
 
 class Solution {
 
@@ -28,22 +47,38 @@ class Solution {
 
         if (node == null) return;
 
-        // add current node to path
         path.add(node.val);
-
-        // subtract value from remaining sum
         remainingSum -= node.val;
 
-        // check if it's a leaf and sum is matched
+        // check leaf
         if (node.left == null && node.right == null && remainingSum == 0) {
-            result.add(new ArrayList<>(path)); // copy path
+            result.add(new ArrayList<>(path));
         }
 
-        // go deeper
         dfs(node.left, remainingSum, path, result);
         dfs(node.right, remainingSum, path, result);
 
-        // backtrack (VERY IMPORTANT)
+        // backtracking
         path.remove(path.size() - 1);
     }
 }
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        /*
+              5
+             / \
+            4   8
+           /   / \
+          11  13  4
+         /  \     / \
+        7    2   5   1
+        */
+
+        TreeNode root = new TreeNode(5);
+        root.left = new TreeNode(4);
+        root.right = new TreeNode(8);
+
+        root.left
