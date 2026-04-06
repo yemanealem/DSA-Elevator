@@ -1,30 +1,25 @@
 /*
-Question:
-Given a reference node of a connected undirected graph, return a deep copy (clone) of the graph.
+Optimized DFS Solution for Clone Graph
 
-How it works:
-- Use DFS to traverse the graph.
-- Use a HashMap to store already cloned nodes:
-    original node -> cloned node
-- If a node is already cloned, return it (prevents infinite loops).
-- Otherwise:
-    1. Create a clone of the current node
-    2. Store it in the map
-    3. Recursively clone all neighbors and add them to the clone's neighbors list
+- Avoid double HashMap lookup
+- Directly use get()
+- Cleaner recursion flow
 
-Time Complexity: O(N + E)
-Space Complexity: O(N)
+Time: O(N + E)
+Space: O(N)
 */
 
 class Solution {
 
-    private Map<Node, Node> map = new HashMap<>();
-
     public Node cloneGraph(Node node) {
+        Map<Node, Node> map = new HashMap<>();
+        return dfs(node, map);
+    }
 
+    private Node dfs(Node node, Map<Node, Node> map) {
         if (node == null) return null;
 
-        // If already cloned, return it
+        // If already cloned, return it immediately
         if (map.containsKey(node)) {
             return map.get(node);
         }
@@ -33,9 +28,9 @@ class Solution {
         Node clone = new Node(node.val);
         map.put(node, clone);
 
-        // Clone all neighbors
+        // Clone neighbors
         for (Node neighbor : node.neighbors) {
-            clone.neighbors.add(cloneGraph(neighbor));
+            clone.neighbors.add(dfs(neighbor, map));
         }
 
         return clone;
