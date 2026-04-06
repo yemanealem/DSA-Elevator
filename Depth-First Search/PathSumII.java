@@ -7,12 +7,12 @@ Given a binary tree and a target sum, return all root-to-leaf paths
 where each path's sum equals the given target.
 
 Approach:
-- Use DFS (Depth-First Search) + Backtracking
+- DFS + Backtracking
 - Track current path and remaining sum
-- When reaching a leaf and sum == 0 → add path to result
+- Add path when leaf node and sum == 0
 
 Time Complexity: O(N)
-Space Complexity: O(H) recursion stack
+Space Complexity: O(H)
 */
 
 class TreeNode {
@@ -33,7 +33,7 @@ class TreeNode {
     }
 }
 
-class Solution {
+class PathSumII {
 
     public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
         List<List<Integer>> result = new ArrayList<>();
@@ -50,7 +50,7 @@ class Solution {
         path.add(node.val);
         remainingSum -= node.val;
 
-        // check leaf
+        // check if leaf and sum matches
         if (node.left == null && node.right == null && remainingSum == 0) {
             result.add(new ArrayList<>(path));
         }
@@ -58,7 +58,7 @@ class Solution {
         dfs(node.left, remainingSum, path, result);
         dfs(node.right, remainingSum, path, result);
 
-        // backtracking
+        // backtrack
         path.remove(path.size() - 1);
     }
 }
@@ -81,4 +81,21 @@ public class Main {
         root.left = new TreeNode(4);
         root.right = new TreeNode(8);
 
-        root.left
+        root.left.left = new TreeNode(11);
+        root.left.left.left = new TreeNode(7);
+        root.left.left.right = new TreeNode(2);
+
+        root.right.left = new TreeNode(13);
+        root.right.right = new TreeNode(4);
+        root.right.right.left = new TreeNode(5);
+        root.right.right.right = new TreeNode(1);
+
+        PathSumII solver = new PathSumII();
+        List<List<Integer>> result = solver.pathSum(root, 22);
+
+        System.out.println("Paths with sum 22:");
+        for (List<Integer> path : result) {
+            System.out.println(path);
+        }
+    }
+}
