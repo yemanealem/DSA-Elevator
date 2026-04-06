@@ -3,16 +3,35 @@ import java.util.*;
 /*
 Problem: Path Sum II (LeetCode)
 
-Given a binary tree and a target sum, return all root-to-leaf paths
-where each path's sum equals the given target.
+Question:
+Given the root of a binary tree and an integer targetSum, return all root-to-leaf
+paths where the sum of the node values in the path equals targetSum.
+A leaf is a node with no children.
 
-Approach:
-- DFS + Backtracking
-- Track current path and remaining sum
-- Add path when leaf node and sum == 0
+How it works:
+- We use Depth-First Search (DFS) with Backtracking.
+- Start from the root and explore all paths down to the leaves.
+- Maintain:
+    1. A list (path) to store the current path.
+    2. A remainingSum (targetSum - node values along the path).
+- At each node:
+    - Add the node value to the path.
+    - Subtract it from remainingSum.
+- If we reach a leaf node AND remainingSum == 0:
+    → We found a valid path, so we add a copy of it to the result.
+- Then we backtrack:
+    → Remove the last element from the path to explore other branches.
 
-Time Complexity: O(N)
-Space Complexity: O(H)
+Why backtracking?
+- Because we reuse the same path list while exploring different branches.
+
+Time Complexity:
+- O(N), where N is the number of nodes.
+  We visit each node once.
+
+Space Complexity:
+- O(H), where H is the height of the tree (recursion stack).
+- Additional space for storing paths in the result.
 */
 
 class TreeNode {
@@ -50,7 +69,7 @@ class PathSumII {
         path.add(node.val);
         remainingSum -= node.val;
 
-        // check if leaf and sum matches
+        // if leaf node and sum matches
         if (node.left == null && node.right == null && remainingSum == 0) {
             result.add(new ArrayList<>(path));
         }
@@ -58,7 +77,7 @@ class PathSumII {
         dfs(node.left, remainingSum, path, result);
         dfs(node.right, remainingSum, path, result);
 
-        // backtrack
+        // backtracking
         path.remove(path.size() - 1);
     }
 }
