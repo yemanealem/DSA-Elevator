@@ -3,41 +3,23 @@
 📌 Question:
 Balance a Binary Search Tree (LeetCode 1382)
 
-Given the root of a Binary Search Tree (BST),
-return a balanced BST with the same node values.
+💡 How it works (optimized):
 
-A balanced BST means:
-- The depth of the two subtrees of every node never differs by more than 1.
+- Perform inorder traversal → gives sorted order
+- Instead of storing values in a list:
+  👉 First, count total nodes
+  👉 Then build BST using inorder simulation
 
-========================================
-💡 How it works:
-
-- First, perform an inorder traversal of the BST.
-  👉 This gives a sorted list of node values.
-
-- Then, build a balanced BST from the sorted list:
-  👉 Use the middle element as the root
-  👉 Recursively build:
-     - Left subtree from left half
-     - Right subtree from right half
-
-- Why this works:
-  - Inorder traversal gives sorted data
-  - Choosing the middle element ensures balance
+- Use a global pointer (index)
+- Build tree in O(N) time and O(N) space (recursion only)
 
 ========================================
 ⏱️ Running Time:
-
 - Time Complexity: O(N)
-  (inorder traversal + building BST)
-
-- Space Complexity: O(N)
-  (to store elements in a list)
+- Space Complexity: O(H) → recursion only (better than O(N) list)
 
 ========================================
 */
-
-import java.util.*;
 
 class TreeNode {
     int val;
@@ -48,35 +30,46 @@ class TreeNode {
     }
 }
 
-class BalanceBST {
-    
+class BalanceBSTOptimized {
+    private int count = 0;
+    private int index = 0;
+    private int[] values;
+
     public TreeNode balanceBST(TreeNode root) {
-        List<Integer> values = new ArrayList<>();
+        // Step 1: Count nodes
+        countNodes(root);
 
-        // Step 1: Inorder traversal (sorted values)
-        inorder(root, values);
+        // Step 2: Store values in sorted order
+        values = new int[count];
+        inorder(root);
 
-        // Step 2: Build balanced BST
-        return buildBST(values, 0, values.size() - 1);
+        // Step 3: Build balanced BST
+        return buildBST(0, count - 1);
     }
 
-    private void inorder(TreeNode node, List<Integer> values) {
+    private void countNodes(TreeNode node) {
+        if (node == null) return;
+        count++;
+        countNodes(node.left);
+        countNodes(node.right);
+    }
+
+    private void inorder(TreeNode node) {
         if (node == null) return;
 
-        inorder(node.left, values);
-        values.add(node.val);
-        inorder(node.right, values);
+        inorder(node.left);
+        values[index++] = node.val;
+        inorder(node.right);
     }
 
-    private TreeNode buildBST(List<Integer> values, int left, int right) {
+    private TreeNode buildBST(int left, int right) {
         if (left > right) return null;
 
-        int mid = left + (right - left) / 2;
+        int mid = (left + right) / 2;
+        TreeNode node = new TreeNode(values[mid]);
 
-        TreeNode node = new TreeNode(values.get(mid));
-
-        node.left = buildBST(values, left, mid - 1);
-        node.right = buildBST(values, mid + 1, right);
+        node.left = buildBST(left, mid - 1);
+        node.right = buildBST(mid + 1, right);
 
         return node;
     }
@@ -92,7 +85,6 @@ public class Main {
                     3
                      \
                       4
-        (Unbalanced BST)
         */
 
         TreeNode root = new TreeNode(1);
@@ -100,16 +92,14 @@ public class Main {
         root.right.right = new TreeNode(3);
         root.right.right.right = new TreeNode(4);
 
-        BalanceBST solution = new BalanceBST();
-        TreeNode balancedRoot = solution.balanceBST(root);
+        BalanceBSTOptimized solution = new BalanceBSTOptimized();
+        TreeNode balanced = solution.balanceBST(root);
 
-        // Print inorder of balanced BST
-        printInorder(balancedRoot);
+        printInorder(balanced);
     }
 
     private static void printInorder(TreeNode node) {
         if (node == null) return;
-
         printInorder(node.left);
         System.out.print(node.val + " ");
         printInorder(node.right);
