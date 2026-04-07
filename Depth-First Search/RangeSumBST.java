@@ -1,3 +1,47 @@
+/*
+========================================
+📌 Question:
+Range Sum of BST (LeetCode 938)
+
+Given the root of a Binary Search Tree (BST) and two integers low and high,
+return the sum of values of all nodes with a value in the range [low, high].
+
+========================================
+💡 How it works:
+
+- A Binary Search Tree (BST) has the property:
+  Left subtree < Root < Right subtree
+
+- We use this property to optimize traversal:
+  1. If current node value < low:
+     → Skip left subtree (all values are smaller)
+     → Only explore right subtree
+
+  2. If current node value > high:
+     → Skip right subtree (all values are larger)
+     → Only explore left subtree
+
+  3. If current node value is within [low, high]:
+     → Add its value
+     → Explore both left and right subtrees
+
+- This reduces unnecessary traversal and improves efficiency.
+
+========================================
+⏱️ Running Time:
+
+- Worst Case: O(N)
+  (if all nodes are within the range or tree is skewed)
+
+- Best/Average Case: Better than O(N)
+  (due to pruning using BST properties)
+
+- Space Complexity: O(H)
+  where H is the height of the tree (recursion stack)
+
+========================================
+*/
+
 class TreeNode {
     int val;
     TreeNode left, right;
