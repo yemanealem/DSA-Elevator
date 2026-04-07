@@ -36,14 +36,11 @@ class BalanceBSTOptimized {
     private int[] values;
 
     public TreeNode balanceBST(TreeNode root) {
-        // Step 1: Count nodes
         countNodes(root);
 
-        // Step 2: Store values in sorted order
         values = new int[count];
         inorder(root);
 
-        // Step 3: Build balanced BST
         return buildBST(0, count - 1);
     }
 
