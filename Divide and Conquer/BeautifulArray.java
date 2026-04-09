@@ -1,5 +1,8 @@
-class Solution {
-    public int[] beautifulArray(int n) {
+import java.util.Arrays;
+
+public class BeautifulArray {
+
+    public static int[] beautifulArray(int n) {
         int[] res = new int[n];
         res[0] = 1;
 
@@ -9,16 +12,20 @@ class Solution {
             int[] temp = new int[n];
             int idx = 0;
 
-            // odds
+            // Generate odd numbers
             for (int i = 0; i < size; i++) {
                 int val = 2 * res[i] - 1;
-                if (val <= n) temp[idx++] = val;
+                if (val <= n) {
+                    temp[idx++] = val;
+                }
             }
 
-            // evens
+            // Generate even numbers
             for (int i = 0; i < size; i++) {
                 int val = 2 * res[i];
-                if (val <= n) temp[idx++] = val;
+                if (val <= n) {
+                    temp[idx++] = val;
+                }
             }
 
             res = temp;
@@ -26,5 +33,14 @@ class Solution {
         }
 
         return res;
+    }
+
+    public static void main(String[] args) {
+        int n = 5; // you can change this value
+
+        int[] result = beautifulArray(n);
+
+        System.out.println("Beautiful Array for n = " + n + ":");
+        System.out.println(Arrays.toString(result));
     }
 }
