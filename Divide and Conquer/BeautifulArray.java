@@ -1,26 +1,28 @@
 class Solution {
     public int[] beautifulArray(int n) {
-        List<Integer> result = divide(n);
-        return result.stream().mapToInt(i -> i).toArray();
-    }
+        int[] res = new int[n];
+        res[0] = 1;
 
-    private List<Integer> divide(int n) {
-        List<Integer> res = new ArrayList<>();
-        if (n == 1) {
-            res.add(1);
-            return res;
-        }
+        int size = 1;
 
-        // Divide
-        List<Integer> left = divide((n + 1) / 2); // odds
-        List<Integer> right = divide(n / 2);      // evens
+        while (size < n) {
+            int[] temp = new int[n];
+            int idx = 0;
 
-        // Conquer
-        for (int x : left) {
-            res.add(2 * x - 1);
-        }
-        for (int x : right) {
-            res.add(2 * x);
+            // odds
+            for (int i = 0; i < size; i++) {
+                int val = 2 * res[i] - 1;
+                if (val <= n) temp[idx++] = val;
+            }
+
+            // evens
+            for (int i = 0; i < size; i++) {
+                int val = 2 * res[i];
+                if (val <= n) temp[idx++] = val;
+            }
+
+            res = temp;
+            size = idx;
         }
 
         return res;
