@@ -12,7 +12,7 @@ Goal:
 Reconstruct the binary tree.
 
 ------------------------------------------------------------
-How it works (Divide & Conquer):
+How it works using (Divide & Conquer):
 
 1. The first element in preorder is always the root.
 
