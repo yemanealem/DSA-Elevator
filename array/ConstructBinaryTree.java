@@ -75,19 +75,15 @@ public class ConstructBinaryTree {
         int rootVal = postorder[postIndex--];
         TreeNode root = new TreeNode(rootVal);
 
-        // Find root in inorder
         int index = inorderMap.get(rootVal);
 
-        // Build RIGHT subtree first
         root.right = helper(inorder, postorder, index + 1, right);
 
-        // Build LEFT subtree
         root.left = helper(inorder, postorder, left, index - 1);
 
         return root;
     }
 
-    // Preorder print to verify tree
     public static void printPreorder(TreeNode root) {
         if (root == null) return;
         System.out.print(root.val + " ");
