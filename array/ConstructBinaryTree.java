@@ -60,7 +60,6 @@ public class ConstructBinaryTree {
         postIndex = postorder.length - 1;
         inorderMap = new HashMap<>();
 
-        // Store inorder index for quick lookup
         for (int i = 0; i < inorder.length; i++) {
             inorderMap.put(inorder[i], i);
         }
@@ -71,7 +70,6 @@ public class ConstructBinaryTree {
     private static TreeNode helper(int[] inorder, int[] postorder, int left, int right) {
         if (left > right) return null;
 
-        // Get root from postorder
         int rootVal = postorder[postIndex--];
         TreeNode root = new TreeNode(rootVal);
 
