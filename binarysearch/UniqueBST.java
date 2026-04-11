@@ -32,7 +32,6 @@ public class UniqueBST {
         dp[0] = 1;
         dp[1] = 1;
 
-        // Build DP table
         for (int nodes = 2; nodes <= n; nodes++) {
             for (int root = 1; root <= nodes; root++) {
                 dp[nodes] += dp[root - 1] * dp[nodes - root];
@@ -45,7 +44,7 @@ public class UniqueBST {
     public static void main(String[] args) {
         UniqueBST solution = new UniqueBST();
 
-        int n = 3; // change this value to test
+        int n = 3; 
         int result = solution.numTrees(n);
 
         System.out.println("Number of unique BSTs for n = " + n + " is: " + result);
