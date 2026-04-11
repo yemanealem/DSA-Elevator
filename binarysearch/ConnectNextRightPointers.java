@@ -31,7 +31,7 @@ public class ConnectNextRightPointers {
         Node current = root;
 
         while (current != null) {
-            Node dummy = new Node(0); // start of next level
+            Node dummy = new Node(0);
             Node tail = dummy;
 
             // Traverse current level
