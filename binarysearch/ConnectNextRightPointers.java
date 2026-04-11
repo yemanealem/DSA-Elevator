@@ -56,7 +56,6 @@ public class ConnectNextRightPointers {
         return root;
     }
 
-    // Helper method to print levels using next pointers
     public static void printLevels(Node root) {
         Node levelStart = root;
 
