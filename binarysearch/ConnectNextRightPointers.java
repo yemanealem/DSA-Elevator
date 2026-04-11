@@ -34,7 +34,6 @@ public class ConnectNextRightPointers {
             Node dummy = new Node(0);
             Node tail = dummy;
 
-            // Traverse current level
             while (current != null) {
                 if (current.left != null) {
                     tail.next = current.left;
@@ -49,7 +48,6 @@ public class ConnectNextRightPointers {
                 current = current.next;
             }
 
-            // Move to next level
             current = dummy.next;
         }
 
