@@ -58,7 +58,6 @@ public class SearchInRotatedSortedArrayII {
                 return true;
             }
 
-            // Case 2: duplicates (cannot decide sorted side)
             if (nums[left] == nums[mid] && nums[mid] == nums[right]) {
                 left++;
                 right--;
