@@ -74,7 +74,6 @@ public class SearchInRotatedSortedArrayII {
                 }
             }
 
-            // Case 4: right half is sorted
             else {
                 if (nums[mid] < target && target <= nums[right]) {
                     left = mid + 1;
@@ -90,7 +89,7 @@ public class SearchInRotatedSortedArrayII {
     public static void main(String[] args) {
         int[] nums = {2,5,6,0,0,1,2};
 
-        System.out.println(search(nums, 0)); // true
-        System.out.println(search(nums, 3)); // false
+        System.out.println(search(nums, 0)); 
+        System.out.println(search(nums, 3)); 
     }
 }
