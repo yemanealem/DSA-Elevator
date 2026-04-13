@@ -63,7 +63,6 @@ public class SearchInRotatedSortedArrayII {
                 right--;
             }
 
-            // Case 3: left half is sorted
             else if (nums[left] <= nums[mid]) {
                 if (nums[left] <= target && target < nums[mid]) {
                     right = mid - 1;
