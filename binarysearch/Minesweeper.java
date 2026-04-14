@@ -69,10 +69,8 @@ public class Minesweeper {
         int mineCount = countMines(board, r, c);
 
         if (mineCount > 0) {
-            // If mines nearby → place number and stop
             board[r][c] = (char)(mineCount + '0');
         } else {
-            // No mines → mark as blank and explore neighbors
             board[r][c] = 'B';
 
             for (int[] dir : directions) {
