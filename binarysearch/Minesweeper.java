@@ -50,13 +50,11 @@ public class Minesweeper {
     public static char[][] updateBoard(char[][] board, int[] click) {
         int r = click[0], c = click[1];
 
-        // If clicked on a mine → game over
         if (board[r][c] == 'M') {
             board[r][c] = 'X';
             return board;
         }
 
-        // Start DFS
         dfs(board, r, c);
         return board;
     }
@@ -66,10 +64,8 @@ public class Minesweeper {
         if (r < 0 || c < 0 || r >= board.length || c >= board[0].length)
             return;
 
-        // Only process unrevealed empty cells
         if (board[r][c] != 'E') return;
 
-        // Count adjacent mines
         int mineCount = countMines(board, r, c);
 
         if (mineCount > 0) {
