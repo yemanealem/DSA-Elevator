@@ -18,6 +18,6 @@ public class WaterJugProblem {
 
     public static void main(String[] args) {
         int x = 3, y = 5, z = 4;
-        System.out.println(canMeasureWater(x, y, z)); // true
+        System.out.println(canMeasureWater(x, y, z)); 
     }
 }
