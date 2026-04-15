@@ -77,6 +77,6 @@ public class LargestValuesInTreeRows {
         root.right.right = new TreeNode(9);
 
         List<Integer> result = largestValues(root);
-        System.out.println(result); // Output: [1, 3, 9]
+        System.out.println(result); 
     }
 }
