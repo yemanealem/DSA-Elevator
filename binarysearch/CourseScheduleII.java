@@ -41,7 +41,6 @@ public class CourseScheduleII {
             adjacencyList.add(new ArrayList<>());
         }
 
-        // Build graph
         for (int[] pair : prerequisites) {
             int course = pair[0];
             int prereq = pair[1];
@@ -52,7 +51,6 @@ public class CourseScheduleII {
 
         Queue<Integer> queue = new ArrayDeque<>();
 
-        // Add all nodes with indegree 0
         for (int i = 0; i < numCourses; i++) {
             if (indegree[i] == 0) {
                 queue.offer(i);
@@ -75,7 +73,6 @@ public class CourseScheduleII {
             }
         }
 
-        // Cycle detection
         if (processedCourses != numCourses) {
             return new int[0];
         }
