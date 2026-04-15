@@ -26,7 +26,7 @@ public class CourseScheduleII {
      * TIME COMPLEXITY:
      * - O(V + E)
      *   V = number of courses
-     *   E = number of prerequisites
+     *   E = number of prerequisite
      *
      * SPACE COMPLEXITY:
      * - O(V + E) for graph + queue + result
