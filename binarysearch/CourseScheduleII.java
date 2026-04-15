@@ -2,63 +2,93 @@ import java.util.*;
 
 public class CourseScheduleII {
 
-    public static int[] findOrder(int numCourses, int[][] prerequisites) {
-        List<List<Integer>> graph = new ArrayList<>();
+    /*
+     * PROBLEM:
+     * Given numCourses and a list of prerequisites where [a, b] means
+     * you must take course b before course a, return a valid order
+     * to finish all courses. If impossible (cycle exists), return empty array.
+     *
+     * HOW IT WORKS:
+     * - Model the problem as a directed graph:
+     *     b → a (edge from prerequisite to course)
+     * - Use Topological Sorting (Kahn’s Algorithm - BFS):
+     *     1. Build adjacency list (graph)
+     *     2. Compute indegree of each node (number of prerequisites)
+     *     3. Add all nodes with indegree = 0 to queue
+     *     4. Process queue:
+     *          - Remove node
+     *          - Add to result
+     *          - Reduce indegree of neighbors
+     *          - If indegree becomes 0 → add to queue
+     *     5. If all nodes are processed → valid order
+     *        Else → cycle exists → return empty array
+     *
+     * TIME COMPLEXITY:
+     * - O(V + E)
+     *   V = number of courses
+     *   E = number of prerequisites
+     *
+     * SPACE COMPLEXITY:
+     * - O(V + E) for graph + queue + result
+     */
+
+    public static int[] findCourseOrder(int numCourses, int[][] prerequisites) {
+
+        List<List<Integer>> adjacencyList = new ArrayList<>();
         int[] indegree = new int[numCourses];
 
-        // initialize graph
         for (int i = 0; i < numCourses; i++) {
-            graph.add(new ArrayList<>());
+            adjacencyList.add(new ArrayList<>());
         }
 
-        // build graph and indegree
-        for (int[] pre : prerequisites) {
-            int course = pre[0];
-            int prereq = pre[1];
+        // Build graph
+        for (int[] pair : prerequisites) {
+            int course = pair[0];
+            int prereq = pair[1];
 
-            graph.get(prereq).add(course);
+            adjacencyList.get(prereq).add(course);
             indegree[course]++;
         }
 
-        // queue for BFS
-        Queue<Integer> queue = new LinkedList<>();
+        Queue<Integer> queue = new ArrayDeque<>();
 
-        // add nodes with indegree 0
+        // Add all nodes with indegree 0
         for (int i = 0; i < numCourses; i++) {
             if (indegree[i] == 0) {
                 queue.offer(i);
             }
         }
 
-        int[] result = new int[numCourses];
-        int index = 0;
+        int[] order = new int[numCourses];
+        int processedCourses = 0;
 
         while (!queue.isEmpty()) {
             int current = queue.poll();
-            result[index++] = current;
+            order[processedCourses++] = current;
 
-            for (int neighbor : graph.get(current)) {
-                indegree[neighbor]--;
-                if (indegree[neighbor] == 0) {
-                    queue.offer(neighbor);
+            for (int next : adjacencyList.get(current)) {
+                indegree[next]--;
+
+                if (indegree[next] == 0) {
+                    queue.offer(next);
                 }
             }
         }
 
-        // if not all courses are processed → cycle
-        if (index != numCourses) {
+        // Cycle detection
+        if (processedCourses != numCourses) {
             return new int[0];
         }
 
-        return result;
+        return order;
     }
 
     public static void main(String[] args) {
         int numCourses = 4;
-        int[][] prerequisites = {{1,0}, {2,0}, {3,1}, {3,2}};
+        int[][] prerequisites = {
+            {1, 0}, {2, 0}, {3, 1}, {3, 2}
+        };
 
-        int[] order = findOrder(numCourses, prerequisites);
-
-        System.out.println(Arrays.toString(order));
+        System.out.println(Arrays.toString(findCourseOrder(numCourses, prerequisites)));
     }
 }
