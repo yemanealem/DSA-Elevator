@@ -25,7 +25,7 @@ public class LargestValuesInTreeRows {
      * - Add the max value of each level to the result list
      *
      * TIME COMPLEXITY:
-     * O(n) → each node is visited once
+     * O(n) → each node is visited onc
      *
      * SPACE COMPLEXITY:
      * O(w) → width of the tree (queue size in worst case)
@@ -46,7 +46,6 @@ public class LargestValuesInTreeRows {
             for (int i = 0; i < size; i++) {
                 TreeNode node = queue.poll();
 
-                // Update max for current level
                 max = Math.max(max, node.val);
 
                 if (node.left != null) queue.offer(node.left);
@@ -59,7 +58,6 @@ public class LargestValuesInTreeRows {
         return result;
     }
 
-    // Main method to test
     public static void main(String[] args) {
         /*
                 1
@@ -77,6 +75,6 @@ public class LargestValuesInTreeRows {
         root.right.right = new TreeNode(9);
 
         List<Integer> result = largestValues(root);
-        System.out.println(result); // Output: [1, 3, 9]
+        System.out.println(result); 
     }
 }
