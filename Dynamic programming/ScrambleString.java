@@ -114,14 +114,13 @@ public class ScrambleString {
     */
     private boolean isSameCharCount(String a, String b) {
 
-        int[] count = new int[26]; // assuming lowercase letters
+        int[] count = new int[26]; 
 
         for (int i = 0; i < a.length(); i++) {
             count[a.charAt(i) - 'a']++;
             count[b.charAt(i) - 'a']--;
         }
 
-        // If any count is not zero → mismatch
         for (int c : count) {
             if (c != 0) return false;
         }
