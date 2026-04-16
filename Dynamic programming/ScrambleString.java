@@ -68,7 +68,6 @@ public class ScrambleString {
 
         int n = a.length();
 
-        // 🔁 Try all possible split positions
         for (int k = 1; k < n; k++) {
 
             /*
