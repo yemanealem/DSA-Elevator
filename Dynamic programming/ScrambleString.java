@@ -86,4 +86,46 @@ public class ScrambleString {
             }
 
             /*
-            --------------------
+            -----------------------------------------
+            Case 2: SWAP
+            a[0:k] ↔ b[n-k:n]
+            a[k:n] ↔ b[0:n-k]
+            -----------------------------------------
+            */
+            if (dfs(a.substring(0, k), b.substring(n - k)) &&
+                dfs(a.substring(k), b.substring(0, n - k))) {
+
+                memo.put(key, true);
+                return true;
+            }
+        }
+
+        // ❌ If no valid split found
+        memo.put(key, false);
+        return false;
+    }
+
+    /*
+    ---------------------------------------------------
+    🔧 Helper Method:
+    Check if two strings have same character frequency
+    (Used for pruning to improve performance)
+    ---------------------------------------------------
+    */
+    private boolean isSameCharCount(String a, String b) {
+
+        int[] count = new int[26]; // assuming lowercase letters
+
+        for (int i = 0; i < a.length(); i++) {
+            count[a.charAt(i) - 'a']++;
+            count[b.charAt(i) - 'a']--;
+        }
+
+        // If any count is not zero → mismatch
+        for (int c : count) {
+            if (c != 0) return false;
+        }
+
+        return true;
+    }
+}
