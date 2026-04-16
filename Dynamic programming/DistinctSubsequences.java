@@ -2,22 +2,12 @@ public class DistinctSubsequences {
 
     /*
     ===========================================================
-    📌 PROBLEM:
-    Count number of distinct subsequences of s that equal t
-
-    Example:
-    s = "rabbbit", t = "rabbit" → Output = 3
-
+    🚀 OPTIMIZED VERSION (FAST)
     ===========================================================
-    💡 APPROACH:
-    Use Dynamic Programming (2D DP)
-
-    dp[i][j] = ways to form first j chars of t
-               using first i chars of s
-
-    ===========================================================
-    ⏱ TIME: O(n * m)
-    ⏱ SPACE: O(n * m)
+    Improvements:
+    - 1D DP → less memory
+    - char[] → faster access
+    - j <= i → avoid useless computation
     ===========================================================
     */
 
@@ -26,30 +16,26 @@ public class DistinctSubsequences {
         int n = s.length();
         int m = t.length();
 
-        // DP table
-        long[][] dp = new long[n + 1][m + 1];
+        // If target is longer → impossible
+        if (m > n) return 0;
 
-        // Base case:
-        // Empty t can be formed from any prefix of s
-        for (int i = 0; i <= n; i++) {
-            dp[i][0] = 1;
-        }
+        char[] sArr = s.toCharArray();
+        char[] tArr = t.toCharArray();
 
-        // Fill DP table
+        long[] dp = new long[m + 1];
+        dp[0] = 1; // empty target
+
         for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= m; j++) {
 
-                // If characters match
-                if (s.charAt(i - 1) == t.charAt(j - 1)) {
-                    dp[i][j] = dp[i - 1][j - 1]   // take it
-                             + dp[i - 1][j];     // skip it
-                } else {
-                    // If not match → skip character from s
-                    dp[i][j] = dp[i - 1][j];
+            // Important: go backwards
+            for (int j = Math.min(i, m); j >= 1; j--) {
+
+                if (sArr[i - 1] == tArr[j - 1]) {
+                    dp[j] += dp[j - 1];
                 }
             }
         }
 
-        return (int) dp[n][m];
+        return (int) dp[m];
     }
 }
