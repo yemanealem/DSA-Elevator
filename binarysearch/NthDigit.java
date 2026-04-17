@@ -59,8 +59,8 @@ public class NthDigit {
     public static void main(String[] args) {
         NthDigit solution = new NthDigit();
 
-        System.out.println(solution.findNthDigit(11));  // Output: 0
-        System.out.println(solution.findNthDigit(3));   // Output: 3
-        System.out.println(solution.findNthDigit(15));  // Output: 2
+        System.out.println(solution.findNthDigit(11));  
+        System.out.println(solution.findNthDigit(3));   
+        System.out.println(solution.findNthDigit(15));  
     }
 }
