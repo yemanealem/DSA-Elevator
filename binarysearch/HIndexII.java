@@ -40,15 +40,13 @@ public class HIndexII {
         while (left <= right) {
             int mid = left + (right - left) / 2;
 
-            // If this position can form a valid H-index
             if (citations[mid] >= n - mid) {
-                right = mid - 1; // try to find earlier valid index
+                right = mid - 1; 
             } else {
                 left = mid + 1; 
             }
         }
 
-        // left is first valid position
         return n - left;
     }
 
