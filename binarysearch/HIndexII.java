@@ -44,7 +44,7 @@ public class HIndexII {
             if (citations[mid] >= n - mid) {
                 right = mid - 1; // try to find earlier valid index
             } else {
-                left = mid + 1; // move right
+                left = mid + 1; 
             }
         }
 
@@ -58,7 +58,7 @@ public class HIndexII {
         int[] citations1 = {0, 1, 3, 5, 6};
         int[] citations2 = {1, 2, 100};
 
-        System.out.println(solution.hIndex(citations1)); // 3
-        System.out.println(solution.hIndex(citations2)); // 2
+        System.out.println(solution.hIndex(citations1)); 
+        System.out.println(solution.hIndex(citations2));
     }
 }
