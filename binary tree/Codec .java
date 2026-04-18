@@ -104,10 +104,8 @@ public class Codec {
             return null;
         }
 
-        // Create current node
         TreeNode node = new TreeNode(Integer.parseInt(val));
 
-        // Build left and right subtree recursively
         node.left = deserializeHelper(queue);
         node.right = deserializeHelper(queue);
 
