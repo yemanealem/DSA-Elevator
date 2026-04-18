@@ -75,13 +75,11 @@ public class Codec {
     }
 
     private void serializeHelper(TreeNode node, StringBuilder sb) {
-        // Base case: null node
         if (node == null) {
             sb.append(NULL).append(SEP);
             return;
         }
 
-        // Preorder: Root → Left → Right
         sb.append(node.val).append(SEP);
         serializeHelper(node.left, sb);
         serializeHelper(node.right, sb);
