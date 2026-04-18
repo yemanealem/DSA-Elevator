@@ -1,109 +1,68 @@
-import java.util.*;
-
 /**
- * Problem: Serialize and Deserialize Binary Tree
+ * ------------------------------------------------------
+ * 🧠 Problem: Binary Tree Maximum Path Sum
+ * ------------------------------------------------------
+ * A path is any sequence of nodes connected via parent-child links.
  *
- * -----------------------------------------------
- * 🧠 Problem Description:
- * -----------------------------------------------
- * Design an algorithm to convert a binary tree into a string
- * (serialization) and then convert that string back to the exact
- * same binary tree (deserialization).
+ * Rules:
+ * - Path can start and end anywhere
+ * - Must contain at least one node
+ * - Cannot reuse nodes
+ *
+ * Goal:
+ * Find the maximum sum of any path in the tree.
  *
  * Example:
- *        1
- *       / \
- *      2   3
- *         / \
- *        4   5
+ *        -10
+ *        /  \
+ *       9   20
+ *          /  \
+ *         15   7
  *
- * Serialized output:
- * 1,2,#,#,3,4,#,#,5,#,#
+ * Output: 42 (15 → 20 → 7)
  *
- * "#" represents a null node.
+ * ------------------------------------------------------
+ * 💡 How it works:
+ * ------------------------------------------------------
+ * At each node:
+ * 1. Compute left gain
+ * 2. Compute right gain
+ * 3. Ignore negative gains (use 0)
  *
- * -----------------------------------------------
- * 🧠 How it works:
- * -----------------------------------------------
- * We use PREORDER traversal (Root → Left → Right):
+ * Two cases:
  *
- * 1. Serialize:
- *    - Visit node
- *    - If null → add "#"
- *    - Otherwise → add value
- *    - Recursively go left and right
+ * A) Path THROUGH node (update answer):
+ *    node.val + leftGain + rightGain
  *
- *    This preserves structure using null markers.
+ * B) Path going UP (return to parent):
+ *    node.val + max(leftGain, rightGain)
  *
- * 2. Deserialize:
- *    - Read values in same preorder order
- *    - If value is "#", return null
- *    - Otherwise, create node
- *    - Recursively build left and right subtree
- *
- * Key idea:
- * → Same traversal order guarantees correct reconstruction.
- *
- * -----------------------------------------------
- * ⏱️ Running Time:
- * -----------------------------------------------
- * Serialization:
- *    Time:  O(n)  → visit every node once
- *    Space: O(n)  → output string + recursion stack
- *
- * Deserialization:
- *    Time:  O(n)  → process each token once
- *    Space: O(n)  → queue + recursion stack
- *
- * Overall:
- *    Time Complexity:  O(n)
- *    Space Complexity: O(n)
+ * ------------------------------------------------------
+ * ⏱️ Complexity:
+ * ------------------------------------------------------
+ * Time:  O(n)
+ * Space: O(h)
  */
 
-public class Codec {
+class BinaryTreeMaximumPathSum {
 
-    private static final String SEP = ",";
-    private static final String NULL = "#";
+    int maxSum = Integer.MIN_VALUE;
 
-    // ---------------------------------------------------
-    // Serialize Tree → String
-    // ---------------------------------------------------
-    public String serialize(TreeNode root) {
-        StringBuilder sb = new StringBuilder();
-        serializeHelper(root, sb);
-        return sb.toString();
+    public int maxPathSum(TreeNode root) {
+        dfs(root);
+        return maxSum;
     }
 
-    private void serializeHelper(TreeNode node, StringBuilder sb) {
-        if (node == null) {
-            sb.append(NULL).append(SEP);
-            return;
-        }
+    private int dfs(TreeNode node) {
+        if (node == null) return 0;
 
-        sb.append(node.val).append(SEP);
-        serializeHelper(node.left, sb);
-        serializeHelper(node.right, sb);
-    }
+        int leftGain = Math.max(0, dfs(node.left));
+        int rightGain = Math.max(0, dfs(node.right));
 
-   
-    public TreeNode deserialize(String data) {
-        String[] nodes = data.split(SEP);
-        Queue<String> queue = new LinkedList<>(Arrays.asList(nodes));
-        return deserializeHelper(queue);
-    }
+        int currentPathSum = node.val + leftGain + rightGain;
 
-    private TreeNode deserializeHelper(Queue<String> queue) {
-        String val = queue.poll();
+        maxSum = Math.max(maxSum, currentPathSum);
 
-        if (val.equals(NULL)) {
-            return null;
-        }
-
-        TreeNode node = new TreeNode(Integer.parseInt(val));
-
-        node.left = deserializeHelper(queue);
-        node.right = deserializeHelper(queue);
-
-        return node;
+        return node.val + Math.max(leftGain, rightGain);
     }
 }
