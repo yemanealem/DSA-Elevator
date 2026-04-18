@@ -87,9 +87,7 @@ public class Codec {
         serializeHelper(node.right, sb);
     }
 
-    // ---------------------------------------------------
-    // Deserialize String → Tree
-    // ---------------------------------------------------
+   
     public TreeNode deserialize(String data) {
         String[] nodes = data.split(SEP);
         Queue<String> queue = new LinkedList<>(Arrays.asList(nodes));
@@ -99,7 +97,6 @@ public class Codec {
     private TreeNode deserializeHelper(Queue<String> queue) {
         String val = queue.poll();
 
-        // If null marker → return null node
         if (val.equals(NULL)) {
             return null;
         }
