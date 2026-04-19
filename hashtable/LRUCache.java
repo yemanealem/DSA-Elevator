@@ -62,7 +62,6 @@ public class LRUCache {
         tail.prev = head;
     }
 
-    // Get value and mark as recently used
     public int get(int key) {
         Node node = map.get(key);
 
@@ -74,7 +73,6 @@ public class LRUCache {
         return node.value;
     }
 
-    // Insert or update value
     public void put(int key, int value) {
         if (map.containsKey(key)) {
             Node node = map.get(key);
@@ -85,7 +83,6 @@ public class LRUCache {
 
         } else {
             if (map.size() == capacity) {
-                // Remove least recently used node
                 Node lru = tail.prev;
                 remove(lru);
                 map.remove(lru.key);
@@ -97,13 +94,11 @@ public class LRUCache {
         }
     }
 
-    // Remove node from linked list
     private void remove(Node node) {
         node.prev.next = node.next;
         node.next.prev = node.prev;
     }
 
-    // Insert node right after head (most recently used)
     private void insertToFront(Node node) {
         node.next = head.next;
         node.prev = head;
@@ -117,10 +112,10 @@ public class LRUCache {
 
         cache.put(1, 1);
         cache.put(2, 2);
-        System.out.println(cache.get(1)); // 1
+        System.out.println(cache.get(1)); 
 
-        cache.put(3, 3); // evicts key 2
-        System.out.println(cache.get(2)); // -1
+        cache.put(3, 3); 
+        System.out.println(cache.get(2));
 
         cache.put(4, 4); 
         System.out.println(cache.get(1)); 
