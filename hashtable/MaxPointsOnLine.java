@@ -2,56 +2,77 @@ import java.util.*;
 
 public class MaxPointsOnLine {
 
+    // Iterative GCD (faster than recursive)
     private int gcd(int a, int b) {
-        if (b == 0) return a;
-        return gcd(b, a % b);
+        while (b != 0) {
+            int temp = a % b;
+            a = b;
+            b = temp;
+        }
+        return a;
     }
 
     public int maxPoints(int[][] points) {
-        if (points.length <= 2) return points.length;
+        int n = points.length;
+        if (n <= 2) return n;
 
-        int maxPoints = 0;
+        int result = 0;
 
-        for (int i = 0; i < points.length; i++) {
-            Map<String, Integer> map = new HashMap<>();
-            int duplicate = 1;
-            int currentMax = 0;
+        for (int i = 0; i < n; i++) {
 
-            for (int j = i + 1; j < points.length; j++) {
-                int x1 = points[i][0], y1 = points[i][1];
-                int x2 = points[j][0], y2 = points[j][1];
+            // 🔥 Optimization: early break
+            if (result >= n - i) break;
 
-                if (x1 == x2 && y1 == y2) {
-                    duplicate++;
+            Map<Long, Integer> map = new HashMap<>();
+            int duplicates = 1;
+            int max = 0;
+
+            for (int j = i + 1; j < n; j++) {
+                int dx = points[j][0] - points[i][0];
+                int dy = points[j][1] - points[i][1];
+
+                // Same point
+                if (dx == 0 && dy == 0) {
+                    duplicates++;
                     continue;
                 }
-
-                int dx = x2 - x1;
-                int dy = y2 - y1;
 
                 int g = gcd(dx, dy);
                 dx /= g;
                 dy /= g;
 
-                String slope = dx + "/" + dy;
+                // Normalize sign (important!)
+                if (dx < 0) {
+                    dx = -dx;
+                    dy = -dy;
+                } else if (dx == 0) {
+                    dy = 1;
+                } else if (dy == 0) {
+                    dx = 1;
+                }
 
-                map.put(slope, map.getOrDefault(slope, 0) + 1);
-                currentMax = Math.max(currentMax, map.get(slope));
+                // Encode (dx, dy) into one long
+                long key = ((long) dx << 32) | (dy & 0xffffffffL);
+
+                int count = map.getOrDefault(key, 0) + 1;
+                map.put(key, count);
+
+                max = Math.max(max, count);
             }
 
-            maxPoints = Math.max(maxPoints, currentMax + duplicate);
+            result = Math.max(result, max + duplicates);
         }
 
-        return maxPoints;
+        return result;
     }
 
     public static void main(String[] args) {
-        MaxPointsOnLine solution = new MaxPointsOnLine();
+        MaxPointsOnLine sol = new MaxPointsOnLine();
 
         int[][] points = {
             {1,1}, {2,2}, {3,3}, {3,4}, {5,6}
         };
 
-        System.out.println("Max points on a line: " + solution.maxPoints(points));
+        System.out.println(sol.maxPoints(points));
     }
 }
