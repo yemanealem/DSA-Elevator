@@ -5,12 +5,10 @@ class FrequencySortBucket {
     public String frequencySort(String s) {
         Map<Character, Integer> map = new HashMap<>();
 
-        // Count frequency
         for (char c : s.toCharArray()) {
             map.put(c, map.getOrDefault(c, 0) + 1);
         }
 
-        // Bucket array
         List<Character>[] buckets = new List[s.length() + 1];
 
         for (char c : map.keySet()) {
@@ -21,7 +19,6 @@ class FrequencySortBucket {
             buckets[freq].add(c);
         }
 
-        // Build result
         StringBuilder result = new StringBuilder();
 
         for (int i = buckets.length - 1; i >= 0; i--) {
