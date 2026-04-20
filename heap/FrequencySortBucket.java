@@ -1,68 +1,53 @@
 import java.util.*;
 
-class FrequencySortBucket {
+class FrequencySortHeap {
 
     /*
      * QUESTION:
-     * Given a string s, sort it in decreasing order based on the frequency of characters.
-     * Return the sorted string.
-     *
-     * Example:
-     * Input: "tree"
-     * Output: "eert" or "eetr"
+     * Same as above.
      *
      * -------------------------------------------------------
      * HOW IT WORKS:
      *
-     * 1. Count frequency of each character using a HashMap.
-     *    Example: "tree" → {t:1, r:1, e:2}
+     * 1. Count frequency using HashMap.
      *
-     * 2. Create "buckets" where index = frequency.
-     *    bucket[2] → ['e']
-     *    bucket[1] → ['t', 'r']
+     * 2. Use a max-heap (priority queue) where:
+     *    - Highest frequency comes first.
      *
-     * 3. Traverse buckets from highest frequency to lowest.
-     *    Append characters multiple times based on frequency.
-     *
-     * 4. Build the final string.
+     * 3. Extract from heap and append characters
+     *    based on their frequency.
      *
      * -------------------------------------------------------
      * TIME COMPLEXITY:
-     * O(n) → counting + building result
+     * O(n log k)
+     * where k = number of unique characters
      *
      * SPACE COMPLEXITY:
-     * O(n) → map + buckets
+     * O(n)
      */
 
     public String frequencySort(String s) {
         Map<Character, Integer> map = new HashMap<>();
 
-        // Step 1: Count frequency
+        // Count frequency
         for (char c : s.toCharArray()) {
             map.put(c, map.getOrDefault(c, 0) + 1);
         }
 
-        // Step 2: Create buckets
-        List<Character>[] buckets = new List[s.length() + 1];
+        // Max heap
+        PriorityQueue<Character> heap =
+                new PriorityQueue<>((a, b) -> map.get(b) - map.get(a));
 
-        for (char c : map.keySet()) {
-            int freq = map.get(c);
-            if (buckets[freq] == null) {
-                buckets[freq] = new ArrayList<>();
-            }
-            buckets[freq].add(c);
-        }
+        heap.addAll(map.keySet());
 
-        // Step 3: Build result
         StringBuilder result = new StringBuilder();
 
-        for (int i = buckets.length - 1; i >= 0; i--) {
-            if (buckets[i] != null) {
-                for (char c : buckets[i]) {
-                    for (int j = 0; j < i; j++) {
-                        result.append(c);
-                    }
-                }
+        while (!heap.isEmpty()) {
+            char c = heap.poll();
+            int freq = map.get(c);
+
+            for (int i = 0; i < freq; i++) {
+                result.append(c);
             }
         }
 
@@ -70,7 +55,7 @@ class FrequencySortBucket {
     }
 
     public static void main(String[] args) {
-        FrequencySortBucket obj = new FrequencySortBucket();
+        FrequencySortHeap obj = new FrequencySortHeap();
 
         String input = "tree";
         String output = obj.frequencySort(input);
