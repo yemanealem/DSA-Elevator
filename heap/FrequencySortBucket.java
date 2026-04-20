@@ -29,12 +29,10 @@ class FrequencySortHeap {
     public String frequencySort(String s) {
         Map<Character, Integer> map = new HashMap<>();
 
-        // Count frequency
         for (char c : s.toCharArray()) {
             map.put(c, map.getOrDefault(c, 0) + 1);
         }
 
-        // Max heap
         PriorityQueue<Character> heap =
                 new PriorityQueue<>((a, b) -> map.get(b) - map.get(a));
 
