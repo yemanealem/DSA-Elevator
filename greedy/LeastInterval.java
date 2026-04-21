@@ -25,6 +25,21 @@ Explanation: A B idle A B idle A B
 ===========================================================
 */
 
+  /*
+    ===========================================================
+    Time Complexity:
+    ----------------
+    O(N) where N = number of tasks
+
+    - Counting frequencies: O(N)
+    - Scanning 26 letters: O(1) constant
+
+    Space Complexity:
+    ------------------
+    O(1) because frequency array is fixed size (26)
+    ===========================================================
+    */
+
 public class leastInterval {
 
     public int leastInterval(char[] tasks, int n) {
@@ -73,18 +88,5 @@ public class leastInterval {
         return Math.max(part1, part2);
     }
 
-    /*
-    ===========================================================
-    Time Complexity:
-    ----------------
-    O(N) where N = number of tasks
-
-    - Counting frequencies: O(N)
-    - Scanning 26 letters: O(1) constant
-
-    Space Complexity:
-    ------------------
-    O(1) because frequency array is fixed size (26)
-    ===========================================================
-    */
+  
 }
