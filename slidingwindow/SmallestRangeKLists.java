@@ -33,7 +33,6 @@ public class SmallestRangeKLists {
             if (freq[listIdx] == 0) count++;
             freq[listIdx]++;
 
-            // shrink window
             while (count == k) {
                 int leftVal = list.get(left)[0];
                 int rightVal = list.get(right)[0];
