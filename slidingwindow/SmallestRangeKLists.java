@@ -1,48 +1,70 @@
 import java.util.*;
 
 /*
- * Problem: Smallest Range Covering Elements from K Lists (LeetCode 632)
- *
- * Given k sorted lists, find the smallest range [L, R] such that
- * at least one number from each list is included in the range.
- *
- * ------------------------------------------------------------
- * How It Works:
- * ------------------------------------------------------------
- * 1. Flatten all numbers into a list of (value, listIndex)
- * 2. Sort by value
- * 3. Use sliding window:
- *    - Expand right pointer to include all lists
- *    - Once all lists are included, shrink from left
- *    - Track minimum range
- *
- * ------------------------------------------------------------
- * Time Complexity:
- * ------------------------------------------------------------
- * O(N log N) due to sorting
- * N = total number of elements
- *
- * ------------------------------------------------------------
- * Space Complexity:
- * ------------------------------------------------------------
- * O(N)
+ * Sliding Window Optimized Version
+ * Time: O(N log N)
+ * Faster due to reduced overhead
  */
 
 public class SmallestRangeKLists {
 
     public static int[] smallestRange(List<List<Integer>> nums) {
+
+        int k = nums.size();
         List<int[]> list = new ArrayList<>();
 
-        // Step 1: Flatten
-        for (int i = 0; i < nums.size(); i++) {
-            for (int num : nums.get(i)) {
-                list.add(new int[]{num, i});
+        // Flatten
+        for (int i = 0; i < k; i++) {
+            for (int val : nums.get(i)) {
+                list.add(new int[]{val, i});
             }
         }
 
-        // Step 2: Sort
-        Collections.sort(list, (a, b) -> a[0] - b[0]);
+        // Sort by value
+        list.sort((a, b) -> a[0] - b[0]);
 
-        // Sliding window
+        int[] freq = new int[k];   // faster than HashMap
+        int count = 0;
+
         int left = 0;
-        int count =
+        int start = 0, end = Integer.MAX_VALUE;
+
+        for (int right = 0; right < list.size(); right++) {
+            int listIdx = list.get(right)[1];
+
+            if (freq[listIdx] == 0) count++;
+            freq[listIdx]++;
+
+            // shrink window
+            while (count == k) {
+                int leftVal = list.get(left)[0];
+                int rightVal = list.get(right)[0];
+
+                if (rightVal - leftVal < end - start) {
+                    start = leftVal;
+                    end = rightVal;
+                }
+
+                int leftIdx = list.get(left)[1];
+                freq[leftIdx]--;
+
+                if (freq[leftIdx] == 0) count--;
+
+                left++;
+            }
+        }
+
+        return new int[]{start, end};
+    }
+
+    public static void main(String[] args) {
+        List<List<Integer>> nums = new ArrayList<>();
+        nums.add(Arrays.asList(4, 10, 15, 24, 26));
+        nums.add(Arrays.asList(0, 9, 12, 20));
+        nums.add(Arrays.asList(5, 18, 22, 30));
+
+        int[] result = smallestRange(nums);
+
+        System.out.println("Smallest Range: [" + result[0] + ", " + result[1] + "]");
+    }
+}
