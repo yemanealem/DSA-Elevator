@@ -52,20 +52,16 @@ public class maxSlidingWindow {
         for (int i = 0; i < n; i++) {
             int current = nums[i];
 
-            // 1. Remove indices that are out of this window
             if (deque.peekFirst() != null && deque.peekFirst() < i - k + 1) {
                 deque.pollFirst();
             }
 
-            // 2. Maintain decreasing order in deque
             while (deque.peekLast() != null && nums[deque.peekLast()] < current) {
                 deque.pollLast();
             }
 
-            // 3. Add current index
             deque.offerLast(i);
 
-            // 4. Add max to result when window is ready
             if (i >= k - 1) {
                 result[idx++] = nums[deque.peekFirst()];
             }
