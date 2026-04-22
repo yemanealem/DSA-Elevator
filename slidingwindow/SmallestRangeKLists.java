@@ -13,17 +13,15 @@ public class SmallestRangeKLists {
         int k = nums.size();
         List<int[]> list = new ArrayList<>();
 
-        // Flatten
         for (int i = 0; i < k; i++) {
             for (int val : nums.get(i)) {
                 list.add(new int[]{val, i});
             }
         }
 
-        // Sort by value
         list.sort((a, b) -> a[0] - b[0]);
 
-        int[] freq = new int[k];   // faster than HashMap
+        int[] freq = new int[k];  
         int count = 0;
 
         int left = 0;
