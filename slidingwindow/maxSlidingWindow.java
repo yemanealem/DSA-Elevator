@@ -38,7 +38,7 @@ import java.util.*;
  * O(k) — Deque stores at most k elements.
  */
 
-public class SlidingWindowMaximum {
+public class maxSlidingWindow {
 
     public static int[] maxSlidingWindow(int[] nums, int k) {
         int n = nums.length;
