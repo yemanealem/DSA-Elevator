@@ -100,6 +100,6 @@ public class ParseLispExpression {
 
         String expr = "(mult 3 (add 2 3))";
 
-        System.out.println(obj.evaluate(expr)); // Output: 15
+        System.out.println(obj.evaluate(expr)); 
     }
 }
