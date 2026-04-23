@@ -25,11 +25,7 @@ public class ReverseKGroup {
         }
     }
 
-    /**
-     * Function: reverseKGroup
-     *
-     * This function reverses nodes in groups of k using recursion.
-     */
+   
     public ListNode reverseKGroup(ListNode head, int k) {
 
         // Step 1: Check if there are at least k nodes
