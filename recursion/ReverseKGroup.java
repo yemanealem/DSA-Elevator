@@ -53,18 +53,13 @@ public class ReverseKGroup {
             curr = head;
 
             for (int i = 0; i < k; i++) {
-                ListNode next = curr.next; // store next node
-                curr.next = prev;          // reverse link
-                prev = curr;               // move prev forward
-                curr = next;               // move curr forward
+                ListNode next = curr.next;
+                curr.next = prev;          
+                prev = curr;              
+                curr = next;               
             }
 
-            /**
-             * Step 3: Recursive call
-             *
-             * head is now the LAST node of reversed group
-             * So connect it with the result of next recursion
-             */
+            
             head.next = reverseKGroup(curr, k);
 
             return prev;
