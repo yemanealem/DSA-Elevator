@@ -1,6 +1,20 @@
+/**
+ * Problem: Reverse Nodes in k-Group
+ *
+ * Given a linked list, reverse the nodes of the list k at a time and return the modified list.
+ *
+ * Rules:
+ * 1. Only reverse if there are at least k nodes.
+ * 2. If remaining nodes are less than k → leave them as is.
+ *
+ * Example:
+ * Input:  1 → 2 → 3 → 4 → 5, k = 2
+ * Output: 2 → 1 → 4 → 3 → 5
+ */
+
 public class ReverseKGroup {
 
-    // Definition for singly-linked list
+    // Definition of ListNode
     static class ListNode {
         int val;
         ListNode next;
@@ -11,37 +25,59 @@ public class ReverseKGroup {
         }
     }
 
-    // Recursive function
+    /**
+     * Function: reverseKGroup
+     *
+     * This function reverses nodes in groups of k using recursion.
+     */
     public ListNode reverseKGroup(ListNode head, int k) {
+
+        // Step 1: Check if there are at least k nodes
         ListNode curr = head;
         int count = 0;
 
-        // Step 1: Check if k nodes exist
         while (curr != null && count < k) {
             curr = curr.next;
             count++;
         }
 
+        /**
+         * If we have k nodes:
+         * - Reverse them
+         * - Recursively process the remaining list
+         */
         if (count == k) {
+
+            // Step 2: Reverse k nodes
             ListNode prev = null;
             curr = head;
 
             for (int i = 0; i < k; i++) {
-                ListNode next = curr.next;
-                curr.next = prev;
-                prev = curr;
-                curr = next;
+                ListNode next = curr.next; // store next node
+                curr.next = prev;          // reverse link
+                prev = curr;               // move prev forward
+                curr = next;               // move curr forward
             }
 
+            /**
+             * Step 3: Recursive call
+             *
+             * head is now the LAST node of reversed group
+             * So connect it with the result of next recursion
+             */
             head.next = reverseKGroup(curr, k);
 
+            // Step 4: prev is new head after reversal
             return prev;
         }
 
+        // If less than k nodes → return as is
         return head;
     }
 
-    // Helper to print list
+    /**
+     * Helper method to print the linked list
+     */
     public void printList(ListNode head) {
         while (head != null) {
             System.out.print(head.val + " -> ");
@@ -50,7 +86,9 @@ public class ReverseKGroup {
         System.out.println("null");
     }
 
-    // Main method
+    /**
+     * Main method (for testing)
+     */
     public static void main(String[] args) {
         ReverseKGroup obj = new ReverseKGroup();
 
