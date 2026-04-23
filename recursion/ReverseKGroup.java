@@ -22,7 +22,6 @@ public class ReverseKGroup {
             count++;
         }
 
-        // Step 2: Reverse k nodes
         if (count == k) {
             ListNode prev = null;
             curr = head;
@@ -34,7 +33,6 @@ public class ReverseKGroup {
                 curr = next;
             }
 
-            // Step 3: Recursive call
             head.next = reverseKGroup(curr, k);
 
             return prev;
