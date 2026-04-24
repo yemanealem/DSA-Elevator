@@ -5,7 +5,6 @@ class Solution {
 
         int n = profits.length;
 
-        // Pair: (capital, profit)
         int[][] projects = new int[n][2];
 
         for (int i = 0; i < n; i++) {
