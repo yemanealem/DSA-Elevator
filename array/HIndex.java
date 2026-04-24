@@ -17,13 +17,11 @@ public class HIndex {
         int n = citations.length;
         int[] bucket = new int[n + 1];
 
-        // Step 1: Fill buckets
         for (int c : citations) {
             if (c >= n) bucket[n]++;
             else bucket[c]++;
         }
 
-        // Step 2: accumulate from right
         int total = 0;
 
         for (int i = n; i >= 0; i--) {
