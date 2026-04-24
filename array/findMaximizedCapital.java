@@ -1,10 +1,4 @@
-import java.util.*;
-
-class Solution {
-    public int findMaximizedCapital(int k, int w, int[] profits, int[] capital) {
-
-        int n = profits.length;
-
+ int n = profits.length;
         int[][] projects = new int[n][2];
 
         for (int i = 0; i < n; i++) {
@@ -31,5 +25,3 @@ class Solution {
         }
 
         return w;
-    }
-}
