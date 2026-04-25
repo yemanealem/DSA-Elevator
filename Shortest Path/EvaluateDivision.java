@@ -1,5 +1,57 @@
 import java.util.*;
 
+/*
+------------------------------------------------------------
+🧠 PROBLEM: Evaluate Division (LeetCode 399)
+
+You are given equations like:
+    a / b = 2.0
+    b / c = 3.0
+
+You must answer queries like:
+    a / c = ?
+    a / e = ?
+
+If not possible → return -1.0
+
+------------------------------------------------------------
+💡 HOW IT WORKS (KEY IDEA)
+
+👉 Treat variables as graph nodes
+👉 Each equation creates TWO edges:
+
+    a / b = 2.0
+    => a → b (2.0)
+    => b → a (1 / 2.0)
+
+So the graph is:
+    - weighted
+    - directed
+    - multiplicative
+
+👉 To answer a query:
+We search a path from src → dst
+and multiply edge weights along the path.
+
+We use DFS with visited set to avoid cycles.
+
+------------------------------------------------------------
+⏱ TIME COMPLEXITY
+
+Let:
+    V = number of variables
+    E = number of equations
+    Q = number of queries
+
+Build graph: O(E)
+Each DFS: O(V + E) worst case
+Total: O(Q × (V + E))
+
+Works efficiently because graph is small.
+
+------------------------------------------------------------
+*/
+
 public class EvaluateDivision {
 
     Map<String, List<String>> graph = new HashMap<>();
@@ -7,7 +59,7 @@ public class EvaluateDivision {
 
     public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
 
-      
+        // build graph
         for (int i = 0; i < equations.size(); i++) {
 
             String u = equations.get(i).get(0);
@@ -58,6 +110,7 @@ public class EvaluateDivision {
         for (int i = 0; i < neighbors.size(); i++) {
 
             String next = neighbors.get(i);
+
             if (visited.contains(next)) continue;
 
             double res = dfs(next, dst, visited, product * weights.get(i));
@@ -67,7 +120,7 @@ public class EvaluateDivision {
         return -1.0;
     }
 
-   
+    // ---------------- MAIN METHOD ----------------
     public static void main(String[] args) {
 
         EvaluateDivision obj = new EvaluateDivision();
