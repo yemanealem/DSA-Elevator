@@ -115,7 +115,6 @@ public class MinimumCostToConvertString {
         return ans;
     }
 
-    // ---------------- MAIN METHOD ----------------
     public static void main(String[] args) {
 
         MinimumCostToConvertString obj = new MinimumCostToConvertString();
