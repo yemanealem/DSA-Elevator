@@ -7,7 +7,7 @@ public class EvaluateDivision {
 
     public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
 
-        // build graph
+      
         for (int i = 0; i < equations.size(); i++) {
 
             String u = equations.get(i).get(0);
@@ -67,7 +67,7 @@ public class EvaluateDivision {
         return -1.0;
     }
 
-    // MAIN METHOD
+   
     public static void main(String[] args) {
 
         EvaluateDivision obj = new EvaluateDivision();
