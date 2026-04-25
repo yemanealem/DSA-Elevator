@@ -1,4 +1,3 @@
-import java.util.*;
 
 public class MinimumCostToConvertString {
 
@@ -9,21 +8,18 @@ public class MinimumCostToConvertString {
 
         int[][] dist = new int[n][n];
 
-        // initialize distance matrix
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 dist[i][j] = (i == j) ? 0 : INF;
             }
         }
 
-        // build graph from rules
         for (int i = 0; i < original.length; i++) {
             int u = original[i] - 'a';
             int v = changed[i] - 'a';
             dist[u][v] = Math.min(dist[u][v], cost[i]);
         }
 
-        // Floyd-Warshall (all-pairs shortest path)
         for (int k = 0; k < n; k++) {
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
@@ -34,7 +30,6 @@ public class MinimumCostToConvertString {
             }
         }
 
-        // compute answer
         long ans = 0;
 
         for (int i = 0; i < source.length(); i++) {
@@ -50,7 +45,6 @@ public class MinimumCostToConvertString {
         return ans;
     }
 
-    // MAIN METHOD
     public static void main(String[] args) {
 
         MinimumCostToConvertString obj = new MinimumCostToConvertString();
