@@ -1,4 +1,3 @@
-import java.util.*;
 
 /**
  * Class Name: SudokuSolverApp
@@ -24,14 +23,12 @@ import java.util.*;
  */
 public class SudokuSolverApp {
 
-    // Tracking arrays (faster than HashSet)
     private boolean[][] rows = new boolean[9][10];
     private boolean[][] cols = new boolean[9][10];
     private boolean[][] boxes = new boolean[9][10];
 
     public void solveSudoku(char[][] board) {
 
-        // Initialize tracking arrays
         for (int r = 0; r < 9; r++) {
             for (int c = 0; c < 9; c++) {
                 if (board[r][c] != '.') {
@@ -65,13 +62,12 @@ public class SudokuSolverApp {
                 continue;
             }
 
-            // Place number
             board[r][c] = (char) (num + '0');
             rows[r][num] = cols[c][num] = boxes[box][num] = true;
 
             if (backtrack(board, r, c + 1)) return true;
 
-            // Undo (backtrack)
+        
             board[r][c] = '.';
             rows[r][num] = cols[c][num] = boxes[box][num] = false;
         }
