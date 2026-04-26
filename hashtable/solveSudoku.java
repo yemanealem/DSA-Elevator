@@ -1,76 +1,55 @@
-import java.util.*;
-
 class Solution {
 
-    // Declare at class level
-    private Set<Character>[] rows = new HashSet[9];
-    private Set<Character>[] cols = new HashSet[9];
-    private Set<Character>[] boxes = new HashSet[9];
+    // Faster than HashSet (no hashing, no objects)
+    private boolean[][] rows = new boolean[9][10];
+    private boolean[][] cols = new boolean[9][10];
+    private boolean[][] boxes = new boolean[9][10];
 
     public void solveSudoku(char[][] board) {
 
-        // Initialize sets
-        for (int i = 0; i < 9; i++) {
-            rows[i] = new HashSet<>();
-            cols[i] = new HashSet<>();
-            boxes[i] = new HashSet<>();
-        }
-
-        // Fill sets with existing numbers
+        // Initialize tracking arrays
         for (int r = 0; r < 9; r++) {
             for (int c = 0; c < 9; c++) {
-                char num = board[r][c];
-                if (num != '.') {
-                    rows[r].add(num);
-                    cols[c].add(num);
-                    boxes[getBoxIndex(r, c)].add(num);
+                if (board[r][c] != '.') {
+                    int num = board[r][c] - '0';
+                    int box = getBoxIndex(r, c);
+
+                    rows[r][num] = true;
+                    cols[c][num] = true;
+                    boxes[box][num] = true;
                 }
             }
         }
 
-        // Start backtracking
         backtrack(board, 0, 0);
     }
 
     private boolean backtrack(char[][] board, int r, int c) {
 
-        // If reached end → solved
         if (r == 9) return true;
-
-        // Move to next row
         if (c == 9) return backtrack(board, r + 1, 0);
 
-        // Skip filled cells
         if (board[r][c] != '.') {
             return backtrack(board, r, c + 1);
         }
 
-        // Try digits 1–9
-        for (char num = '1'; num <= '9'; num++) {
+        int box = getBoxIndex(r, c);
 
-            int box = getBoxIndex(r, c);
+        for (int num = 1; num <= 9; num++) {
 
-            // O(1) check using hash sets
-            if (rows[r].contains(num) ||
-                cols[c].contains(num) ||
-                boxes[box].contains(num)) {
+            if (rows[r][num] || cols[c][num] || boxes[box][num]) {
                 continue;
             }
 
-            // Place number
-            board[r][c] = num;
-            rows[r].add(num);
-            cols[c].add(num);
-            boxes[box].add(num);
+            // Place
+            board[r][c] = (char)(num + '0');
+            rows[r][num] = cols[c][num] = boxes[box][num] = true;
 
-            // Recurse
             if (backtrack(board, r, c + 1)) return true;
 
-            // Undo (backtrack)
+            // Undo
             board[r][c] = '.';
-            rows[r].remove(num);
-            cols[c].remove(num);
-            boxes[box].remove(num);
+            rows[r][num] = cols[c][num] = boxes[box][num] = false;
         }
 
         return false;
