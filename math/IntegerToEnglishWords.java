@@ -25,7 +25,6 @@
 
 public class IntegerToEnglishWords {
 
-    // Words for numbers 1–19
     private final String[] below20 = {
         "", "One", "Two", "Three", "Four", "Five", "Six",
         "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
@@ -33,26 +32,18 @@ public class IntegerToEnglishWords {
         "Seventeen", "Eighteen", "Nineteen"
     };
 
-    // Words for tens (20, 30, ..., 90)
     private final String[] tens = {
         "", "", "Twenty", "Thirty", "Forty",
         "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"
     };
 
-    /**
-     * Main function to convert number to words
-     */
     public String numberToWords(int num) {
 
-        // Edge case
         if (num == 0) return "Zero";
 
         StringBuilder result = new StringBuilder();
 
-        /**
-         * STEP 1:
-         * Extract 3-digit groups from right to left
-         */
+    
         if (num >= 1_000_000_000) {
             result.append(helper(num / 1_000_000_000)).append(" Billion ");
             num %= 1_000_000_000;
