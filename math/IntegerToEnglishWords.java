@@ -63,29 +63,19 @@ public class IntegerToEnglishWords {
             result.append(helper(num));
         }
 
-        /**
-         * STEP 2:
-         * Remove extra spaces at the end
-         */
+      
         return result.toString().trim();
     }
 
-    /**
-     * Convert numbers from 1 to 999 into words
-     *
-     * Example:
-     * 345 -> "Three Hundred Forty Five"
-     */
+  
     private String helper(int num) {
         StringBuilder sb = new StringBuilder();
 
-        // Handle hundreds
         if (num >= 100) {
             sb.append(below20[num / 100]).append(" Hundred ");
             num %= 100;
         }
 
-        // Handle 20–99
         if (num >= 20) {
             sb.append(tens[num / 10]).append(" ");
             num %= 10;
