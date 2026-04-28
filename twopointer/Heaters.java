@@ -45,22 +45,14 @@ public class Heaters {
 
     public int findRadius(int[] houses, int[] heaters) {
 
-        // Step 1: Sort both arrays
         Arrays.sort(houses);
         Arrays.sort(heaters);
 
-        int heaterIndex = 0; // pointer for heaters
-        int radius = 0;      // final answer
+        int heaterIndex = 0; 
+        int radius = 0;      
 
-        // Step 2: Iterate through each house
         for (int house : houses) {
-            /*
-             * Move heater pointer forward if the next heater
-             * is closer to the current house.
-             *
-             * We compare:
-             * distance to current heater  vs  next heater
-             */
+            
             while (heaterIndex < heaters.length - 1 &&
                    (heaters[heaterIndex + 1] - house) <= (house - heaters[heaterIndex])) {
                 heaterIndex++;
