@@ -1,9 +1,9 @@
 import java.util.HashMap;
 import java.util.Map;
 
-public class Solution {
+public class getMaxRepetitions {
 
-    public int getMaxRepetitions(String s1, int n1, String s2, int n2) {
+    public int solve(String s1, int n1, String s2, int n2) {
 
         // If s1 cannot produce s2 at all → early exit
         for (char c : s2.toCharArray()) {
@@ -14,13 +14,11 @@ public class Solution {
         int s2Count = 0;
         int index = 0;
 
-        // index in s2 → (s1Count, s2Count)
         Map<Integer, int[]> seen = new HashMap<>();
 
         while (s1Count < n1) {
             s1Count++;
 
-            // match one s1
             for (int i = 0; i < s1.length(); i++) {
                 if (s1.charAt(i) == s2.charAt(index)) {
                     index++;
@@ -31,24 +29,19 @@ public class Solution {
                 }
             }
 
-            // 🚨 Cycle detection
+            // cycle detection
             if (seen.containsKey(index)) {
 
                 int[] prev = seen.get(index);
                 int prevS1 = prev[0];
                 int prevS2 = prev[1];
 
-                // cycle length
                 int cycleS1 = s1Count - prevS1;
                 int cycleS2 = s2Count - prevS2;
 
-                // remaining s1 blocks
                 int remaining = n1 - s1Count;
-
-                // number of cycles we can skip
                 int times = remaining / cycleS1;
 
-                // fast forward 🚀
                 s1Count += times * cycleS1;
                 s2Count += times * cycleS2;
 
@@ -58,5 +51,19 @@ public class Solution {
         }
 
         return s2Count / n2;
+    }
+
+    // MAIN METHOD inside same class
+    public static void main(String[] args) {
+        getMaxRepetitions obj = new getMaxRepetitions();
+
+        String s1 = "acb";
+        int n1 = 4;
+        String s2 = "ab";
+        int n2 = 2;
+
+        System.out.println(obj.solve(s1, n1, s2, n2));
+
+        System.out.println(obj.solve("abc", 10, "ac", 2));
     }
 }
