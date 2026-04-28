@@ -54,7 +54,6 @@ public class Heaters {
 
         // Step 2: Iterate through each house
         for (int house : houses) {
-
             /*
              * Move heater pointer forward if the next heater
              * is closer to the current house.
@@ -67,17 +66,10 @@ public class Heaters {
                 heaterIndex++;
             }
 
-            /*
-             * Now heaters[heaterIndex] is the closest heater
-             * for this house.
-             */
+           
             int distance = Math.abs(heaters[heaterIndex] - house);
 
-            /*
-             * Step 3:
-             * Keep track of the maximum distance needed
-             * (this determines the minimum required radius)
-             */
+           
             radius = Math.max(radius, distance);
         }
 
