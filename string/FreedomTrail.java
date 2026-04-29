@@ -102,6 +102,6 @@ public class FreedomTrail {
 
     public static void main(String[] args) {
         FreedomTrail sol = new FreedomTrail();
-        System.out.println(sol.findRotateSteps("godding", "gd")); // Output: 4
+        System.out.println(sol.findRotateSteps("godding", "gd")); 
     }
 }
