@@ -5,13 +5,12 @@ public class FreedomTrail {
     public int findRotateSteps(String ring, String key) {
         int n = ring.length();
 
-        // Map characters to indices
         Map<Character, List<Integer>> map = new HashMap<>();
         for (int i = 0; i < n; i++) {
             map.computeIfAbsent(ring.charAt(i), k -> new ArrayList<>()).add(i);
         }
 
-        // Memoization
+  
         Map<String, Integer> memo = new HashMap<>();
 
         return dfs(0, 0, ring, key, map, memo);
@@ -43,6 +42,6 @@ public class FreedomTrail {
 
     public static void main(String[] args) {
         FreedomTrail sol = new FreedomTrail();
-        System.out.println(sol.findRotateSteps("godding", "gd")); // Output: 4
+        System.out.println(sol.findRotateSteps("godding", "gd"));
     }
 }
