@@ -54,9 +54,7 @@ public class ParseLispExpression {
         return eval(tokens.get(tokens.size() - 1), newScope);
     }
 
-    /**
-     * Helper: Parse expression into tokens
-     */
+
     private List<String> parse(String s) {
         List<String> result = new ArrayList<>();
         int i = 0;
