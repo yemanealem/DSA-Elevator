@@ -2,34 +2,19 @@
  * LeetCode 467 - Unique Substrings in Wraparound String
  *
  * Problem:
- * Given a string p, return the number of unique non-empty substrings of p
- * that are present in the infinite wraparound string:
- * "...zabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz..."
+ * Count unique non-empty substrings of p that exist in the infinite
+ * wraparound string "...abcdefghijklmnopqrstuvwxyz..."
  *
- * A valid substring must follow consecutive characters in wraparound order.
+ * Approach:
+ * - count[i] = max length of valid substring ending with ('a' + i)
+ * - If current char follows previous in wraparound:
+ *      len++
+ *   else:
+ *      len = 1
+ * - Update count for each character
  *
- * ------------------------------------------------------------
- * Approach (Greedy + DP):
- *
- * 1. Use an array count[26]:
- *    - count[i] = maximum length of valid substring ending with ('a' + i)
- *
- * 2. Traverse string:
- *    - If current char follows previous in wraparound:
- *        increase current length
- *      Else:
- *        reset length = 1
- *
- * 3. Update:
- *    count[currentChar] = max(count[currentChar], currentLength)
- *
- * 4. Result:
- *    sum(count[i]) gives total unique substrings
- *
- * ------------------------------------------------------------
- * Time Complexity: O(n)
- * Space Complexity: O(1)
- * ------------------------------------------------------------
+ * Time: O(n)
+ * Space: O(1)
  */
 
 public class UniqueWraparound {
@@ -38,31 +23,30 @@ public class UniqueWraparound {
         int[] count = new int[26];
         int len = 0;
 
-        for (int i = 0; i < p.length(); i++) {
-            if (i > 0 &&
-               ((p.charAt(i) - p.charAt(i - 1) == 1) ||
-               (p.charAt(i - 1) == 'z' && p.charAt(i) == 'a'))) {
+        char[] arr = p.toCharArray(); // 🔥 faster than charAt
+
+        for (int i = 0; i < arr.length; i++) {
+
+            if (i > 0 && (arr[i] - arr[i - 1] + 26) % 26 == 1) {
                 len++;
             } else {
                 len = 1;
             }
 
-            int index = p.charAt(i) - 'a';
-            if (len > count[index]) {
-                count[index] = len;
+            int idx = arr[i] - 'a';
+            if (len > count[idx]) {
+                count[idx] = len;
             }
         }
 
-        int result = 0;
-        for (int c : count) {
-            result += c;
-        }
+        int res = 0;
+        for (int v : count) res += v;
 
-        return result;
+        return res;
     }
 
     public static void main(String[] args) {
         UniqueWraparound sol = new UniqueWraparound();
-        System.out.println(sol.findSubstringInWraproundString("zab")); // Output: 6
+        System.out.println(sol.findSubstringInWraproundString("zab")); // 6
     }
 }
