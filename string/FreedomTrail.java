@@ -70,7 +70,6 @@ public class FreedomTrail {
             dp[i][0] = step + 1;
         }
 
-        // Fill DP
         for (int j = 1; j < m; j++) {
             List<Integer> currList = map.get(key.charAt(j));
             List<Integer> prevList = map.get(key.charAt(j - 1));
@@ -90,7 +89,6 @@ public class FreedomTrail {
             }
         }
 
-        // Get result
         int res = INF;
         List<Integer> lastList = map.get(key.charAt(m - 1));
         for (int i : lastList) {
