@@ -23,7 +23,7 @@ public class UniqueWraparound {
         int[] count = new int[26];
         int len = 0;
 
-        char[] arr = p.toCharArray(); // 🔥 faster than charAt
+        char[] arr = p.toCharArray();
 
         for (int i = 0; i < arr.length; i++) {
 
@@ -47,6 +47,6 @@ public class UniqueWraparound {
 
     public static void main(String[] args) {
         UniqueWraparound sol = new UniqueWraparound();
-        System.out.println(sol.findSubstringInWraproundString("zab")); // 6
+        System.out.println(sol.findSubstringInWraproundString("zab")); 
     }
 }
