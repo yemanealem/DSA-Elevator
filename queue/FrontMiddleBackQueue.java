@@ -86,13 +86,7 @@ class FrontMiddleBackQueue {
         return left.isEmpty() && right.isEmpty();
     }
 
-    /*
-     * Time Complexity:
-     * Each operation (push/pop/balance) is O(1) amortized.
-     *
-     * Space Complexity:
-     * O(n) for storing all elements in the two deques.
-     */
+  
 
     public static void main(String[] args) {
         FrontMiddleBackQueue q = new FrontMiddleBackQueue();
