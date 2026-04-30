@@ -22,6 +22,14 @@ import java.util.Deque;
  * - middle from left's last element
  */
 
+   /*
+     * Time Complexity:
+     * Each operation (push/pop/balance) is O(1) amortized.
+     *
+     * Space Complexity:
+     * O(n) for storing all elements in the two deques.
+     */
+
 class FrontMiddleBackQueue {
 
     private final Deque<Integer> left;
