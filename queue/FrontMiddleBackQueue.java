@@ -1,6 +1,27 @@
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+/*
+ * Problem:
+ * Design a FrontMiddleBackQueue that supports:
+ * - pushFront, pushMiddle, pushBack
+ * - popFront, popMiddle, popBack
+ *
+ * Idea:
+ * We use two deques (left and right) to simulate a balanced split of the queue.
+ * - left holds the first half (and may have at most 1 extra element)
+ * - right holds the second half
+ *
+ * The middle element is always at the end of left.
+ * After every operation, we rebalance both deques to maintain this property.
+ *
+ * Why it works:
+ * By keeping both halves balanced, we can access:
+ * - front from left/right
+ * - back from right/left
+ * - middle from left's last element
+ */
+
 class FrontMiddleBackQueue {
 
     private final Deque<Integer> left;
@@ -64,6 +85,14 @@ class FrontMiddleBackQueue {
     private boolean isEmpty() {
         return left.isEmpty() && right.isEmpty();
     }
+
+    /*
+     * Time Complexity:
+     * Each operation (push/pop/balance) is O(1) amortized.
+     *
+     * Space Complexity:
+     * O(n) for storing all elements in the two deques.
+     */
 
     public static void main(String[] args) {
         FrontMiddleBackQueue q = new FrontMiddleBackQueue();
