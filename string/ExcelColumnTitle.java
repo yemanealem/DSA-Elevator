@@ -27,7 +27,7 @@ public class ExcelColumnTitle {
         StringBuilder sb = new StringBuilder();
 
         while (columnNumber > 0) {
-            columnNumber--; // 🔥 key step
+            columnNumber--; 
 
             int rem = columnNumber % 26;
             sb.append((char) ('A' + rem));
@@ -40,6 +40,6 @@ public class ExcelColumnTitle {
 
     public static void main(String[] args) {
         ExcelColumnTitle sol = new ExcelColumnTitle();
-        System.out.println(sol.convertToTitle(28)); // AB
+        System.out.println(sol.convertToTitle(28)); 
     }
 }
