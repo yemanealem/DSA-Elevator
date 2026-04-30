@@ -1,31 +1,25 @@
-import java.util.ArrayDeque;
-import java.util.Deque;
-
 class Solution {
     public int minKBitFlips(int[] nums, int k) {
         int n = nums.length;
-        Deque<Integer> queue = new ArrayDeque<>();
-        
-        int flip = 0; // current flip parity (0 or 1)
+
+        int[] diff = new int[n + 1]; // flip markers
+        int flip = 0;                // current parity
         int res = 0;
 
         for (int i = 0; i < n; i++) {
 
-            // remove expired flips
-            if (!queue.isEmpty() && queue.peekFirst() == i) {
-                queue.pollFirst();
-                flip ^= 1;
-            }
+            // remove expired flip effect
+            flip ^= diff[i];
 
-            // if current bit after flips is 0, we must flip here
+            // if current bit after flips is 0 → must flip
             if (nums[i] == flip) {
-                if (i + k > n) {
-                    return -1;
-                }
+
+                if (i + k > n) return -1;
 
                 res++;
-                flip ^= 1;           // start new flip effect
-                queue.offer(i + k);  // mark when this flip expires
+
+                flip ^= 1;        // apply flip starting here
+                diff[i + k] ^= 1; // cancel flip after k steps
             }
         }
 
