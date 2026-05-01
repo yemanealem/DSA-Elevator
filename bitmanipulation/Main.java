@@ -1,4 +1,4 @@
-class Solution {
+class ChessboardTransformer {
     public int movesToChessboard(int[][] board) {
         int n = board.length;
 
@@ -33,5 +33,20 @@ class Solution {
         }
 
         return (rowSwap + colSwap) / 2;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        ChessboardTransformer transformer = new ChessboardTransformer();
+
+        int[][] board = {
+            {1, 1, 0},
+            {0, 0, 1},
+            {0, 0, 1}
+        };
+
+        int result = transformer.movesToChessboard(board);
+        System.out.println(result);
     }
 }
