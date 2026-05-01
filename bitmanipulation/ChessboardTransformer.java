@@ -1,11 +1,11 @@
 /*
 Problem: Transform to Chessboard (LeetCode 782)
 
-Given an n x n binary matrix, you can swap any two rows or columns.
-Return the minimum number of swaps to transform the board into a chessboard pattern,
-or -1 if it is impossible.
+Given an n x n binary matrix, you can swap rows or columns.
+Return the minimum number of swaps to transform it into a chessboard pattern,
+or -1 if impossible.
 
-A valid chessboard must alternate like:
+A valid chessboard alternates like:
 010101...
 101010...
 
@@ -13,29 +13,24 @@ A valid chessboard must alternate like:
 How it works:
 
 1. Validity check:
-   - For every cell, we verify only two patterns exist:
-     board[i][j] must match either the reference pattern or its inverse.
-   - This is checked using XOR consistency:
+   - Every cell must match either the base pattern or its inverse.
+   - Verified using XOR consistency:
      board[i][j] ^ board[0][0] ^ board[i][0] ^ board[0][j]
 
-2. Row/Column structure:
-   - Count how many 1s exist in first row/column.
-   - They must be balanced (n/2 for even n, or ±1 for odd n).
+2. Structure validation:
+   - Only two row/column patterns are allowed.
+   - Check balance of 0s and 1s in first row/column.
 
 3. Swap calculation:
-   - Compare current pattern with ideal alternating pattern (0101... or 1010...).
-   - Count mismatches.
-   - Each swap fixes 2 mismatches → result = mismatches / 2.
+   - Compare against ideal alternating pattern (0101... or 1010...).
+   - Each swap fixes 2 mismatches → swaps = mismatches / 2.
 
 ---------------------------------------
-Time Complexity:
-O(n^2)
-
-Space Complexity:
-O(1)
+Time Complexity: O(n^2)
+Space Complexity: O(1)
 */
 
-class ChessboardTransformer {
+public class ChessboardTransformer {
 
     public int movesToChessboard(int[][] board) {
         int n = board.length;
@@ -72,9 +67,7 @@ class ChessboardTransformer {
 
         return (rowSwap + colSwap) / 2;
     }
-}
 
-public class Main {
     public static void main(String[] args) {
         ChessboardTransformer transformer = new ChessboardTransformer();
 
