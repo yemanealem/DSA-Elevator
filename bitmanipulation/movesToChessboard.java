@@ -4,7 +4,7 @@ class Solution {
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                if ((board[0][0] ^ board[i][0] ^ board[0][j] ^ board[i][j]) != 0) {
+                if ((board[i][j] ^ board[0][0] ^ board[i][0] ^ board[0][j]) != 0) {
                     return -1;
                 }
             }
@@ -28,8 +28,8 @@ class Solution {
             rowSwap = Math.min(rowSwap, n - rowSwap);
             colSwap = Math.min(colSwap, n - colSwap);
         } else {
-            if (rowSwap % 2 == 1) rowSwap = n - rowSwap;
-            if (colSwap % 2 == 1) colSwap = n - colSwap;
+            if ((rowSwap & 1) == 1) rowSwap = n - rowSwap;
+            if ((colSwap & 1) == 1) colSwap = n - colSwap;
         }
 
         return (rowSwap + colSwap) / 2;
