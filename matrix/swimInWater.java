@@ -1,16 +1,32 @@
 /*
 ===========================================
-🔷 Swim in Rising Water (Fast Approach)
+🔷 Swim in Rising Water (LeetCode 778)
 ===========================================
 
-🧠 Idea:
-Binary search the answer (time T)
-and check if we can reach (n-1,n-1)
-using BFS only on cells <= T.
+🧠 Problem:
+You are given an n x n grid where each cell
+represents elevation. Water rises over time.
+
+You can move 4 directions and can only step
+on cells where grid[i][j] <= time.
+
+Goal:
+Find minimum time to reach (n-1, n-1).
 
 ===========================================
-⏱ Time: O(n^2 log(maxValue))
-💾 Space: O(n^2)
+💡 How it works:
+1. Binary search the answer (time T)
+2. For each T, run BFS to check if path exists
+3. Return smallest valid T
+
+Why this is efficient:
+- Avoids PriorityQueue (Dijkstra overhead)
+- Uses simple BFS checks
+- Reduces search space via binary search
+
+===========================================
+⏱ Time Complexity: O(n^2 log(maxValue))
+💾 Space Complexity: O(n^2)
 ===========================================
 */
 
@@ -81,5 +97,22 @@ class Solution {
         }
 
         return false;
+    }
+
+    // ============================
+    // Main method for testing
+    // ============================
+    public static void main(String[] args) {
+
+        Solution sol = new Solution();
+
+        int[][] grid = {
+            {0, 2},
+            {1, 3}
+        };
+
+        System.out.println(
+            "Minimum time to reach end: " + sol.swimInWater(grid)
+        );
     }
 }
