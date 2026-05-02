@@ -25,7 +25,7 @@ Binary Search + BFS feasibility check
 
 import java.util.*;
 
-class SwimInRisingWater {
+public class SwimInRisingWater {
 
     private int n;
     private int[][] grid;
@@ -91,15 +91,10 @@ class SwimInRisingWater {
 
         return false;
     }
-}
 
-/*
-===========================================
-🟢 MAIN CLASS (ENTRY POINT)
-===========================================
-*/
-
-public class Main {
+    // ============================
+    // MAIN METHOD (as requested)
+    // ============================
     public static void main(String[] args) {
 
         SwimInRisingWater solver = new SwimInRisingWater();
