@@ -4,25 +4,18 @@
 ===========================================
 
 🧠 Problem:
-You are given an n x n grid where each cell
-represents elevation. Water rises over time.
+Find minimum time to travel from (0,0) to (n-1,n-1)
+in a grid where each cell is an elevation.
 
-You can move 4 directions and can only step
-on cells where grid[i][j] <= time.
-
-Goal:
-Find minimum time to reach (n-1, n-1).
+You can only enter cells where grid[i][j] <= time.
 
 ===========================================
-💡 How it works:
-1. Binary search the answer (time T)
-2. For each T, run BFS to check if path exists
-3. Return smallest valid T
+💡 Approach:
+Binary Search + BFS feasibility check
 
-Why this is efficient:
-- Avoids PriorityQueue (Dijkstra overhead)
-- Uses simple BFS checks
-- Reduces search space via binary search
+1. Binary search the answer (time)
+2. For each time, check if path exists using BFS
+3. Return minimum valid time
 
 ===========================================
 ⏱ Time Complexity: O(n^2 log(maxValue))
@@ -32,10 +25,10 @@ Why this is efficient:
 
 import java.util.*;
 
-class Solution {
+class SwimInRisingWater {
 
-    int n;
-    int[][] grid;
+    private int n;
+    private int[][] grid;
 
     public int swimInWater(int[][] grid) {
         this.grid = grid;
@@ -98,21 +91,26 @@ class Solution {
 
         return false;
     }
+}
 
-    // ============================
-    // Main method for testing
-    // ============================
+/*
+===========================================
+🟢 MAIN CLASS (ENTRY POINT)
+===========================================
+*/
+
+public class Main {
     public static void main(String[] args) {
 
-        Solution sol = new Solution();
+        SwimInRisingWater solver = new SwimInRisingWater();
 
         int[][] grid = {
             {0, 2},
             {1, 3}
         };
 
-        System.out.println(
-            "Minimum time to reach end: " + sol.swimInWater(grid)
-        );
+        int result = solver.swimInWater(grid);
+
+        System.out.println("Minimum time to reach end: " + result);
     }
 }
