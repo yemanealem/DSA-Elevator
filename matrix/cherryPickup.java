@@ -1,4 +1,4 @@
-class Solution {
+class CherryPickupSolver {
 
     private Integer[][][] dp;
     private int n;
@@ -14,15 +14,15 @@ class Solution {
     private int dfs(int[][] grid, int r1, int c1, int r2) {
         int c2 = r1 + c1 - r2;
 
-        // bounds check
+        // boundary check
         if (r1 >= n || c1 >= n || r2 >= n || c2 >= n)
             return Integer.MIN_VALUE;
 
-        // thorn check
+        // blocked cell check
         if (grid[r1][c1] == -1 || grid[r2][c2] == -1)
             return Integer.MIN_VALUE;
 
-        // reached end
+        // reached destination
         if (r1 == n - 1 && c1 == n - 1)
             return grid[r1][c1];
 
@@ -41,8 +41,19 @@ class Solution {
                      dfs(grid, r1, c1 + 1, r2 + 1))
         );
 
-        cherries += best;
+        return dp[r1][c1][r2] = cherries + best;
+    }
 
-        return dp[r1][c1][r2] = cherries;
+    public static void main(String[] args) {
+        CherryPickupSolver solver = new CherryPickupSolver();
+
+        int[][] grid = {
+            {0, 1, -1},
+            {1, 0, -1},
+            {1, 1,  1}
+        };
+
+        int result = solver.cherryPickup(grid);
+        System.out.println("Maximum cherries collected: " + result);
     }
 }
