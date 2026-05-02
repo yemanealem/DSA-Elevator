@@ -1,3 +1,64 @@
+/*
+===========================================
+🔷 Problem: Cherry Pickup (LeetCode 741)
+===========================================
+
+You are given an n x n grid:
+- 0 = empty cell
+- 1 = cherry
+- -1 = thorn (blocked cell)
+
+You must:
+1. Go from (0,0) → (n-1,n-1) collecting cherries
+2. Return back from (n-1,n-1) → (0,0)
+3. Only move right or down (forward logic)
+4. Cannot step on -1
+5. Each cherry can be collected only once
+
+Goal: Maximize total cherries collected.
+
+===========================================
+🧠 How it works (Key Idea)
+===========================================
+
+Instead of solving forward + backward separately,
+we simulate TWO people starting from (0,0) and moving
+to (n-1,n-1) at the same time.
+
+At step k:
+- Person 1 is at (r1, c1)
+- Person 2 is at (r2, c2)
+- And: r1 + c1 = r2 + c2 (same number of steps)
+
+We use DP:
+dp[r1][c1][r2] = max cherries collected from these states
+
+At each step, both can move:
+- down/down
+- right/right
+- down/right
+- right/down
+
+If both land on same cell → count cherry once.
+
+We use memoization to avoid recomputation.
+
+===========================================
+⏱ Time Complexity
+===========================================
+
+O(n^3)
+
+Because:
+- r1 (n states)
+- c1 (n states)
+- r2 (n states)
+
+Each state checks 4 transitions → constant factor.
+
+===========================================
+*/
+
 class CherryPickupSolver {
 
     private Integer[][][] dp;
@@ -18,7 +79,7 @@ class CherryPickupSolver {
         if (r1 >= n || c1 >= n || r2 >= n || c2 >= n)
             return Integer.MIN_VALUE;
 
-        // blocked cell check
+        // thorn check
         if (grid[r1][c1] == -1 || grid[r2][c2] == -1)
             return Integer.MIN_VALUE;
 
@@ -31,6 +92,7 @@ class CherryPickupSolver {
 
         int cherries = grid[r1][c1];
 
+        // avoid double counting
         if (r1 != r2 || c1 != c2)
             cherries += grid[r2][c2];
 
@@ -44,7 +106,11 @@ class CherryPickupSolver {
         return dp[r1][c1][r2] = cherries + best;
     }
 
+    // ============================
+    // Main method for testing
+    // ============================
     public static void main(String[] args) {
+
         CherryPickupSolver solver = new CherryPickupSolver();
 
         int[][] grid = {
@@ -54,6 +120,7 @@ class CherryPickupSolver {
         };
 
         int result = solver.cherryPickup(grid);
+
         System.out.println("Maximum cherries collected: " + result);
     }
 }
