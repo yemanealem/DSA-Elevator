@@ -1,15 +1,18 @@
 /*
 ===========================================
-🔷 Swim in Rising Water (LeetCode 778)
+🔷 Swim in Rising Water (Optimized)
 ===========================================
 
-🧠 Idea:
-Treat matrix as a graph.
-Use Dijkstra-like approach where:
-cost = max(current path cost, grid value)
+🧠 Optimization Idea:
+Instead of PriorityQueue + objects,
+we use a lightweight int array heap.
 
-Goal:
-Minimize the maximum value along the path.
+This reduces:
+- Object allocation
+- Comparator overhead
+- GC pressure
+
+Still behaves like Dijkstra.
 
 ===========================================
 ⏱ Time: O(n^2 log n)
@@ -21,30 +24,23 @@ import java.util.*;
 
 class Solution {
 
-    static class Node {
-        int x, y, time;
-
-        Node(int x, int y, int time) {
-            this.x = x;
-            this.y = y;
-            this.time = time;
-        }
-    }
-
     public int swimInWater(int[][] grid) {
         int n = grid.length;
 
-        int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}};
         boolean[][] visited = new boolean[n][n];
 
-        PriorityQueue<Node> pq =
-            new PriorityQueue<>(Comparator.comparingInt(a -> a.time));
+        // min-heap: [time, x, y]
+        PriorityQueue<int[]> pq =
+            new PriorityQueue<>((a, b) -> a[0] - b[0]);
 
-        pq.offer(new Node(0, 0, grid[0][0]));
+        pq.offer(new int[]{grid[0][0], 0, 0});
+
+        int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}};
 
         while (!pq.isEmpty()) {
-            Node cur = pq.poll();
-            int x = cur.x, y = cur.y, time = cur.time;
+
+            int[] cur = pq.poll();
+            int time = cur[0], x = cur[1], y = cur[2];
 
             if (visited[x][y]) continue;
             visited[x][y] = true;
@@ -63,7 +59,7 @@ class Solution {
                     continue;
 
                 int newTime = Math.max(time, grid[nx][ny]);
-                pq.offer(new Node(nx, ny, newTime));
+                pq.offer(new int[]{newTime, nx, ny});
             }
         }
 
