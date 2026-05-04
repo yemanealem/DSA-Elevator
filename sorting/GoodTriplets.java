@@ -3,22 +3,22 @@
 Problem: Count Good Triplets in an Array (LeetCode 2179)
 
 We are given two permutations nums1 and nums2.
-
-A "good triplet" (i, j, k) satisfies:
+We need to count triplets (i, j, k) such that:
 - i < j < k
-- Relative ordering of nums1 matches nums2
+- Relative order of nums1 matches nums2
 
 ------------------------------------------------------------
-Key Idea:
+How it works:
 
 1. Map each value in nums2 → its index position.
-2. Transform nums1 into an index array "arr".
-3. For each index j:
-   - left[j]  = number of elements before j smaller than arr[j]
-   - right[j] = number of elements after j greater than arr[j]
-4. Answer = sum(left[j] * right[j])
+2. Convert nums1 into an index array based on nums2.
+3. For each element:
+   - leftSmaller[i]  = number of elements before i smaller than it
+   - rightGreater[i] = number of elements after i greater than it
+4. Each index contributes:
+      leftSmaller[i] * rightGreater[i]
 
-We compute both using Fenwick Tree (BIT).
+We compute both using Merge Sort (divide & conquer counting).
 
 ------------------------------------------------------------
 Time Complexity: O(n log n)
@@ -26,76 +26,99 @@ Space Complexity: O(n)
 ------------------------------------------------------------
 */
 
-import java.util.*;
+public class goodTriplets {
 
-class Solution {
-
-    // Fenwick Tree (BIT)
-    static class BIT {
-        int[] tree;
-        int n;
-
-        BIT(int n) {
-            this.n = n;
-            tree = new int[n + 2];
-        }
-
-        void update(int i, int val) {
-            while (i <= n) {
-                tree[i] += val;
-                i += i & -i;
-            }
-        }
-
-        int query(int i) {
-            int sum = 0;
-            while (i > 0) {
-                sum += tree[i];
-                i -= i & -i;
-            }
-            return sum;
-        }
-    }
+    static int[] temp;
 
     public long goodTriplets(int[] nums1, int[] nums2) {
         int n = nums1.length;
 
-        // Step 1: map value -> index in nums2
-        Map<Integer, Integer> pos = new HashMap<>();
+        // Map nums2 value -> index (O(1) access)
+        int[] pos = new int[n];
         for (int i = 0; i < n; i++) {
-            pos.put(nums2[i], i + 1); // 1-based indexing
+            pos[nums2[i]] = i;
         }
 
-        // Step 2: transform nums1
+        // Convert nums1 into index array
         int[] arr = new int[n];
         for (int i = 0; i < n; i++) {
-            arr[i] = pos.get(nums1[i]);
+            arr[i] = pos[nums1[i]];
         }
 
         int[] left = new int[n];
         int[] right = new int[n];
+        temp = new int[n];
 
-        BIT bitLeft = new BIT(n);
-        BIT bitRight = new BIT(n);
+        mergeLeft(arr.clone(), left, 0, n - 1);
+        mergeRight(arr, right, 0, n - 1);
 
-        // Step 3: left smaller counts
-        for (int i = 0; i < n; i++) {
-            left[i] = bitLeft.query(arr[i] - 1);
-            bitLeft.update(arr[i], 1);
-        }
-
-        // Step 4: right greater counts
-        for (int i = n - 1; i >= 0; i--) {
-            right[i] = bitRight.query(n) - bitRight.query(arr[i]);
-            bitRight.update(arr[i], 1);
-        }
-
-        // Step 5: compute result
         long ans = 0;
         for (int i = 0; i < n; i++) {
             ans += (long) left[i] * right[i];
         }
 
         return ans;
+    }
+
+    // Count smaller elements on the left
+    private void mergeLeft(int[] arr, int[] left, int l, int r) {
+        if (l >= r) return;
+
+        int m = (l + r) / 2;
+        mergeLeft(arr, left, l, m);
+        mergeLeft(arr, left, m + 1, r);
+
+        int i = l, j = m + 1, k = l;
+        int rightCount = 0;
+
+        while (i <= m && j <= r) {
+            if (arr[i] < arr[j]) {
+                left[arr[i]] += rightCount;
+                temp[k++] = arr[i++];
+            } else {
+                rightCount++;
+                temp[k++] = arr[j++];
+            }
+        }
+
+        while (i <= m) {
+            left[arr[i]] += rightCount;
+            temp[k++] = arr[i++];
+        }
+
+        while (j <= r) {
+            temp[k++] = arr[j++];
+        }
+
+        for (int x = l; x <= r; x++) {
+            arr[x] = temp[x];
+        }
+    }
+
+    // Count greater elements on the right
+    private void mergeRight(int[] arr, int[] right, int l, int r) {
+        if (l >= r) return;
+
+        int m = (l + r) / 2;
+        mergeRight(arr, right, l, m);
+        mergeRight(arr, right, m + 1, r);
+
+        int i = l, j = m + 1, k = l;
+
+        while (i <= m && j <= r) {
+            if (arr[i] > arr[j]) {
+                right[arr[i]] += (r - j + 1);
+                temp[k++] = arr[i++];
+            } else {
+                temp[k++] = arr[j++];
+            }
+        }
+
+        while (i <= m) temp[k++] = arr[i++];
+        while (j <= r) temp[k++] = arr[j++];
+
+        for (int x = l; x <= r; x++) {
+            arr[x] = temp[x];
+        }
     }
 }
