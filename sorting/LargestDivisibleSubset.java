@@ -1,56 +1,67 @@
 import java.util.*;
 
 /*
-    LeetCode: Largest Divisible Subset
+    LeetCode: Largest Divisible Subset (Optimized)
 
-    How it works:
-    1. Sort the array so divisibility can be checked in one direction.
-    2. Use DP where dp[i] is the size of the largest divisible subset ending at i.
-    3. Use parent array to reconstruct the subset.
-    4. For each i, check all j < i:
-        if nums[i] % nums[j] == 0 → update dp[i].
+    Idea:
+    - Sort array
+    - DP[i] = largest subset ending at i
+    - prev[i] = previous index in chain
+    - Reconstruct from max index
 
-    Time Complexity:
-    O(N^2)
-    - Two nested loops over array
+    Optimization:
+    - Reduce repeated array access
+    - Use local variables inside loops
+    - Keep logic tight for JVM optimization
+
+    Time Complexity: O(N^2)
+    Space Complexity: O(N)
 */
 
 public class LargestDivisibleSubset {
 
     public static List<Integer> largestDivisibleSubset(int[] nums) {
-        if (nums.length == 0) return new ArrayList<>();
+        int n = nums.length;
+        if (n == 0) return new ArrayList<>();
 
         Arrays.sort(nums);
 
-        int n = nums.length;
         int[] dp = new int[n];
-        int[] parent = new int[n];
+        int[] prev = new int[n];
 
         Arrays.fill(dp, 1);
-        Arrays.fill(parent, -1);
+        Arrays.fill(prev, -1);
 
-        int maxSize = 1;
-        int maxIndex = 0;
+        int maxLen = 1;
+        int maxIdx = 0;
 
         for (int i = 0; i < n; i++) {
+            int curr = nums[i]; // local cache
+
             for (int j = 0; j < i; j++) {
-                if (nums[i] % nums[j] == 0 && dp[j] + 1 > dp[i]) {
-                    dp[i] = dp[j] + 1;
-                    parent[i] = j;
+                int prevVal = nums[j];
+
+                if (curr % prevVal == 0) {
+                    int candidate = dp[j] + 1;
+
+                    if (candidate > dp[i]) {
+                        dp[i] = candidate;
+                        prev[i] = j;
+                    }
                 }
             }
 
-            if (dp[i] > maxSize) {
-                maxSize = dp[i];
-                maxIndex = i;
+            if (dp[i] > maxLen) {
+                maxLen = dp[i];
+                maxIdx = i;
             }
         }
 
         List<Integer> result = new ArrayList<>();
 
-        while (maxIndex != -1) {
-            result.add(nums[maxIndex]);
-            maxIndex = parent[maxIndex];
+        while (maxIdx != -1) {
+            result.add(nums[maxIdx]);
+            maxIdx = prev[maxIdx];
         }
 
         return result;
