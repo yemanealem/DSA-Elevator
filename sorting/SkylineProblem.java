@@ -24,7 +24,7 @@ import java.util.*;
     - Track current max height using TreeMap.lastKey()
     - If max height changes → add a skyline point
 
-    Time Complexity:
+    Time Complexity :
     O(N log N)
     - Sorting events: O(N log N)
     - Each insert/remove in TreeMap: O(log N)
