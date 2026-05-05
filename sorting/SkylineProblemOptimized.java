@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class SkylineProblem {
+public class SkylineProblemOptimized {
 
     public static List<List<Integer>> getSkyline(int[][] buildings) {
         List<int[]> events = new ArrayList<>();
@@ -18,9 +18,9 @@ public class SkylineProblem {
             return a[1] - b[1];
         });
 
-        // Max heap
-        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
-        pq.add(0);
+        // TreeMap as max heap (multiset)
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        map.put(0, 1); // ground
 
         int prevMax = 0;
         List<List<Integer>> result = new ArrayList<>();
@@ -31,12 +31,17 @@ public class SkylineProblem {
             int h = e[1];
 
             if (h < 0) {
-                pq.add(-h); // start
+                // start event → add height
+                map.put(-h, map.getOrDefault(-h, 0) + 1);
             } else {
-                pq.remove(h); // end
+                // end event → remove height
+                map.put(h, map.get(h) - 1);
+                if (map.get(h) == 0) {
+                    map.remove(h);
+                }
             }
 
-            int currMax = pq.peek();
+            int currMax = map.lastKey(); // max height
 
             if (currMax != prevMax) {
                 result.add(Arrays.asList(x, currMax));
