@@ -45,15 +45,12 @@ public class PascalsTriangleII {
 
         List<Integer> row = new ArrayList<>();
 
-        // First row is always [1]
         row.add(1);
 
         for (int i = 1; i <= rowIndex; i++) {
 
-            // Expand size for new row
             row.add(0);
 
-            // Update from right to left
             for (int j = i; j > 0; j--) {
                 row.set(j, row.get(j) + row.get(j - 1));
             }
