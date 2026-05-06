@@ -32,14 +32,11 @@ public class goodTriplets {
 
     public long goodTriplets(int[] nums1, int[] nums2) {
         int n = nums1.length;
-
-        // Map nums2 value -> index (O(1) access)
         int[] pos = new int[n];
         for (int i = 0; i < n; i++) {
             pos[nums2[i]] = i;
         }
 
-        // Convert nums1 into index array
         int[] arr = new int[n];
         for (int i = 0; i < n; i++) {
             arr[i] = pos[nums1[i]];
@@ -60,7 +57,6 @@ public class goodTriplets {
         return ans;
     }
 
-    // Count smaller elements on the left
     private void mergeLeft(int[] arr, int[] left, int l, int r) {
         if (l >= r) return;
 
@@ -95,7 +91,6 @@ public class goodTriplets {
         }
     }
 
-    // Count greater elements on the right
     private void mergeRight(int[] arr, int[] right, int l, int r) {
         if (l >= r) return;
 
