@@ -45,18 +45,12 @@ public class RegularExpressionMatching {
      *
      * dp[i][j] = dp[i-1][j-1]
      *
-     * Because current characters match,
-     * so we move diagonally.
-     *
      * ------------------------------------------------------------
      * CASE 2: '*'
      * ------------------------------------------------------------
      *
      * '*' means:
      * zero or more of previous character.
-     *
-     * Example:
-     * a* -> "", "a", "aa", "aaa", ...
      *
      * Two possibilities:
      *
@@ -66,8 +60,7 @@ public class RegularExpressionMatching {
      *
      * 2. Use '*' to match current character
      *
-     * If previous pattern character matches:
-     *
+     * If:
      * p[j-2] == s[i-1]
      * OR
      * p[j-2] == '.'
@@ -76,17 +69,9 @@ public class RegularExpressionMatching {
      *
      * dp[i][j] |= dp[i-1][j]
      *
-     * Meaning:
-     * consume one character from string
-     * while keeping same pattern.
-     *
      * ============================================================
      * TIME COMPLEXITY:
      * ============================================================
-     *
-     * Let:
-     * m = length of s
-     * n = length of p
      *
      * Time Complexity:
      * O(m × n)
@@ -115,8 +100,6 @@ public class RegularExpressionMatching {
          * a*
          * a*b*
          * a*b*c*
-         *
-         * These can match empty string.
          */
         for (int j = 2; j <= n; j++) {
 
@@ -136,7 +119,7 @@ public class RegularExpressionMatching {
 
                 /*
                  * CASE 1:
-                 * Normal character match OR '.'
+                 * Normal character or '.'
                  */
                 if (pc == sc || pc == '.') {
 
@@ -149,16 +132,10 @@ public class RegularExpressionMatching {
                  */
                 else if (pc == '*') {
 
-                    /*
-                     * OPTION 1:
-                     * Ignore previous char + '*'
-                     */
+                    // Ignore previous character + '*'
                     dp[i][j] = dp[i][j - 2];
 
-                    /*
-                     * OPTION 2:
-                     * Use '*' to match current character
-                     */
+                    // Match one or more characters
                     char prev = p.charAt(j - 2);
 
                     if (prev == sc || prev == '.') {
@@ -172,5 +149,47 @@ public class RegularExpressionMatching {
 
         // Final answer
         return dp[m][n];
+    }
+
+    /*
+     * ============================================================
+     * MAIN METHOD:
+     * ============================================================
+     */
+    public static void main(String[] args) {
+
+        RegularExpressionMatching solution =
+                new RegularExpressionMatching();
+
+        String s1 = "aa";
+        String p1 = "a";
+
+        String s2 = "aa";
+        String p2 = "a*";
+
+        String s3 = "ab";
+        String p3 = ".*";
+
+        System.out.println(
+                "Input: s = " + s1 + ", p = " + p1);
+
+        System.out.println(
+                "Output: " + solution.isMatch(s1, p1));
+
+        System.out.println();
+
+        System.out.println(
+                "Input: s = " + s2 + ", p = " + p2);
+
+        System.out.println(
+                "Output: " + solution.isMatch(s2, p2));
+
+        System.out.println();
+
+        System.out.println(
+                "Input: s = " + s3 + ", p = " + p3);
+
+        System.out.println(
+                "Output: " + solution.isMatch(s3, p3));
     }
 }
