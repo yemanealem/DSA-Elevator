@@ -1,35 +1,58 @@
 
 /*
- * PROBLEM: Burst Balloons
- * ------------------------------------------
- * Given an array nums, each burst gives:
- * nums[left] * nums[i] * nums[right]
+ * PROBLEM: Burst Balloons (LeetCode Hard)
+ * -------------------------------------------------------
+ * You are given an array nums of balloons.
+ * When you burst balloon i, you gain:
  *
- * Find maximum coins possible.
+ *      nums[left] * nums[i] * nums[right]
  *
- * KEY IDEA:
- * ------------------------------------------
- * Instead of choosing first balloon to burst,
- * choose the LAST balloon to burst in each interval.
+ * where left and right are adjacent remaining balloons.
  *
- * This converts problem into Interval DP.
+ * Goal: Find maximum coins possible by bursting all balloons.
  *
+ * -------------------------------------------------------
+ * HOW IT WORKS (KEY IDEA):
+ * -------------------------------------------------------
+ * Instead of choosing the FIRST balloon to burst,
+ * we choose the LAST balloon to burst in a range.
+ *
+ * This transforms the problem into INTERVAL DP:
+ *
+ * dp[left][right] = max coins obtainable in (left, right)
+ *
+ * For every interval, we try all possible last balloons k:
+ *
+ * dp[left][right] =
+ *     max(dp[left][k] + dp[k][right] +
+ *         arr[left] * arr[k] * arr[right])
+ *
+ * -------------------------------------------------------
+ * WHY THIS WORKS:
+ * -------------------------------------------------------
+ * Fixing the last balloon avoids dependency issues
+ * and makes subproblems independent.
+ *
+ * -------------------------------------------------------
  * TIME COMPLEXITY:
+ * -------------------------------------------------------
  * O(n^3)
+ * - O(n^2) intervals
+ * - O(n) choices per interval
  *
  * SPACE COMPLEXITY:
- * O(n^2)
+ * -------------------------------------------------------
+ * O(n^2) for DP table
  */
 
-class BurstBalloonsDP {
+class BurstBalloonsOptimized {
 
     public int maxCoins(int[] nums) {
 
         int n = nums.length;
 
-        // Add virtual balloons (1 at both ends)
+        // Add virtual balloons at both ends
         int[] arr = new int[n + 2];
-
         arr[0] = 1;
         arr[n + 1] = 1;
 
@@ -46,14 +69,23 @@ class BurstBalloonsDP {
 
                 int right = left + len;
 
+                int best = 0;
+
+                int leftVal = arr[left];
+                int rightVal = arr[right];
+
+                // try all possible last balloons
                 for (int k = left + 1; k < right; k++) {
 
-                    int coins = arr[left] * arr[k] * arr[right]
-                            + dp[left][k]
-                            + dp[k][right];
+                    int coins =
+                            leftVal * arr[k] * rightVal +
+                            dp[left][k] +
+                            dp[k][right];
 
-                    dp[left][right] = Math.max(dp[left][right], coins);
+                    best = Math.max(best, coins);
                 }
+
+                dp[left][right] = best;
             }
         }
 
@@ -63,12 +95,10 @@ class BurstBalloonsDP {
     // ---------------- MAIN ----------------
     public static void main(String[] args) {
 
-        BurstBalloonsDP solver = new BurstBalloonsDP();
+        BurstBalloonsOptimized solver = new BurstBalloonsOptimized();
 
         int[] nums = {3, 1, 5, 8};
 
-        int result = solver.maxCoins(nums);
-
-        System.out.println("Max Coins: " + result);
+        System.out.println("Max Coins: " + solver.maxCoins(nums));
     }
 }
