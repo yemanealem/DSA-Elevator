@@ -51,7 +51,6 @@ class BurstBalloonsOptimized {
 
         int n = nums.length;
 
-        // Add virtual balloons at both ends
         int[] arr = new int[n + 2];
         arr[0] = 1;
         arr[n + 1] = 1;
@@ -62,7 +61,6 @@ class BurstBalloonsOptimized {
 
         int[][] dp = new int[n + 2][n + 2];
 
-        // length of interval
         for (int len = 2; len < n + 2; len++) {
 
             for (int left = 0; left < n + 2 - len; left++) {
@@ -74,7 +72,6 @@ class BurstBalloonsOptimized {
                 int leftVal = arr[left];
                 int rightVal = arr[right];
 
-                // try all possible last balloons
                 for (int k = left + 1; k < right; k++) {
 
                     int coins =
@@ -92,7 +89,6 @@ class BurstBalloonsOptimized {
         return dp[0][n + 1];
     }
 
-    // ---------------- MAIN ----------------
     public static void main(String[] args) {
 
         BurstBalloonsOptimized solver = new BurstBalloonsOptimized();
