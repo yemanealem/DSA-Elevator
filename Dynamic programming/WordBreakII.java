@@ -2,12 +2,10 @@ import java.util.*;
 
 /*
  * PROBLEM: Word Break II
- * ----------------------------------------------------
- * Given a string s and a dictionary of words wordDict,
- * return all possible sentences where:
- *
- * - Each word is valid in the dictionary
- * - Spaces are inserted correctly
+ * ------------------------------------------------------
+ * Given a string s and a dictionary wordDict,
+ * return all possible sentences formed by inserting spaces
+ * such that every word is in the dictionary.
  *
  * Example:
  * Input:
@@ -15,100 +13,97 @@ import java.util.*;
  * wordDict = ["cat","cats","and","sand","dog"]
  *
  * Output:
- * [
- *   "cats and dog",
- *   "cat sand dog"
- * ]
+ * ["cats and dog", "cat sand dog"]
  *
- * APPROACH:
- * ----------------------------------------------------
- * 1. Use DFS + Backtracking
- * 2. Try every possible prefix
- * 3. If prefix exists in dictionary:
- *      recursively solve remaining substring
- * 4. Use Memoization (DP cache)
- *      to avoid repeated calculations
+ * ------------------------------------------------------
+ * OPTIMIZATION IDEAS:
+ * 1. DFS + Backtracking
+ * 2. Memoization (avoid recomputing same substring index)
+ * 3. HashSet for O(1) lookup
+ * 4. Limit search using max word length
  *
  * TIME COMPLEXITY:
- * ----------------------------------------------------
- * Worst case exponential because all combinations
- * may need to be generated.
- *
- * SPACE COMPLEXITY:
- * ----------------------------------------------------
- * O(N * 2^N)
+ * Worst case: O(2^N)
+ * But memoization reduces repeated work significantly.
  */
 
 class WordBreakII {
 
-    private Map<String, List<String>> memo = new HashMap<>();
+    // memo[i] stores all sentences starting from index i
+    private Map<Integer, List<String>> memo = new HashMap<>();
+
+    private Set<String> dict;
+    private int maxWordLen = 0;
 
     public List<String> wordBreak(String s, List<String> wordDict) {
 
-        Set<String> dict = new HashSet<>(wordDict);
+        dict = new HashSet<>(wordDict);
 
-        return dfs(s, dict);
+        // compute max word length (optimization)
+        for (String w : wordDict) {
+            maxWordLen = Math.max(maxWordLen, w.length());
+        }
+
+        return dfs(s, 0);
     }
 
-    private List<String> dfs(String s, Set<String> dict) {
+    private List<String> dfs(String s, int start) {
 
-        if (memo.containsKey(s)) {
-            return memo.get(s);
+        if (memo.containsKey(start)) {
+            return memo.get(start);
         }
 
-        List<String> result = new ArrayList<>();
+        List<String> res = new ArrayList<>();
 
-        if (s.length() == 0) {
-            result.add("");
-            return result;
+        // base case: reached end
+        if (start == s.length()) {
+            res.add("");
+            return res;
         }
 
-        for (int i = 1; i <= s.length(); i++) {
+        // only try up to max word length
+        int endLimit = Math.min(s.length(), start + maxWordLen);
 
-            String prefix = s.substring(0, i);
+        for (int end = start + 1; end <= endLimit; end++) {
 
-            if (dict.contains(prefix)) {
+            String word = s.substring(start, end);
 
-                String remaining = s.substring(i);
-                List<String> subSentences = dfs(remaining, dict);
+            if (dict.contains(word)) {
 
-                for (String sentence : subSentences) {
+                List<String> next = dfs(s, end);
+
+                for (String sentence : next) {
 
                     if (sentence.isEmpty()) {
-                        result.add(prefix);
+                        res.add(word);
                     } else {
-                        result.add(prefix + " " + sentence);
+                        res.add(word + " " + sentence);
                     }
                 }
             }
         }
 
-        // Store in memo
-        memo.put(s, result);
-
-        return result;
+        memo.put(start, res);
+        return res;
     }
 
+    // ---------------- MAIN METHOD ----------------
     public static void main(String[] args) {
 
-        WordBreakII solution = new WordBreakII();
+        WordBreakII solver = new WordBreakII();
 
         String s = "catsanddog";
 
         List<String> wordDict = Arrays.asList(
-                "cat",
-                "cats",
-                "and",
-                "sand",
-                "dog"
+                "cat", "cats", "and", "sand", "dog"
         );
 
-        List<String> result = solution.wordBreak(s, wordDict);
+        List<String> result = solver.wordBreak(s, wordDict);
 
-        System.out.println("Possible Sentences:");
+        System.out.println("All Possible Sentences:");
 
-        for (String sentence : result) {
-            System.out.println(sentence);
+        for (String r : result) {
+            System.out.println(r);
         }
     }
 }
