@@ -41,7 +41,6 @@ import java.util.*;
 
 class WordBreakII {
 
-    // Memoization cache
     private Map<String, List<String>> memo = new HashMap<>();
 
     public List<String> wordBreak(String s, List<String> wordDict) {
@@ -53,33 +52,26 @@ class WordBreakII {
 
     private List<String> dfs(String s, Set<String> dict) {
 
-        // Return cached result
         if (memo.containsKey(s)) {
             return memo.get(s);
         }
 
         List<String> result = new ArrayList<>();
 
-        // Base case
         if (s.length() == 0) {
             result.add("");
             return result;
         }
 
-        // Try every possible prefix
         for (int i = 1; i <= s.length(); i++) {
 
             String prefix = s.substring(0, i);
 
-            // If valid dictionary word
             if (dict.contains(prefix)) {
 
                 String remaining = s.substring(i);
-
-                // Solve remaining string
                 List<String> subSentences = dfs(remaining, dict);
 
-                // Combine results
                 for (String sentence : subSentences) {
 
                     if (sentence.isEmpty()) {
