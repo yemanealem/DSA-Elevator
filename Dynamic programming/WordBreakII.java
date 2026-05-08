@@ -29,7 +29,6 @@ import java.util.*;
 
 class WordBreakII {
 
-    // memo[i] stores all sentences starting from index i
     private Map<Integer, List<String>> memo = new HashMap<>();
 
     private Set<String> dict;
@@ -39,7 +38,6 @@ class WordBreakII {
 
         dict = new HashSet<>(wordDict);
 
-        // compute max word length (optimization)
         for (String w : wordDict) {
             maxWordLen = Math.max(maxWordLen, w.length());
         }
@@ -55,13 +53,11 @@ class WordBreakII {
 
         List<String> res = new ArrayList<>();
 
-        // base case: reached end
         if (start == s.length()) {
             res.add("");
             return res;
         }
 
-        // only try up to max word length
         int endLimit = Math.min(s.length(), start + maxWordLen);
 
         for (int end = start + 1; end <= endLimit; end++) {
@@ -86,8 +82,6 @@ class WordBreakII {
         memo.put(start, res);
         return res;
     }
-
-    // ---------------- MAIN METHOD ----------------
     public static void main(String[] args) {
 
         WordBreakII solver = new WordBreakII();
