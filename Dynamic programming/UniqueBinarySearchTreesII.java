@@ -135,20 +135,19 @@ public class UniqueBinarySearchTreesII {
         List<TreeNode> result =
                 new ArrayList<>();
 
-        // Try every number as root
+      
         for (int root = start;
              root <= end;
              root++) {
 
-            // Generate left subtrees
+           
             List<TreeNode> leftTrees =
                     build(start, root - 1);
 
-            // Generate right subtrees
+        
             List<TreeNode> rightTrees =
                     build(root + 1, end);
 
-            // Combine all possibilities
             for (TreeNode left : leftTrees) {
 
                 for (TreeNode right : rightTrees) {
