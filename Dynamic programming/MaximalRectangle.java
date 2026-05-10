@@ -76,18 +76,15 @@ public class MaximalRectangle {
 
         int maxArea = 0;
 
-        // Traverse all bars including extra 0 height
         for (int i = 0; i <= heights.length; i++) {
 
             int currentHeight = (i == heights.length) ? 0 : heights[i];
 
-            // Maintain increasing stack
             while (!stack.isEmpty()
                     && currentHeight < heights[stack.peek()]) {
 
                 int height = heights[stack.pop()];
 
-                // Width calculation
                 int width;
 
                 if (stack.isEmpty()) {
@@ -105,7 +102,7 @@ public class MaximalRectangle {
         return maxArea;
     }
 
-    // Main method for testing
+  
     public static void main(String[] args) {
 
         char[][] matrix = {
