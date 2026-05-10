@@ -148,13 +148,12 @@ public class UniqueBinarySearchTreesII {
             }
         }
 
-        // Cache result
+
         memo.put(key, result);
 
         return result;
     }
 
-    // Preorder traversal for testing
     private static void preorder(TreeNode root) {
 
         if (root == null) {
@@ -168,7 +167,7 @@ public class UniqueBinarySearchTreesII {
         preorder(root.right);
     }
 
-    // Main method
+  
     public static void main(String[] args) {
 
         int n = 3;
