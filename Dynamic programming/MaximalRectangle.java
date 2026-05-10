@@ -62,14 +62,12 @@ public class MaximalRectangle {
                 }
             }
 
-            // Calculate largest rectangle for current histogram
             maxArea = Math.max(maxArea, largestRectangleArea(heights));
         }
 
         return maxArea;
     }
 
-    // Largest Rectangle in Histogram
     private static int largestRectangleArea(int[] heights) {
 
         Stack<Integer> stack = new Stack<>();
