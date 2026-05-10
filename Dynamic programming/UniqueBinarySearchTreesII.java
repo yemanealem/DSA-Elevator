@@ -73,7 +73,7 @@ O(number of generated trees)
 
 public class UniqueBinarySearchTreesII {
 
-    // TreeNode definition
+  
     static class TreeNode {
 
         int val;
@@ -97,7 +97,7 @@ public class UniqueBinarySearchTreesII {
         }
     }
 
-    // DP memo cache
+  
     private List<TreeNode>[][] memo;
 
   
