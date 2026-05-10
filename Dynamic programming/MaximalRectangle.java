@@ -85,7 +85,7 @@ public class MaximalRectangle {
 
     public static int maximalRectangle(char[][] matrix) {
 
-        // Edge case
+      
         if (matrix == null || matrix.length == 0) {
             return 0;
         }
