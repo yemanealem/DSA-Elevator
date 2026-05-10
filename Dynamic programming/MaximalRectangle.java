@@ -36,7 +36,6 @@ public class MaximalRectangle {
 
     public static int maximalRectangle(char[][] matrix) {
 
-        // Edge case
         if (matrix == null || matrix.length == 0) {
             return 0;
         }
@@ -44,15 +43,12 @@ public class MaximalRectangle {
         int rows = matrix.length;
         int cols = matrix[0].length;
 
-        // Histogram heights
         int[] heights = new int[cols];
 
         int maxArea = 0;
 
-        // Process every row
         for (int r = 0; r < rows; r++) {
 
-            // Build histogram
             for (int c = 0; c < cols; c++) {
 
                 if (matrix[r][c] == '1') {
