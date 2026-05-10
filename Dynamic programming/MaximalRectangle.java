@@ -124,7 +124,6 @@ public class MaximalRectangle {
         return maxArea;
     }
 
-    // Optimized Largest Rectangle in Histogram
     private static int largestRectangle(
             int[] heights,
             ArrayDeque<Integer> stack
@@ -137,7 +136,6 @@ public class MaximalRectangle {
 
         for (int i = 0; i <= n; i++) {
 
-            // Sentinel height
             int currentHeight = (i == n) ? 0 : heights[i];
 
             while (!stack.isEmpty()
