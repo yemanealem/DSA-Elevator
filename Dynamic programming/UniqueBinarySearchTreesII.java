@@ -100,23 +100,23 @@ public class UniqueBinarySearchTreesII {
     // DP memo cache
     private List<TreeNode>[][] memo;
 
-    // Main API
+  
     public List<TreeNode> generateTrees(int n) {
 
         if (n == 0) {
             return new ArrayList<>();
         }
 
-        // Initialize DP cache
+      
         memo = new ArrayList[n + 1][n + 1];
 
         return build(1, n);
     }
 
-    // Generate BSTs in range [start, end]
+    
     private List<TreeNode> build(int start, int end) {
 
-        // Empty subtree
+     
         if (start > end) {
 
             List<TreeNode> base =
@@ -127,7 +127,7 @@ public class UniqueBinarySearchTreesII {
             return base;
         }
 
-        // Return cached result
+       
         if (memo[start][end] != null) {
             return memo[start][end];
         }
