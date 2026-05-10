@@ -185,7 +185,7 @@ public class UniqueBinarySearchTreesII {
         preorder(root.right);
     }
 
-    // Main method
+  
     public static void main(String[] args) {
 
         UniqueBinarySearchTreesII solution =
@@ -203,7 +203,7 @@ public class UniqueBinarySearchTreesII {
 
         System.out.println();
 
-        // Print all trees
+        
         for (TreeNode root : trees) {
 
             preorder(root);
