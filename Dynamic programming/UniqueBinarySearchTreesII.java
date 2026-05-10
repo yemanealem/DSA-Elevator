@@ -5,21 +5,38 @@ LeetCode 95. Unique Binary Search Trees II
 
 Problem:
 Generate all structurally unique BSTs
-that store values 1 to n.
+(Binary Search Trees) storing values 1 to n.
 
 ----------------------------------------------------
-KEY IDEA
+OPTIMIZED DYNAMIC PROGRAMMING SOLUTION
 ----------------------------------------------------
 
-For every number i:
-- Use i as root
-- Generate all left subtrees from:
-      start -> i-1
-- Generate all right subtrees from:
-      i+1 -> end
+Why This Version Is Faster:
+1. Uses 2D DP cache instead of HashMap<String,...>
+2. Avoids expensive String creation
+3. Faster memo lookup
+4. Uses constructor directly:
+      new TreeNode(root, left, right)
 
-Then combine every:
-(left subtree) × (right subtree)
+----------------------------------------------------
+HOW IT WORKS
+----------------------------------------------------
+
+For every value i:
+- Choose i as root
+- Generate all left subtrees
+- Generate all right subtrees
+- Combine every possibility
+
+Example:
+
+n = 3
+
+Possible roots:
+1, 2, 3
+
+Each root recursively builds:
+left subtree + right subtree
 
 ----------------------------------------------------
 WHY THIS IS DYNAMIC PROGRAMMING
@@ -28,15 +45,10 @@ WHY THIS IS DYNAMIC PROGRAMMING
 Subproblems repeat many times.
 
 Example:
-generate(1,3)
+build(1,2) may be called repeatedly.
 
-Needs:
-generate(1,1)
-generate(3,3)
-
-Later these ranges are needed again.
-
-So we cache results using memoization.
+So we cache:
+memo[start][end]
 
 ----------------------------------------------------
 TIME COMPLEXITY
@@ -47,25 +59,14 @@ Catalan Number Complexity
 Approximately:
 O(4^n / sqrt(n))
 
-This is expected because the number of
-unique BSTs itself grows exponentially.
+This is optimal because we must generate
+all unique BSTs.
 
 ----------------------------------------------------
 SPACE COMPLEXITY
 ----------------------------------------------------
 
 O(number of generated trees)
-
-Plus recursion stack and memo cache.
-
-----------------------------------------------------
-OPTIMIZATIONS
-----------------------------------------------------
-
-1. Memoization avoids recomputation
-2. HashMap caching
-3. Reuse subtree results
-4. Efficient recursive construction
 
 ----------------------------------------------------
 */
@@ -79,81 +80,97 @@ public class UniqueBinarySearchTreesII {
         TreeNode left;
         TreeNode right;
 
+        TreeNode() {}
+
         TreeNode(int val) {
             this.val = val;
         }
+
+        TreeNode(
+                int val,
+                TreeNode left,
+                TreeNode right
+        ) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
     }
 
-    // Memoization cache
-    private static final Map<String, List<TreeNode>> memo =
-            new HashMap<>();
+    // DP memo cache
+    private List<TreeNode>[][] memo;
 
-    public static List<TreeNode> generateTrees(int n) {
+    // Main API
+    public List<TreeNode> generateTrees(int n) {
 
         if (n == 0) {
             return new ArrayList<>();
         }
 
+        // Initialize DP cache
+        memo = new ArrayList[n + 1][n + 1];
+
         return build(1, n);
     }
 
-    // Build all BSTs in range [start, end]
-    private static List<TreeNode> build(int start, int end) {
+    // Generate BSTs in range [start, end]
+    private List<TreeNode> build(int start, int end) {
 
-        String key = start + "," + end;
-
-        // Return cached result
-        if (memo.containsKey(key)) {
-            return memo.get(key);
-        }
-
-        List<TreeNode> result = new ArrayList<>();
-
-        // Base case
+        // Empty subtree
         if (start > end) {
 
-            result.add(null);
+            List<TreeNode> base =
+                    new ArrayList<>();
 
-            memo.put(key, result);
+            base.add(null);
 
-            return result;
+            return base;
         }
 
-        // Try every value as root
-        for (int rootValue = start;
-             rootValue <= end;
-             rootValue++) {
+        // Return cached result
+        if (memo[start][end] != null) {
+            return memo[start][end];
+        }
+
+        List<TreeNode> result =
+                new ArrayList<>();
+
+        // Try every number as root
+        for (int root = start;
+             root <= end;
+             root++) {
 
             // Generate left subtrees
             List<TreeNode> leftTrees =
-                    build(start, rootValue - 1);
+                    build(start, root - 1);
 
             // Generate right subtrees
             List<TreeNode> rightTrees =
-                    build(rootValue + 1, end);
+                    build(root + 1, end);
 
             // Combine all possibilities
             for (TreeNode left : leftTrees) {
 
                 for (TreeNode right : rightTrees) {
 
-                    TreeNode root =
-                            new TreeNode(rootValue);
-
-                    root.left = left;
-                    root.right = right;
-
-                    result.add(root);
+                    result.add(
+                            new TreeNode(
+                                    root,
+                                    left,
+                                    right
+                            )
+                    );
                 }
             }
         }
 
-
-        memo.put(key, result);
+        // Store in DP cache
+        memo[start][end] = result;
 
         return result;
     }
 
+    // Preorder traversal for visualization
     private static void preorder(TreeNode root) {
 
         if (root == null) {
@@ -164,23 +181,32 @@ public class UniqueBinarySearchTreesII {
         System.out.print(root.val + " ");
 
         preorder(root.left);
+
         preorder(root.right);
     }
 
-  
+    // Main method
     public static void main(String[] args) {
+
+        UniqueBinarySearchTreesII solution =
+                new UniqueBinarySearchTreesII();
 
         int n = 3;
 
-        List<TreeNode> trees = generateTrees(n);
+        List<TreeNode> trees =
+                solution.generateTrees(n);
 
         System.out.println(
-                "Total Unique BSTs: " + trees.size()
+                "Total Unique BSTs = "
+                        + trees.size()
         );
 
-        for (TreeNode tree : trees) {
+        System.out.println();
 
-            preorder(tree);
+        // Print all trees
+        for (TreeNode root : trees) {
+
+            preorder(root);
 
             System.out.println();
         }
