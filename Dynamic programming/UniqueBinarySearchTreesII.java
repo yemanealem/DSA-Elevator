@@ -164,13 +164,11 @@ public class UniqueBinarySearchTreesII {
             }
         }
 
-        // Store in DP cache
         memo[start][end] = result;
 
         return result;
     }
 
-    // Preorder traversal for visualization
     private static void preorder(TreeNode root) {
 
         if (root == null) {
