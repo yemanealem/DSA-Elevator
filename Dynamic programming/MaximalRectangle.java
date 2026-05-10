@@ -93,15 +93,15 @@ public class MaximalRectangle {
         int rows = matrix.length;
         int cols = matrix[0].length;
 
-        // Histogram heights
+     
         int[] heights = new int[cols];
 
         int maxArea = 0;
 
-        // Reusable stack (faster)
+      
         ArrayDeque<Integer> stack = new ArrayDeque<>();
 
-        // Process each row
+     
         for (int r = 0; r < rows; r++) {
 
             for (int c = 0; c < cols; c++) {
