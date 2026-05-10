@@ -104,17 +104,14 @@ public class MaximalRectangle {
         // Process each row
         for (int r = 0; r < rows; r++) {
 
-            // Build histogram heights
             for (int c = 0; c < cols; c++) {
 
-                // Increase height if current cell is 1
-                // Else reset to 0
+             
                 heights[c] = (matrix[r][c] == '1')
                         ? heights[c] + 1
                         : 0;
             }
 
-            // Compute largest rectangle for current histogram
             maxArea = Math.max(
                     maxArea,
                     largestRectangle(heights, stack)
