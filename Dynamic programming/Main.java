@@ -1,4 +1,3 @@
-import java.util.*;
 
 class StockProfitCalculator {
 
@@ -6,7 +5,6 @@ class StockProfitCalculator {
         int n = prices.length;
         if (n == 0 || k == 0) return 0;
 
-        // If k is large → unlimited transactions (greedy case)
         if (k >= n / 2) {
             int profit = 0;
             for (int i = 1; i < n; i++) {
