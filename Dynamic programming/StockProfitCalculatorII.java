@@ -41,7 +41,6 @@ class StockProfitCalculatorII {
 
         for (int i = 1; i < prices.length; i++) {
 
-            // If price goes up, take the profit
             if (prices[i] > prices[i - 1]) {
                 profit += prices[i] - prices[i - 1];
             }
