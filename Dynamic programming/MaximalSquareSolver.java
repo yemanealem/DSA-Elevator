@@ -48,7 +48,7 @@ class MaximalSquareOptimized {
 
             for (int j = 1; j <= cols; j++) {
 
-                int temp = dp[j]; // store old dp[j] (for diagonal use)
+                int temp = dp[j]; 
 
                 if (matrix[i - 1][j - 1] == '1') {
 
@@ -63,7 +63,7 @@ class MaximalSquareOptimized {
                     dp[j] = 0;
                 }
 
-                prev = temp; // update diagonal
+                prev = temp;
             }
         }
 
