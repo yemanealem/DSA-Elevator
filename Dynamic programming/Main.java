@@ -71,14 +71,12 @@ class StockProfitCalculator {
 
             for (int j = 1; j < n; j++) {
 
-                // Option 1: don't sell today
-                // Option 2: sell today using best previous buy
+             
                 dp[i][j] = Math.max(
                         dp[i][j - 1],
                         prices[j] + maxDiff
                 );
 
-                // Update best buy opportunity
                 maxDiff = Math.max(
                         maxDiff,
                         dp[i - 1][j] - prices[j]
@@ -90,11 +88,7 @@ class StockProfitCalculator {
     }
 }
 
-/*
-------------------------------------------------------------
-🚀 Main class to run the program
-------------------------------------------------------------
-*/
+
 public class Main {
 
     public static void main(String[] args) {
