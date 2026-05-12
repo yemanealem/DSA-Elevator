@@ -25,7 +25,7 @@ O(1)
 ===========================================================
 */
 
-public class IntegerBreakOptimized {
+public class IntegerBreak {
 
     public static int integerBreak(int n) {
 
