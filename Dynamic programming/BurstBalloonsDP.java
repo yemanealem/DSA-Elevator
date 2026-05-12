@@ -1,58 +1,100 @@
+
 /*
-===========================================================
-📌 PROBLEM: Integer Break
+ * PROBLEM: Burst Balloons (LeetCode Hard)
+ * -------------------------------------------------------
+ * You are given an array nums of balloons.
+ * When you burst balloon i, you gain:
+ *
+ *      nums[left] * nums[i] * nums[right]
+ *
+ * where left and right are adjacent remaining balloons.
+ *
+ * Goal: Find maximum coins possible by bursting all balloons.
+ *
+ * -------------------------------------------------------
+ * HOW IT WORKS (KEY IDEA):
+ * -------------------------------------------------------
+ * Instead of choosing the FIRST balloon to burst,
+ * we choose the LAST balloon to burst in a range.
+ *
+ * This transforms the problem into INTERVAL DP:
+ *
+ * dp[left][right] = max coins obtainable in (left, right)
+ *
+ * For every interval, we try all possible last balloons k:
+ *
+ * dp[left][right] =
+ *     max(dp[left][k] + dp[k][right] +
+ *         arr[left] * arr[k] * arr[right])
+ *
+ * -------------------------------------------------------
+ * WHY THIS WORKS:
+ * -------------------------------------------------------
+ * Fixing the last balloon avoids dependency issues
+ * and makes subproblems independent.
+ *
+ * -------------------------------------------------------
+ * TIME COMPLEXITY:
+ * -------------------------------------------------------
+ * O(n^3)
+ * - O(n^2) intervals
+ * - O(n) choices per interval
+ *
+ * SPACE COMPLEXITY:
+ * -------------------------------------------------------
+ * O(n^2) for DP table
+ */
 
-Given an integer n, break it into at least two positive integers
-to maximize their product.
+class BurstBalloonsOptimized {
 
-Return the maximum product possible.
+    public int maxCoins(int[] nums) {
 
-===========================================================
-🧠 IDEA (DP)
+        int n = nums.length;
 
-For each number i:
-Try all splits j + (i - j)
+        int[] arr = new int[n + 2];
+        arr[0] = 1;
+        arr[n + 1] = 1;
 
-We take max of:
-1. j * (i - j)
-2. j * dp[i - j]
+        for (int i = 0; i < n; i++) {
+            arr[i + 1] = nums[i];
+        }
 
-===========================================================
-⏱ TIME COMPLEXITY:
-O(n²)
+        int[][] dp = new int[n + 2][n + 2];
 
-📦 SPACE COMPLEXITY:
-O(n)
+        for (int len = 2; len < n + 2; len++) {
 
-===========================================================
-*/
+            for (int left = 0; left < n + 2 - len; left++) {
 
-public class IntegerBreak {
+                int right = left + len;
 
-    public static int integerBreak(int n) {
+                int best = 0;
 
-        int[] dp = new int[n + 1];
+                int leftVal = arr[left];
+                int rightVal = arr[right];
 
-        // base case: 1 cannot be broken
-        dp[1] = 1;
+                for (int k = left + 1; k < right; k++) {
 
-        for (int i = 2; i <= n; i++) {
+                    int coins =
+                            leftVal * arr[k] * rightVal +
+                            dp[left][k] +
+                            dp[k][right];
 
-            for (int j = 1; j < i; j++) {
+                    best = Math.max(best, coins);
+                }
 
-                int noSplit = j * (i - j);
-                int split = j * dp[i - j];
-
-                dp[i] = Math.max(dp[i], Math.max(noSplit, split));
+                dp[left][right] = best;
             }
         }
 
-        return dp[n];
+        return dp[0][n + 1];
     }
 
     public static void main(String[] args) {
 
-        int n = 10;
-        System.out.println(integerBreak(n)); // 36
+        BurstBalloonsOptimized solver = new BurstBalloonsOptimized();
+
+        int[] nums = {3, 1, 5, 8};
+
+        System.out.println("Max Coins: " + solver.maxCoins(nums));
     }
 }
