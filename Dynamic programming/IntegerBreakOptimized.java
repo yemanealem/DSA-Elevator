@@ -45,6 +45,6 @@ public class IntegerBreakOptimized {
 
     public static void main(String[] args) {
 
-        System.out.println(integerBreak(10)); // 36
+        System.out.println(integerBreak(10)); 
     }
 }
