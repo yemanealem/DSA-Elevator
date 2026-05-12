@@ -33,7 +33,6 @@ public class IntegerBreak {
 
         int[] dp = new int[n + 1];
 
-        // base case: 1 cannot be broken
         dp[1] = 1;
 
         for (int i = 2; i <= n; i++) {
@@ -53,6 +52,6 @@ public class IntegerBreak {
     public static void main(String[] args) {
 
         int n = 10;
-        System.out.println(integerBreak(n)); // 36
+        System.out.println(integerBreak(n)); 
     }
 }
