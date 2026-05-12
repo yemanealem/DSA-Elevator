@@ -1,58 +1,30 @@
-/*
-===========================================================
-📌 PROBLEM: Divisor Game
+class Solution {
 
-Alice starts with n.
-Players subtract a divisor x (0 < x < n, n % x == 0).
-Player who cannot move loses.
+    Boolean[] dp;
 
-Return true if Alice wins.
+    public boolean divisorGame(int n) {
+        dp = new Boolean[n + 1];
+        return dfs(n);
+    }
 
-===========================================================
-🧠 IDEA (Dynamic Programming)
+    private boolean dfs(int n) {
 
-dp[i] = true if current player wins with i
+        if (n == 1) return false;
 
-Try all valid divisors x:
-If any move leads to dp[i - x] == false → win
+        if (dp[n] != null) return dp[n];
 
-===========================================================
-⏱ TIME COMPLEXITY:
-O(n √n)
+        // try all valid moves
+        for (int x = 1; x < n; x++) {
 
-📦 SPACE COMPLEXITY:
-O(n)
+            if (n % x == 0) {
 
-===========================================================
-*/
-
-public class DivisorGameDP {
-
-    public static boolean divisorGame(int n) {
-
-        boolean[] dp = new boolean[n + 1];
-
-        dp[1] = false; // no move possible
-
-        for (int i = 2; i <= n; i++) {
-
-            for (int x = 1; x < i; x++) {
-
-                if (i % x == 0) {
-
-                    if (!dp[i - x]) {
-                        dp[i] = true;
-                        break;
-                    }
+                // if opponent loses, current wins
+                if (!dfs(n - x)) {
+                    return dp[n] = true;
                 }
             }
         }
 
-        return dp[n];
-    }
-
-    public static void main(String[] args) {
-
-        System.out.println(divisorGame(10)); // true
+        return dp[n] = false;
     }
 }
