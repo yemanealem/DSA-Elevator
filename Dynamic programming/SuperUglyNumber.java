@@ -64,14 +64,12 @@ public class SuperUglyNumber {
 
         dp[0] = 1;
 
-        // initialize candidate values
         for (int i = 0; i < k; i++) {
             value[i] = primes[i];
         }
 
         for (int i = 1; i < n; i++) {
 
-            // find minimum
             long min = value[0];
             for (int j = 1; j < k; j++) {
                 min = Math.min(min, value[j]);
@@ -79,7 +77,6 @@ public class SuperUglyNumber {
 
             dp[i] = min;
 
-            // update all primes that match min
             for (int j = 0; j < k; j++) {
                 if (value[j] == min) {
                     index[j]++;
