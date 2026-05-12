@@ -58,9 +58,9 @@ public class SuperUglyNumber {
 
         int k = primes.length;
 
-        long[] dp = new long[n];     // store results
-        int[] index = new int[k];    // pointers
-        long[] value = new long[k];  // candidates
+        long[] dp = new long[n];     
+        int[] index = new int[k];   
+        long[] value = new long[k];  
 
         dp[0] = 1;
 
