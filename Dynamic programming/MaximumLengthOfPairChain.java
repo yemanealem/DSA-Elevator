@@ -62,17 +62,14 @@ public class MaximumLengthOfPairChain {
 
     public static int findLongestChain(int[][] pairs) {
 
-        // Sort by second value of each pair
         Arrays.sort(pairs, (a, b) -> a[1] - b[1]);
 
         int count = 1;
 
-        // End of current selected pair
         int currentEnd = pairs[0][1];
 
         for (int i = 1; i < pairs.length; i++) {
 
-            // If current pair can follow previous pair
             if (pairs[i][0] > currentEnd) {
 
                 count++;
