@@ -3,82 +3,107 @@ Question:
 ---------
 LeetCode 650 - 2 Keys Keyboard
 
-You start with one character 'A'.
+Initially there is only one character 'A' on the screen.
 
-Allowed operations:
+You can perform only two operations:
+
 1. Copy All
 2. Paste
 
-Return the minimum number of operations
+Return the minimum number of operations needed
 to get exactly n 'A's.
 
 
-Optimal Mathematical Idea:
---------------------------
-The minimum operations equal the sum
-of prime factors of n.
+Dynamic Programming Idea:
+-------------------------
+dp[i] = minimum operations needed to get i 'A's.
 
-Why?
-----
-If n = a × b
+For every number i:
+- Find a divisor j of i.
+- If j divides i:
+    We can:
+    1. Build j first
+    2. Copy All once
+    3. Paste (i/j - 1) times
 
-We can:
-1. Build a
-2. Copy All
-3. Paste (b - 1) times
+So:
 
-Cost:
-a + b
+dp[i] = dp[j] + (i/j)
 
-Breaking into smaller factors minimizes operations.
+We try all divisors and take the minimum.
+
+
+Optimization:
+-------------
+Instead of checking all numbers from 1 to i,
+we only check divisors up to sqrt(i).
+
+Also, once we find the largest divisor,
+we can break early because it gives
+the minimum operations faster.
 
 
 Example:
 --------
-n = 12
+n = 9
 
-12 = 2 × 2 × 3
+Build 3 A's first:
+AAA
+
+Copy All
+Paste twice
+
+AAA -> AAAAAA -> AAAAAAAAA
 
 Operations:
-2 + 2 + 3 = 7
+dp[3] + 3 = 6
 
 
 Time Complexity:
 ----------------
-O(sqrt(n))
-
-Because we try divisors only up to sqrt(n).
-
+O(n * sqrt(n))
 
 Space Complexity:
 -----------------
-O(1)
+O(n)
 */
 
 public class TwoKeysKeyboard {
 
     public static int minSteps(int n) {
 
-        int operations = 0;
+        // dp[i] = minimum operations to get i A's
+        int[] dp = new int[n + 1];
 
-        // Start checking factors from 2
-        for (int factor = 2; factor * factor <= n; factor++) {
+        for (int i = 2; i <= n; i++) {
 
-            // Keep dividing while factor exists
-            while (n % factor == 0) {
+            // Worst case:
+            // Copy once + paste (i - 1) times
+            dp[i] = i;
 
-                operations += factor;
+            // Find largest divisor quickly
+            for (int j = i / 2; j >= 2; j--) {
 
-                n /= factor;
+                // If j divides i
+                if (i % j == 0) {
+
+                    /*
+                     Build j first
+                     Copy All once
+                     Paste (i/j - 1) times
+
+                     Total:
+                     dp[j] + i/j
+                    */
+                    dp[i] = dp[j] + (i / j);
+
+                    // First largest divisor gives optimal answer
+                    break;
+                }
             }
         }
 
-        // Remaining prime factor
-        if (n > 1) {
-            operations += n;
-        }
-
-        return operations;
+        return dp[n];
     }
 
     public static void main(String[] args) {
