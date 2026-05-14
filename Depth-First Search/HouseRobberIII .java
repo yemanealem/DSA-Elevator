@@ -30,19 +30,13 @@ public class HouseRobberIII {
 
     private int[] dfs(TreeNode node) {
 
-        // Base case
         if (node == null) {
             return new int[]{0, 0};
         }
-
-        // DFS left and right subtree
         int[] left = dfs(node.left);
         int[] right = dfs(node.right);
 
-        // Rob current node
         int rob = node.val + left[0] + right[0];
-
-        // Skip current node
         int skip = Math.max(left[0], left[1])
                  + Math.max(right[0], right[1]);
 
