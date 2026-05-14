@@ -51,14 +51,6 @@ public class HouseRobberIII {
 
     public static void main(String[] args) {
 
-        /*
-                 3
-                / \
-               2   3
-                \    \
-                 3    1
-         */
-
         TreeNode root = new TreeNode(3);
 
         root.left = new TreeNode(2);
