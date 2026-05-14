@@ -65,19 +65,16 @@ public class PacificAtlanticWaterFlow {
             int newRow = row + dir[0];
             int newCol = col + dir[1];
 
-            // Boundary check
             if (newRow < 0 || newCol < 0
                     || newRow >= ROWS
                     || newCol >= COLS) {
                 continue;
             }
 
-            // Already visited
             if (visited[newRow][newCol]) {
                 continue;
             }
 
-            // Water can flow only to same or higher height
             if (heights[newRow][newCol] < heights[row][col]) {
                 continue;
             }
