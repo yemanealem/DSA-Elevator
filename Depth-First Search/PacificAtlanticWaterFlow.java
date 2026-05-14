@@ -75,8 +75,6 @@ public class PacificAtlanticWaterFlow {
     private int ROWS;
     private int COLS;
 
-    // Directions:
-    // down, up, right, left
     private final int[][] directions = {
             {1, 0},
             {-1, 0},
@@ -95,31 +93,23 @@ public class PacificAtlanticWaterFlow {
         ROWS = heights.length;
         COLS = heights[0].length;
 
-        // visited arrays
         boolean[][] pacific = new boolean[ROWS][COLS];
         boolean[][] atlantic = new boolean[ROWS][COLS];
 
-        // DFS from left and right borders
         for (int r = 0; r < ROWS; r++) {
 
-            // Pacific -> left border
             dfs(heights, pacific, r, 0);
 
-            // Atlantic -> right border
             dfs(heights, atlantic, r, COLS - 1);
         }
 
-        // DFS from top and bottom borders
         for (int c = 0; c < COLS; c++) {
 
-            // Pacific -> top border
             dfs(heights, pacific, 0, c);
 
-            // Atlantic -> bottom border
             dfs(heights, atlantic, ROWS - 1, c);
         }
 
-        // Find cells reachable by both oceans
         for (int r = 0; r < ROWS; r++) {
 
             for (int c = 0; c < COLS; c++) {
@@ -146,19 +136,17 @@ public class PacificAtlanticWaterFlow {
             int newRow = row + dir[0];
             int newCol = col + dir[1];
 
-            // boundary check
+    
             if (newRow < 0 || newCol < 0
                     || newRow >= ROWS
                     || newCol >= COLS) {
                 continue;
             }
 
-            // already visited
             if (visited[newRow][newCol]) {
                 continue;
             }
 
-            // move only to same or higher height
             if (heights[newRow][newCol]
                     < heights[row][col]) {
                 continue;
