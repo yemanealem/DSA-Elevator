@@ -1,3 +1,77 @@
+/*
+===============================================================================
+ LeetCode Problem: Contain Virus
+===============================================================================
+
+Question:
+You are given an m x n grid where:
+
+1  = infected cell
+0  = healthy cell
+
+Each day, the virus spreads to neighboring healthy cells
+(up, down, left, right).
+
+You can build walls around ONLY ONE infected region per day.
+
+Your task:
+- Find the infected region that will infect the largest number
+  of healthy cells.
+- Build walls around it (quarantine it).
+- Let the other regions spread.
+- Return the total number of walls built.
+
+-------------------------------------------------------------------------------
+How This DFS Solution Works
+-------------------------------------------------------------------------------
+
+1. Find all infected regions using DFS
+   - DFS explores connected infected cells.
+   - Each connected component is considered one region.
+
+2. For every region calculate:
+   - Frontier cells:
+     Healthy cells this region can infect next.
+   - Walls needed:
+     Number of walls required to isolate the region.
+
+3. Select the most dangerous region
+   - The region threatening the most healthy cells.
+
+4. Quarantine that region
+   - Mark all cells as -1 (blocked).
+
+5. Spread remaining regions
+   - Other infected regions spread to neighboring healthy cells.
+
+6. Repeat until no more spread is possible.
+
+-------------------------------------------------------------------------------
+DFS Idea
+-------------------------------------------------------------------------------
+
+DFS is used to:
+- Traverse connected infected cells.
+- Count required walls.
+- Collect neighboring healthy cells.
+
+-------------------------------------------------------------------------------
+Time Complexity
+-------------------------------------------------------------------------------
+
+Let:
+R = number of rows
+C = number of columns
+
+Each iteration scans the whole grid.
+
+Worst Case:
+Time Complexity  = O((R * C)^2)
+Space Complexity = O(R * C)
+
+-------------------------------------------------------------------------------
+*/
+
 import java.util.*;
 
 public class ContainVirus {
@@ -149,7 +223,7 @@ public class ContainVirus {
         }
     }
 
-    // Main method
+    // Main Method
     public static void main(String[] args) {
 
         ContainVirus solution = new ContainVirus();
