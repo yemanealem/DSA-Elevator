@@ -5,7 +5,6 @@ public class ContainVirus {
     private int rows;
     private int cols;
 
-    // 4 directions
     private final int[][] directions = {
             {1, 0},
             {-1, 0},
@@ -28,7 +27,6 @@ public class ContainVirus {
 
             boolean[][] visited = new boolean[rows][cols];
 
-            // Step 1: Find all infected regions
             for (int r = 0; r < rows; r++) {
                 for (int c = 0; c < cols; c++) {
 
@@ -48,12 +46,10 @@ public class ContainVirus {
                 }
             }
 
-            // No more infected regions
             if (regions.isEmpty()) {
                 break;
             }
 
-            // Step 2: Find most dangerous region
             int maxIndex = 0;
 
             for (int i = 1; i < frontiers.size(); i++) {
@@ -64,19 +60,16 @@ public class ContainVirus {
                 }
             }
 
-            // If no region can spread
             if (frontiers.get(maxIndex).isEmpty()) {
                 break;
             }
 
-            // Step 3: Build walls around dangerous region
             totalWalls += wallsNeeded.get(maxIndex);
 
             for (int[] cell : regions.get(maxIndex)) {
                 grid[cell[0]][cell[1]] = -1;
             }
 
-            // Step 4: Spread other regions
             for (int i = 0; i < regions.size(); i++) {
 
                 if (i == maxIndex) {
@@ -104,12 +97,10 @@ public class ContainVirus {
                      Set<Integer> frontier,
                      int[] walls) {
 
-        // Out of bounds
         if (r < 0 || c < 0 || r >= rows || c >= cols) {
             return;
         }
 
-        // Already visited or not infected
         if (visited[r][c] || grid[r][c] != 1) {
             return;
         }
@@ -123,7 +114,6 @@ public class ContainVirus {
             int nr = r + dir[0];
             int nc = c + dir[1];
 
-            // Neighbor is healthy
             if (nr >= 0 && nc >= 0 &&
                     nr < rows && nc < cols &&
                     grid[nr][nc] == 0) {
@@ -133,7 +123,6 @@ public class ContainVirus {
                 frontier.add(nr * cols + nc);
             }
 
-            // Continue DFS
             else if (nr >= 0 && nc >= 0 &&
                     nr < rows && nc < cols &&
                     grid[nr][nc] == 1 &&
