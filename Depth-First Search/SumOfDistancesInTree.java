@@ -122,7 +122,6 @@ public class SumOfDistancesInTree {
             graph[i] = new ArrayList<>();
         }
 
-        // Build graph
         for (int[] edge : edges) {
 
             int u = edge[0];
@@ -137,17 +136,15 @@ public class SumOfDistancesInTree {
 
         Arrays.fill(count, 1);
 
-        // First DFS
         postOrderDFS(0, -1);
 
-        // Second DFS
+   
         preOrderDFS(0, -1);
 
         return result;
     }
 
-    // Postorder DFS
-    // Calculates subtree sizes and root distance sum
+ 
     private void postOrderDFS(int node, int parent) {
 
         for (int neighbor : graph[node]) {
@@ -165,8 +162,7 @@ public class SumOfDistancesInTree {
         }
     }
 
-    // Preorder DFS
-    // Re-root tree and compute answers
+    
     private void preOrderDFS(int node, int parent) {
 
         for (int neighbor : graph[node]) {
@@ -184,7 +180,6 @@ public class SumOfDistancesInTree {
         }
     }
 
-    // Main Method
     public static void main(String[] args) {
 
         SumOfDistancesInTree solution =
