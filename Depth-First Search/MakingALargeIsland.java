@@ -72,7 +72,6 @@ public class MakingALargeIsland {
 
     private int n;
 
-    // 4-direction movement
     private final int[][] directions = {
             {1, 0},
             {-1, 0},
@@ -84,14 +83,12 @@ public class MakingALargeIsland {
 
         n = grid.length;
 
-        // islandId -> islandSize
         Map<Integer, Integer> islandSizeMap = new HashMap<>();
 
         int islandId = 2;
 
         int maxIsland = 0;
 
-        // Step 1: Find all islands and mark them
         for (int row = 0; row < n; row++) {
 
             for (int col = 0; col < n; col++) {
@@ -109,7 +106,6 @@ public class MakingALargeIsland {
             }
         }
 
-        // Step 2: Try converting each 0 to 1
         for (int row = 0; row < n; row++) {
 
             for (int col = 0; col < n; col++) {
@@ -129,7 +125,6 @@ public class MakingALargeIsland {
 
                             int neighborIslandId = grid[newRow][newCol];
 
-                            // Avoid counting same island twice
                             if (neighborIslandId > 1 &&
                                     visitedIslands.add(neighborIslandId)) {
 
