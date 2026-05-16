@@ -1,6 +1,31 @@
 /*
 Problem: Similar String Groups
 
+(in different positions) of X, so that it equals Y.
+Also, two strings X and Y are similar if they are equal.
+
+For example:
+- "tars" and "rats" are similar
+- "rats" and "arts" are similar
+- "star" is not similar to "tars"
+
+Together, these form two connected groups:
+{"tars", "rats", "arts"} and {"star"}
+
+Given an array of strings strs where every string in strs
+is an anagram of every other string in strs,
+return the number of groups of similar strings.
+
+--------------------------------------------------
+
+Example 1:
+Input: strs = ["tars","rats","arts","star"]
+Output: 2
+
+Example 2:
+Input: strs = ["omv","ovm"]
+Output: 1
+
 Approach:
 - Treat each string as a graph node.
 - If two strings are similar, connect them.
