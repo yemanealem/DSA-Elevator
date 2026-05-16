@@ -24,7 +24,6 @@ public class SimilarStringGroups {
 
         int groups = 0;
 
-        // Traverse all strings
         for (int i = 0; i < n; i++) {
 
             if (!visited[i]) {
@@ -38,14 +37,12 @@ public class SimilarStringGroups {
         return groups;
     }
 
-    // Depth First Search
     private void dfs(String[] strs, boolean[] visited, int index) {
 
         visited[index] = true;
 
         for (int j = 0; j < strs.length; j++) {
 
-            // Visit all similar unvisited strings
             if (!visited[j] && isSimilar(strs[index], strs[j])) {
 
                 dfs(strs, visited, j);
@@ -53,7 +50,6 @@ public class SimilarStringGroups {
         }
     }
 
-    // Check similarity between two strings
     private boolean isSimilar(String a, String b) {
 
         int diff = 0;
@@ -64,18 +60,17 @@ public class SimilarStringGroups {
 
                 diff++;
 
-                // More than 2 differences => not similar
+              
                 if (diff > 2) {
                     return false;
                 }
             }
         }
 
-        // Similar if 0 or 2 differences
+       
         return diff == 0 || diff == 2;
     }
 
-    // Main method for testing
     public static void main(String[] args) {
 
         SimilarStringGroups solution = new SimilarStringGroups();
