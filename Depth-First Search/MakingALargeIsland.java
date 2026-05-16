@@ -146,15 +146,12 @@ public class MakingALargeIsland {
         return maxIsland;
     }
 
-    // DFS to calculate island size
     private int dfs(int[][] grid, int row, int col, int islandId) {
 
-        // Boundary + water + already visited check
         if (!isValid(row, col) || grid[row][col] != 1) {
             return 0;
         }
 
-        // Mark island with unique ID
         grid[row][col] = islandId;
 
         int size = 1;
@@ -170,7 +167,6 @@ public class MakingALargeIsland {
         return size;
     }
 
-    // Check boundaries
     private boolean isValid(int row, int col) {
 
         return row >= 0 &&
@@ -179,7 +175,6 @@ public class MakingALargeIsland {
                 col < n;
     }
 
-    // Main method for testing
     public static void main(String[] args) {
 
         MakingALargeIsland solution = new MakingALargeIsland();
