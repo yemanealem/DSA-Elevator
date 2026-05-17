@@ -10,7 +10,6 @@ class TreeNode {
 
 public class LowestCommonAncestorOfBinaryTree {
 
-    // Depth First Search (DFS)
     public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
 
         if (root == null || root == p || root == q) {
