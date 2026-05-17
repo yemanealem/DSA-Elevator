@@ -13,15 +13,10 @@ public class LowestCommonAncestorOfBinaryTree {
     // Depth First Search (DFS)
     public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
 
-        // Base case
         if (root == null || root == p || root == q) {
             return root;
         }
-
-        // Search left subtree
         TreeNode left = lowestCommonAncestor(root.left, p, q);
-
-        // Search right subtree
         TreeNode right = lowestCommonAncestor(root.right, p, q);
 
         if (left != null && right != null) {
