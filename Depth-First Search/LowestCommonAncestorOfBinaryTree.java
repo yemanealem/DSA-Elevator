@@ -24,13 +24,9 @@ public class LowestCommonAncestorOfBinaryTree {
         // Search right subtree
         TreeNode right = lowestCommonAncestor(root.right, p, q);
 
-        // If both sides return non-null,
-        // current node is the Lowest Common Ancestor
         if (left != null && right != null) {
             return root;
         }
-
-        // Otherwise return the non-null side
         return left != null ? left : right;
     }
 
