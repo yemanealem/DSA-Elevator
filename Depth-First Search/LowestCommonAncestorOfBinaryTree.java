@@ -55,8 +55,8 @@ public class LowestCommonAncestorOfBinaryTree {
         root.right.left = new TreeNode(0);
         root.right.right = new TreeNode(8);
 
-        TreeNode p = root.left;   // Node 5
-        TreeNode q = root.right;  // Node 1
+        TreeNode p = root.left; 
+        TreeNode q = root.right;  
 
         TreeNode lca = lowestCommonAncestor(root, p, q);
 
