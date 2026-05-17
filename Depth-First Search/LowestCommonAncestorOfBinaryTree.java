@@ -36,13 +36,6 @@ public class LowestCommonAncestorOfBinaryTree {
 
     public static void main(String[] args) {
 
-        /*
-                 3
-                / \
-               5   1
-              / \ / \
-             6  2 0  8
-        */
 
         TreeNode root = new TreeNode(3);
 
