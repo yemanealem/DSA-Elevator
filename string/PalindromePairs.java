@@ -91,7 +91,6 @@ public class PalindromePairs {
 
         Map<String, Integer> map = new HashMap<>();
 
-        // store words with index
         for (int i = 0; i < words.length; i++) {
             map.put(words[i], i);
         }
@@ -105,7 +104,6 @@ public class PalindromePairs {
                 String prefix = word.substring(0, j);
                 String suffix = word.substring(j);
 
-                // CASE 1: prefix is palindrome
                 if (isPalindrome(prefix)) {
 
                     String revSuffix = new StringBuilder(suffix)
@@ -117,7 +115,6 @@ public class PalindromePairs {
                     }
                 }
 
-                // CASE 2: suffix is palindrome
                 if (j != word.length() && isPalindrome(suffix)) {
 
                     String revPrefix = new StringBuilder(prefix)
