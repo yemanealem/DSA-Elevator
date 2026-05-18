@@ -2,13 +2,11 @@ import java.util.*;
 
 public class WordSearchII {
 
-    // Trie Node
     static class TrieNode {
         TrieNode[] children = new TrieNode[26];
         String word;
     }
 
-    // Main solution method
     public List<String> findWords(char[][] board, String[] words) {
 
         TrieNode root = buildTrie(words);
@@ -24,14 +22,12 @@ public class WordSearchII {
         return result;
     }
 
-    // DFS Backtracking
     private void dfs(char[][] board,
                      int r,
                      int c,
                      TrieNode node,
                      List<String> result) {
 
-        // Boundary check
         if (r < 0 || c < 0 ||
             r >= board.length ||
             c >= board[0].length) {
@@ -40,7 +36,6 @@ public class WordSearchII {
 
         char ch = board[r][c];
 
-        // Already visited or not in Trie
         if (ch == '#' || node.children[ch - 'a'] == null) {
             return;
         }
