@@ -46,29 +46,20 @@ public class WordSearchII {
         }
 
         node = node.children[ch - 'a'];
-
-        // Word found
         if (node.word != null) {
             result.add(node.word);
-
-            // Prevent duplicates
             node.word = null;
         }
 
-        // Mark visited
         board[r][c] = '#';
 
-        // Explore 4 directions
         dfs(board, r + 1, c, node, result);
         dfs(board, r - 1, c, node, result);
         dfs(board, r, c + 1, node, result);
         dfs(board, r, c - 1, node, result);
-
-        // Restore character
         board[r][c] = ch;
     }
 
-    // Build Trie
     private TrieNode buildTrie(String[] words) {
 
         TrieNode root = new TrieNode();
@@ -94,7 +85,7 @@ public class WordSearchII {
         return root;
     }
 
-    // Main Method
+   
     public static void main(String[] args) {
 
         WordSearchII solution = new WordSearchII();
